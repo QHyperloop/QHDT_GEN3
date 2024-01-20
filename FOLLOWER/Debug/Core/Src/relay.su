@@ -1,0 +1,3 @@
+../Core/Src/relay.cpp:10:1:relay::relay()	16	static
+../Core/Src/relay.cpp:15:1:relay::~relay()	16	static
+../Core/Src/relay.cpp:15:1:virtual relay::~relay()	16	static
