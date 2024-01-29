@@ -8,12 +8,12 @@ CPP_SRCS += \
 ../Core/Src/bms.cpp \
 ../Core/Src/can.cpp \
 ../Core/Src/esc.cpp \
-../Core/Src/relay.cpp \
 ../Core/Src/temperature.cpp 
 
 C_SRCS += \
 ../Core/Src/bno055.c \
 ../Core/Src/main.c \
+../Core/Src/relay.c \
 ../Core/Src/stm32g4xx_hal_msp.c \
 ../Core/Src/stm32g4xx_it.c \
 ../Core/Src/syscalls.c \
@@ -23,6 +23,7 @@ C_SRCS += \
 C_DEPS += \
 ./Core/Src/bno055.d \
 ./Core/Src/main.d \
+./Core/Src/relay.d \
 ./Core/Src/stm32g4xx_hal_msp.d \
 ./Core/Src/stm32g4xx_it.d \
 ./Core/Src/syscalls.d \
@@ -47,7 +48,6 @@ CPP_DEPS += \
 ./Core/Src/bms.d \
 ./Core/Src/can.d \
 ./Core/Src/esc.d \
-./Core/Src/relay.d \
 ./Core/Src/temperature.d 
 
 

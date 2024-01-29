@@ -8,12 +8,6 @@
 #include "temperature.h"
 
 
-class temperature
-{
-
-};
-
-
 temperature::temperature() {
 	// TODO Auto-generated constructor stub
 
