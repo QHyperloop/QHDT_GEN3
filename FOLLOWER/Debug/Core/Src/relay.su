@@ -5,4 +5,4 @@
 ../Core/Src/relay.c:66:6:yellowstatus	16	static
 ../Core/Src/relay.c:74:6:greenstatus	16	static
 ../Core/Src/relay.c:82:6:brake_release	16	static
-../Core/Src/relay.c:90:6:pump_active	16	static
+../Core/Src/relay.c:90:6:pump_control	16	static

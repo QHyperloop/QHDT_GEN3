@@ -31,7 +31,7 @@ extern TIM_HandleTypeDef htim2;
 
 //PORT MATCHES LETTER
 
-void precharge(){
+void precharge(void){
  //high side on, low side precharge resitor on wait 500ms then low side main on, resistor off
 	HAL_GPIO_WritePin(GPIOE, RELAY14, GPIO_PIN_SET); //LOW SIDE ON
 	HAL_GPIO_WritePin(GPIOE, RELAY9, GPIO_PIN_SET);
@@ -39,7 +39,7 @@ void precharge(){
 	HAL_GPIO_WritePin(GPIOE, RELAY10, GPIO_PIN_SET);
 	HAL_TIM_Base_Start_IT(&htim2);
 }
-void HV_on(){
+void HV_on(void){
 	HAL_GPIO_WritePin(GPIOE, RELAY11, GPIO_PIN_SET); //HIGHSIDE ON
 	HAL_GPIO_WritePin(GPIOE, RELAY16, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, RELAY15, GPIO_PIN_RESET); //RESISTOR OFF
@@ -47,7 +47,7 @@ void HV_on(){
 
 }
 
-void HV_off(){
+void HV_off(void){
 	HAL_GPIO_WritePin(GPIOE, RELAY11, GPIO_PIN_RESET); //HIGHSIDE ON
 	HAL_GPIO_WritePin(GPIOE, RELAY16, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RELAY14, GPIO_PIN_RESET); //LOW SIDE ON
@@ -87,7 +87,7 @@ void brake_release(int state){
 	}
 }
 
-void pump_active(int state){
+void pump_control(int state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY5, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOD, RELAY6, GPIO_PIN_RESET);

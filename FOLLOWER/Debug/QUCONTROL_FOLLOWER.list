@@ -29,23 +29,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  12 .comment      00000043  00000000  00000000  0002008c  2**0
                   CONTENTS, READONLY
- 13 .debug_info   00023211  00000000  00000000  000200cf  2**0
+ 13 .debug_info   0002320b  00000000  00000000  000200cf  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 00003d7d  00000000  00000000  000432e0  2**0
+ 14 .debug_abbrev 00003d7a  00000000  00000000  000432da  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 00001ea0  00000000  00000000  00047060  2**3
+ 15 .debug_aranges 00001ea0  00000000  00000000  00047058  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_rnglists 000017ef  00000000  00000000  00048f00  2**0
+ 16 .debug_rnglists 000017ef  00000000  00000000  00048ef8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  0000484e  00000000  00000000  0004a6ef  2**0
+ 17 .debug_macro  00004653  00000000  00000000  0004a6e7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00024f65  00000000  00000000  0004ef3d  2**0
+ 18 .debug_line   00024f70  00000000  00000000  0004ed3a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    00120322  00000000  00000000  00073ea2  2**0
+ 19 .debug_str    00120323  00000000  00000000  00073caa  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  000087f4  00000000  00000000  001941c4  2**2
+ 20 .debug_frame  000087f4  00000000  00000000  00193fd0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000063  00000000  00000000  0019c9b8  2**0
+ 21 .debug_line_str 00000063  00000000  00000000  0019c7c4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -2412,7 +2412,7 @@ __STATIC_FORCEINLINE void __disable_irq(void)
 	HAL_GPIO_WritePin(GPIOE, RELAY10, GPIO_PIN_SET);
 	HAL_TIM_Base_Start_IT(&htim2);
 }
-void HV_on(){
+void HV_on(void){
  8001018:	b580      	push	{r7, lr}
  800101a:	af00      	add	r7, sp, #0
 	HAL_GPIO_WritePin(GPIOE, RELAY11, GPIO_PIN_SET); //HIGHSIDE ON
