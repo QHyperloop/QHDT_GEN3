@@ -69,7 +69,17 @@ SPI_HandleTypeDef hspi3;
 PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN PV */
-
+enum PodState {
+	INIT,
+	FAULT,
+	SAFE_TO_APPROACH,
+	LAUNCH,
+	COAST,
+	BRAKE,
+	CRAWL,
+	GROUNDWARNING,
+	STDBY
+};
 
 /* USER CODE END PV */
 
@@ -142,7 +152,65 @@ int main(void)
   MX_SPI3_Init();
   MX_LPUART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  unsigned long previousMillis = 0;
+  PodState the_STATE = FAULT;
+  PodState currentState = STDBY;
 
+  bool EStopReady = true;
+  //We wait to initialize the pod. Make sure it is mounted and everything is ready.
+  while(!EStopReady){
+
+  }
+
+  bool PodMounted = false;
+  //Ideally, we could have a button that, once triggered, places the pod in a safe-to-approach state.
+  //Once the pod is mounted.
+  while(!PodMounted){
+	  int buttonValue = digitalRead(buttonPin); //for some buttonPin specified earlier
+	  if(buttonPin = LOW){
+		  the_STATE = SAFE_TO_APPROACH;
+		  //output: ... << "POD safe to approach" << ...
+		  delay(5000);
+
+		  PodMounted = true;
+	  }
+  }
+
+  bool RTL = false;
+  //Ready To Launch:
+  while(!RTL){
+
+  }
+
+  bool groundFault = false;
+  bool lossOfSerial = false;
+  bool launch = false;
+  //DO NOT proceed with procedures until groundFaults and loss of communication have been checked.
+  //while(!groundFault && !lossOfSerial){	etc...	}
+  while(!launch){
+	  //Perform ready-to-launch procedures. Make sure brakes are still on, apply current brakes.
+	  //Continue checking for ground faults or loss of communication on radios.
+	  //isoState = ... - Check for ground faults
+	  if(isoState == 0){
+		  //faultState(); (fault state) is triggered
+	  }
+	  if(Serial3.available){ //'Serial3.available' is temporary. Currently checking for loss of communication.
+		  int theState = Serial3.read() - '0'; //Comms are available, read the state.
+		  if(theState == -1){
+			  //faultState();
+		  }
+	  }
+	  unsigned long currentMillis = millis();
+	  if(currentMillis - previousMillis >= 750){
+		  previousMillis = currentMillis;
+		  if(ledState == LOW){
+			  ledState = HIGH;
+		  } else {
+			  ledState = LOW;
+		  }
+	  }
+
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
