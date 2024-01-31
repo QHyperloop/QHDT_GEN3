@@ -48,13 +48,13 @@ void HV_on(void){
 }
 
 void HV_off(void){
-	HAL_GPIO_WritePin(GPIOE, RELAY11, GPIO_PIN_RESET); //HIGHSIDE ON
+	HAL_GPIO_WritePin(GPIOE, RELAY11, GPIO_PIN_RESET); //HIGHSIDE OFF
 	HAL_GPIO_WritePin(GPIOE, RELAY16, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOE, RELAY14, GPIO_PIN_RESET); //LOW SIDE ON
+	HAL_GPIO_WritePin(GPIOE, RELAY14, GPIO_PIN_RESET); //LOW SIDE OFF
 	HAL_GPIO_WritePin(GPIOE, RELAY9, GPIO_PIN_RESET);
 }
 
-void redstatus(int state){
+void redstatus(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY1, GPIO_PIN_SET);
 	}else{
@@ -63,7 +63,7 @@ void redstatus(int state){
 
 }
 
-void yellowstatus(int state){
+void yellowstatus(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY2, GPIO_PIN_SET);
 	}else{
@@ -71,7 +71,7 @@ void yellowstatus(int state){
 	}
 }
 
-void greenstatus(int state){
+void greenstatus(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY3, GPIO_PIN_SET);
 	}else{
@@ -79,7 +79,7 @@ void greenstatus(int state){
 	}
 }
 
-void brake_release(int state){
+void brake_state(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY4, GPIO_PIN_SET);
 	}else{
@@ -87,7 +87,7 @@ void brake_release(int state){
 	}
 }
 
-void pump_control(int state){
+void pump_control(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY5, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOD, RELAY6, GPIO_PIN_RESET);

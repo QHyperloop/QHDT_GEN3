@@ -73,8 +73,18 @@ TIM_HandleTypeDef htim2;
 PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN PV */
-
-
+enum PodState {
+	INIT,
+	FAULT,
+	SAFE_TO_APPROACH,
+	READY,
+	LAUNCH,
+	COAST,
+	BRAKE,
+	CRAWL,
+	GROUNDWARNING,
+	STDBY
+};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,6 +111,43 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void Run_State(enum PodState state) {
+    switch (state) {
+        case INIT:
+
+            break;
+        case FAULT:
+
+            break;
+        case SAFE_TO_APPROACH:
+
+            break;
+        case READY:
+
+            break;
+        case LAUNCH:
+
+            break;
+        case COAST:
+
+            break;
+        case BRAKE:
+
+            break;
+        case CRAWL:
+
+            break;
+        case GROUNDWARNING:
+
+            break;
+        case STDBY:
+
+            break;
+        default:
+            printf("Invalid state\n");
+            break;
+    }
+}
 
 /* USER CODE END 0 */
 
@@ -149,6 +196,8 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+  enum PodState Curr_State = INIT;
+  Run_State(Curr_State);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -156,7 +205,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	Run_State(Curr_State);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
