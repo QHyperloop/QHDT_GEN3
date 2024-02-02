@@ -69,7 +69,7 @@ SPI_HandleTypeDef hspi3;
 PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN PV */
-enum PodState {
+typedef enum PodState {
 	INIT,
 	FAULT,
 	SAFE_TO_APPROACH,
@@ -79,7 +79,7 @@ enum PodState {
 	CRAWL,
 	GROUNDWARNING,
 	STDBY
-};
+}PodState;
 
 /* USER CODE END PV */
 
@@ -154,7 +154,46 @@ int main(void)
   /* USER CODE BEGIN 2 */
   unsigned long previousMillis = 0;
   PodState the_STATE = FAULT;
-  PodState currentState = STDBY;
+  PodState currentState = INIT;
+
+  switch (currentState){
+  case(INIT):
+	  bool EStopReady = false;
+
+  	  currentState = SAFE_TO_APPROACH;
+	  break;
+
+
+  case(FAULT):
+		  break;
+
+  case(SAFE_TO_APPROACH):
+		  thing1
+		thing2
+		  break;
+
+
+  case(LAUNCH):
+		  break;
+
+  case(COAST):
+		  break;
+
+  case(BRAKE):
+		  break;
+
+  case(CRAWL):
+		  break;
+
+  case(GROUNDWARNING):
+		  break;
+
+  case(STDBY):
+		  break;
+
+
+  }
+
 
   bool EStopReady = true;
   //We wait to initialize the pod. Make sure it is mounted and everything is ready.
@@ -211,6 +250,8 @@ int main(void)
 	  }
 
   }
+
+  bool notTrue = false;
   /* USER CODE END 2 */
 
   /* Infinite loop */
