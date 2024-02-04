@@ -26,6 +26,8 @@
 /* USER CODE END Includes */
 extern DMA_HandleTypeDef hdma_adc1;
 
+extern DMA_HandleTypeDef hdma_adc5;
+
 extern DMA_HandleTypeDef hdma_i2c1_rx;
 
 extern DMA_HandleTypeDef hdma_i2c1_tx;
@@ -177,6 +179,24 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+    /* ADC5 DMA Init */
+    /* ADC5 Init */
+    hdma_adc5.Instance = DMA1_Channel5;
+    hdma_adc5.Init.Request = DMA_REQUEST_ADC5;
+    hdma_adc5.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_adc5.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_adc5.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_adc5.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_adc5.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    hdma_adc5.Init.Mode = DMA_NORMAL;
+    hdma_adc5.Init.Priority = DMA_PRIORITY_LOW;
+    if (HAL_DMA_Init(&hdma_adc5) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc5);
+
   /* USER CODE BEGIN ADC5_MspInit 1 */
 
   /* USER CODE END ADC5_MspInit 1 */
@@ -227,6 +247,8 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
     */
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9);
 
+    /* ADC5 DMA DeInit */
+    HAL_DMA_DeInit(hadc->DMA_Handle);
   /* USER CODE BEGIN ADC5_MspDeInit 1 */
 
   /* USER CODE END ADC5_MspDeInit 1 */

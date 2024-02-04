@@ -2,6 +2,8 @@
 "./Core/Src/bms.o"
 "./Core/Src/bno055.o"
 "./Core/Src/can.o"
+"./Core/Src/driver_mcp9600.o"
+"./Core/Src/driver_mcp9600_interface_stm32.o"
 "./Core/Src/esc.o"
 "./Core/Src/main.o"
 "./Core/Src/relay.o"

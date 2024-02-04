@@ -1,3 +1,4 @@
-../Core/Src/temperature.cpp:11:1:temperature::temperature()	16	static
-../Core/Src/temperature.cpp:16:1:temperature::~temperature()	16	static
-../Core/Src/temperature.cpp:16:1:virtual temperature::~temperature()	16	static
+../Core/Src/temperature.c:23:9:i2c_temp_init	24	static
+../Core/Src/temperature.c:74:9:mcp9600_read	48	static
+../Core/Src/temperature.c:83:9:tempsensor_init	16	static
+../Core/Src/temperature.c:114:6:HAL_ADC_ConvCpltCallback	16	static

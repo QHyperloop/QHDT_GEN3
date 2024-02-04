@@ -25,6 +25,7 @@
 #include <stdio.h>
 
 #include "relay.h"
+#include "temperature.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -34,10 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define thermocouple1_id = 0x60;
-#define thermocouple2_id = 0x66;
-#define thermocouple3_id = 0x67;
-#define thermocouple4_id = 0x65;
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -49,6 +47,7 @@
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc5;
 DMA_HandleTypeDef hdma_adc1;
+DMA_HandleTypeDef hdma_adc5;
 
 FDCAN_HandleTypeDef hfdcan1;
 FDCAN_HandleTypeDef hfdcan2;
@@ -205,7 +204,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	Run_State(Curr_State);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -946,6 +945,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel4_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 
 }
 

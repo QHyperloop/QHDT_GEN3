@@ -7,7 +7,7 @@
 
 #ifndef RELAY_H_
 #define RELAY_H_
-
+#include <stdint.h>
 extern void precharge(void);
 extern void HV_on(void);
 extern void HV_off(void);
