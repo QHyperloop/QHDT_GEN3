@@ -84,8 +84,8 @@ all: main-build
 main-build: QUCONTROL_FOLLOWER.elf secondary-outputs
 
 # Tool invocations
-QUCONTROL_FOLLOWER.elf QUCONTROL_FOLLOWER.map: $(OBJS) $(USER_OBJS) C:\Users\Patrick\Documents\GitHub\QHDT_GEN3\FOLLOWER\STM32G474VETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "QUCONTROL_FOLLOWER.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Patrick\Documents\GitHub\QHDT_GEN3\FOLLOWER\STM32G474VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="QUCONTROL_FOLLOWER.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+QUCONTROL_FOLLOWER.elf QUCONTROL_FOLLOWER.map: $(OBJS) $(USER_OBJS) C:\Users\mihai\OneDrive\Documents\GitHub\QHDT_GEN3\FOLLOWER\STM32G474VETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "QUCONTROL_FOLLOWER.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\mihai\OneDrive\Documents\GitHub\QHDT_GEN3\FOLLOWER\STM32G474VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="QUCONTROL_FOLLOWER.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

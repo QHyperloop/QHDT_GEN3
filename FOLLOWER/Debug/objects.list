@@ -1,3 +1,4 @@
+"./Core/Src/accelerometer.o"
 "./Core/Src/bms.o"
 "./Core/Src/bno055.o"
 "./Core/Src/can.o"

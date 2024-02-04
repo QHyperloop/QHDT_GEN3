@@ -8,10 +8,10 @@
 #include "temperature.h"
 
 
-class temperature
+/*class temperature
 {
 
-};
+};*/
 
 
 temperature::temperature() {
