@@ -1,5 +1,5 @@
-Core/Src/accelerometer.o: ../Core/Src/accelerometer.cpp \
- ../Core/Inc/accelerometer.h ../Core/Src/bno055.c \
+Core/Src/accelerometer.o: ../Core/Src/accelerometer.c \
+ ../Core/Inc/accelerometer.h ../Core/Inc/bno055.h \
  ../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h \
  ../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g474xx.h \
  ../Drivers/CMSIS/Include/core_cm4.h \
@@ -39,13 +39,10 @@ Core/Src/accelerometer.o: ../Core/Src/accelerometer.cpp \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h \
- ../Core/Inc/bno055.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h \
- ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h \
- ../Core/Inc/bno_config.h ../Core/Inc/main.h ../Core/Inc/relay.h \
- ../Core/Src/main.c
+ ../Core/Inc/bno_config.h
 ../Core/Inc/accelerometer.h:
-../Core/Src/bno055.c:
+../Core/Inc/bno055.h:
 ../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g4xx.h:
 ../Drivers/CMSIS/Device/ST/STM32G4xx/Include/stm32g474xx.h:
 ../Drivers/CMSIS/Include/core_cm4.h:
@@ -85,10 +82,5 @@ Core/Src/accelerometer.o: ../Core/Src/accelerometer.cpp \
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_spi_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h:
-../Core/Inc/bno055.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h:
-../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_def.h:
 ../Core/Inc/bno_config.h:
-../Core/Inc/main.h:
-../Core/Inc/relay.h:
-../Core/Src/main.c:

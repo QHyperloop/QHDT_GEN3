@@ -1,0 +1,2 @@
+../Core/Src/accelerometer.c:28:6:accelerometer_init	1
+../Core/Src/accelerometer.c:37:5:read_accelerometer_x	1

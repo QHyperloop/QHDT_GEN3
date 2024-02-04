@@ -8,11 +8,8 @@
 #ifndef SRC_ACCELEROMETER_H_
 #define SRC_ACCELEROMETER_H_
 
-/*class accelerometer {
+extern void accelerometer_init();
+extern int read_accelerometer_x();
 
-public:
-	accelerometer();
-	virtual ~accelerometer();
-};*/
 
 #endif /* SRC_ACCELEROMETER_H_ */
