@@ -4,9 +4,8 @@
  *  Created on: Jan 20, 2024
  *      Author: patri
  */
-#include <stdlib.h>
+
 #include "relay.h"
-#include "stm32g4xx_hal.h"
 
 
 

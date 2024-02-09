@@ -26,6 +26,7 @@
 
 #include "relay.h"
 #include "temperature.h"
+#include "accelerometer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -84,6 +85,8 @@ enum PodState {
 	GROUNDWARNING,
 	STDBY
 };
+volatile uint8_t Fault_Flag;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -110,40 +113,60 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void Run_State(enum PodState state) {
+uint8_t Run_State(enum PodState state) {
+	uint8_t status = 0;
+
     switch (state) {
         case INIT:
-
+        	status = tempsensor_init();
+        	if(status != 0){
+        		return 1;
+        	}
+        	status = acc_init();
+        	if(status != 0){
+        		return 1;
+        	}
+        	return status;
             break;
         case FAULT:
 
+        	return status;
             break;
         case SAFE_TO_APPROACH:
 
+        	return status;
             break;
         case READY:
 
+        	return status;
             break;
         case LAUNCH:
 
+        	return status;
             break;
         case COAST:
 
+        	return status;
             break;
         case BRAKE:
 
+        	return status;
             break;
         case CRAWL:
 
+        	return status;
             break;
         case GROUNDWARNING:
 
+        	return status;
             break;
         case STDBY:
 
+        	return status;
             break;
         default:
-            printf("Invalid state\n");
+        	//invalid state
+            return 1;
             break;
     }
 }
@@ -196,7 +219,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   enum PodState Curr_State = INIT;
-  Run_State(Curr_State);
+  Fault_Flag = Run_State(Curr_State);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -432,7 +455,7 @@ static void MX_FDCAN1_Init(void)
   /* USER CODE END FDCAN1_Init 1 */
   hfdcan1.Instance = FDCAN1;
   hfdcan1.Init.ClockDivider = FDCAN_CLOCK_DIV1;
-  hfdcan1.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
+  hfdcan1.Init.FrameFormat = FDCAN_FRAME_FD_BRS;
   hfdcan1.Init.Mode = FDCAN_MODE_NORMAL;
   hfdcan1.Init.AutoRetransmission = DISABLE;
   hfdcan1.Init.TransmitPause = DISABLE;
@@ -475,7 +498,7 @@ static void MX_FDCAN2_Init(void)
   /* USER CODE END FDCAN2_Init 1 */
   hfdcan2.Instance = FDCAN2;
   hfdcan2.Init.ClockDivider = FDCAN_CLOCK_DIV1;
-  hfdcan2.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
+  hfdcan2.Init.FrameFormat = FDCAN_FRAME_FD_BRS;
   hfdcan2.Init.Mode = FDCAN_MODE_NORMAL;
   hfdcan2.Init.AutoRetransmission = DISABLE;
   hfdcan2.Init.TransmitPause = DISABLE;
@@ -518,7 +541,7 @@ static void MX_FDCAN3_Init(void)
   /* USER CODE END FDCAN3_Init 1 */
   hfdcan3.Instance = FDCAN3;
   hfdcan3.Init.ClockDivider = FDCAN_CLOCK_DIV1;
-  hfdcan3.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
+  hfdcan3.Init.FrameFormat = FDCAN_FRAME_FD_BRS;
   hfdcan3.Init.Mode = FDCAN_MODE_NORMAL;
   hfdcan3.Init.AutoRetransmission = DISABLE;
   hfdcan3.Init.TransmitPause = DISABLE;

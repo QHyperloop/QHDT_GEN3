@@ -7,6 +7,14 @@
 
 #ifndef SRC_ACCELEROMETER_H_
 #define SRC_ACCELEROMETER_H_
-extern void accelerometer_init(void);
+
+
+#include "stm32g4xx_hal.h"
+#include "bno055.h"
+#include "bno_config.h"
+#include <stdbool.h>
+#include <stdio.h>
+
+extern uint8_t acc_init(void);
 
 #endif /* SRC_ACCELEROMETER_H_ */

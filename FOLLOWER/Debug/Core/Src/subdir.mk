@@ -6,12 +6,12 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../Core/Src/bms.cpp \
-../Core/Src/can.cpp \
 ../Core/Src/esc.cpp 
 
 C_SRCS += \
 ../Core/Src/accelerometer.c \
 ../Core/Src/bno055.c \
+../Core/Src/can.c \
 ../Core/Src/driver_mcp9600.c \
 ../Core/Src/driver_mcp9600_interface_stm32.c \
 ../Core/Src/main.c \
@@ -26,6 +26,7 @@ C_SRCS += \
 C_DEPS += \
 ./Core/Src/accelerometer.d \
 ./Core/Src/bno055.d \
+./Core/Src/can.d \
 ./Core/Src/driver_mcp9600.d \
 ./Core/Src/driver_mcp9600_interface_stm32.d \
 ./Core/Src/main.d \
@@ -56,7 +57,6 @@ OBJS += \
 
 CPP_DEPS += \
 ./Core/Src/bms.d \
-./Core/Src/can.d \
 ./Core/Src/esc.d 
 
 

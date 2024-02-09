@@ -8,10 +8,6 @@
 #ifndef SRC_CAN_H_
 #define SRC_CAN_H_
 
-class can {
-public:
-	can();
-	virtual ~can();
-};
+#include "stm32g4xx_hal.h"
 
 #endif /* SRC_CAN_H_ */
