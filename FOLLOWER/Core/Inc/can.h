@@ -10,4 +10,7 @@
 
 #include "stm32g4xx_hal.h"
 
+
+#define
+
 #endif /* SRC_CAN_H_ */
