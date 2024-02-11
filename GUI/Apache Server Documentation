@@ -1,0 +1,8 @@
+## This file is to document what the Apache Web Server team has done (and maybe how to do it) and what needs to be done
+
+## Completed Tasks:
+1) Able to connect to pi (Done using Eric's phone as he has an Andriod and can see who is connected to his hotspot and the IP)
+2) Created a script to automatically update the pi and download necessary files, drivers, and software
+
+## To-Do
+1) Get C code to send out states and process CAN
