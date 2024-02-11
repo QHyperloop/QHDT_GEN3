@@ -2,6 +2,8 @@
 
 ## Completed Tasks:
 1) Able to connect to pi (Done using Eric's phone as he has an Andriod and can see who is connected to his hotspot and the IP)
+  a) Use raspberrypi.local on Putty to connect. Or the IP if it doesn't work
+  b) Username: pi     Password: raspberry
 2) Created a script to automatically update the pi and download necessary files, drivers, and software
 
 ## To-Do
