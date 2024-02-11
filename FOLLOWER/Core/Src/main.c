@@ -81,6 +81,8 @@ typedef enum PodState {
 	STDBY
 }PodState;
 
+int isoState;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -157,101 +159,102 @@ int main(void)
   PodState currentState = INIT;
 
   switch (currentState){
-  case(INIT):
+  case INIT:
 	  bool EStopReady = false;
+	  //We wait to initialize the pod. Make sure it is mounted and everything is ready.
+	  while(!EStopReady){
 
-  	  currentState = SAFE_TO_APPROACH;
+	  }
+
+	  bool PodMounted = false;
+	  //Ideally, we could have a button that, once triggered, places the pod in a safe-to-approach state.
+	  //Once the pod is mounted.
+	  while(!PodMounted){
+		  int buttonValue = digitalRead(buttonPin); //for some buttonPin specified earlier
+		  if(buttonPin = LOW){
+			  currentState = SAFE_TO_APPROACH;
+			  //output: ... << "POD safe to approach" << ...
+			  delay(5000);
+			  PodMounted = true;
+		  }
+	  }
+
+
+
 	  break;
+  case SAFE_TO_APPROACH:
+	  bool RTL = false;
+	  //Ready To Launch:
+	  while(!RTL){
 
-
-  case(FAULT):
-		  break;
-
-  case(SAFE_TO_APPROACH):
-		  thing1
-		thing2
-		  break;
-
-
-  case(LAUNCH):
-		  break;
-
-  case(COAST):
-		  break;
-
-  case(BRAKE):
-		  break;
-
-  case(CRAWL):
-		  break;
-
-  case(GROUNDWARNING):
-		  break;
-
-  case(STDBY):
-		  break;
-
-
-  }
-
-
-  bool EStopReady = true;
-  //We wait to initialize the pod. Make sure it is mounted and everything is ready.
-  while(!EStopReady){
-
-  }
-
-  bool PodMounted = false;
-  //Ideally, we could have a button that, once triggered, places the pod in a safe-to-approach state.
-  //Once the pod is mounted.
-  while(!PodMounted){
-	  int buttonValue = digitalRead(buttonPin); //for some buttonPin specified earlier
-	  if(buttonPin = LOW){
-		  the_STATE = SAFE_TO_APPROACH;
-		  //output: ... << "POD safe to approach" << ...
-		  delay(5000);
-
-		  PodMounted = true;
 	  }
-  }
 
-  bool RTL = false;
-  //Ready To Launch:
-  while(!RTL){
-
-  }
-
-  bool groundFault = false;
-  bool lossOfSerial = false;
-  bool launch = false;
-  //DO NOT proceed with procedures until groundFaults and loss of communication have been checked.
-  //while(!groundFault && !lossOfSerial){	etc...	}
-  while(!launch){
-	  //Perform ready-to-launch procedures. Make sure brakes are still on, apply current brakes.
-	  //Continue checking for ground faults or loss of communication on radios.
-	  //isoState = ... - Check for ground faults
-	  if(isoState == 0){
-		  //faultState(); (fault state) is triggered
-	  }
-	  if(Serial3.available){ //'Serial3.available' is temporary. Currently checking for loss of communication.
-		  int theState = Serial3.read() - '0'; //Comms are available, read the state.
-		  if(theState == -1){
-			  //faultState();
+	  bool groundFault = false;
+	  bool lossOfSerial = false;
+	  bool launch = false;
+	  //DO NOT proceed with procedures until groundFaults and loss of communication have been checked.
+	  //while(!groundFault && !lossOfSerial){	etc...	}
+	  while(!launch){
+		  //Perform ready-to-launch procedures. Make sure brakes are still on, apply current brakes.
+		  //Continue checking for ground faults or loss of communication on radios.
+		  //isoState = ... - Check for ground faults
+		  isoState = readIsolationState(IMD_Frame);
+		  if(isoState == 0){
+			  currentState = FAULT;
+			  fprintf(dataFile, "Isolation State: GOOD"); //Temporary. Send information via CAN packet.
 		  }
-	  }
-	  unsigned long currentMillis = millis();
-	  if(currentMillis - previousMillis >= 750){
-		  previousMillis = currentMillis;
-		  if(ledState == LOW){
-			  ledState = HIGH;
-		  } else {
-			  ledState = LOW;
+		  else if(isoState == 7){
+			  currentState = GROUNDWARNING;
+			  fprintf(dataFile, "Isolation State: WARNING");
 		  }
-	  }
+		  else{
+			  currentState = STDBY;
+			  fpinrtf(dataFile, "IsolationState: DANGER")
+		  }
+		  if(Serial3.available){ //'Serial3.available' is temporary. Currently checking for loss of communication.
+			  int theState = Serial3.read() - '0'; //Comms are available, read the state.
+			  if(theState == -1){
+				  //faultState();
+			  }
+		  }
+		  unsigned long currentMillis = millis();
+		  if(currentMillis - previousMillis >= 750){
+			  previousMillis = currentMillis;
+			  if(ledState == LOW){
+				  ledState = HIGH;
+			  } else {
+				  ledState = LOW;
+			  }
+		  }
+
+		}
+
+
+
+  case LAUNCH:
+		  break;
+
+  case COAST:
+		  break;
+
+  case BRAKE:
+		  break;
+
+  case CRAWL:
+		  break;
+
+  case GROUNDWARNING:
+		  break;
+
+  case STDBY:
+		  break;
+  case FAULT:
+  		  break;
 
   }
 
-  bool notTrue = false;
+  fclose(dataFile);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
