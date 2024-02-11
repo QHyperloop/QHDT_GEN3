@@ -1,3 +1,0 @@
-../Core/Src/can.c:25:9:CAN_INIT	7
-../Core/Src/can.c:73:9:Set_ESC_CURR	2
-../Core/Src/can.c:83:9:Set_ESC_RPM	2
