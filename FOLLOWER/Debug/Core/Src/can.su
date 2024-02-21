@@ -1,3 +1,0 @@
-../Core/Src/can.cpp:10:1:can::can()	16	static
-../Core/Src/can.cpp:15:1:can::~can()	16	static
-../Core/Src/can.cpp:15:1:virtual can::~can()	16	static

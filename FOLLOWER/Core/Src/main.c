@@ -23,6 +23,10 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include <stdio.h>
+
+#include "relay.h"
+#include "temperature.h"
+#include "accelerometer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,10 +36,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define thermocouple1_id = 0x60;
-#define thermocouple2_id = 0x66;
-#define thermocouple3_id = 0x67;
-#define thermocouple4_id = 0x65;
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -47,6 +48,7 @@
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc5;
 DMA_HandleTypeDef hdma_adc1;
+DMA_HandleTypeDef hdma_adc5;
 
 FDCAN_HandleTypeDef hfdcan1;
 FDCAN_HandleTypeDef hfdcan2;
@@ -66,10 +68,24 @@ UART_HandleTypeDef hlpuart1;
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi3;
 
+TIM_HandleTypeDef htim2;
+
 PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN PV */
-
+enum PodState {
+	INIT,
+	FAULT,
+	SAFE_TO_APPROACH,
+	READY,
+	LAUNCH,
+	COAST,
+	BRAKE,
+	CRAWL,
+	GROUNDWARNING,
+	STDBY
+};
+volatile uint8_t Fault_Flag;
 
 /* USER CODE END PV */
 
@@ -90,12 +106,70 @@ static void MX_ADC5_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_LPUART1_UART_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint8_t Run_State(enum PodState state) {
+	uint8_t status = 0;
+
+    switch (state) {
+        case INIT:
+        	status = tempsensor_init();
+        	if(status != 0){
+        		return 1;
+        	}
+        	status = acc_init();
+        	if(status != 0){
+        		return 1;
+        	}
+        	return status;
+            break;
+        case FAULT:
+
+        	return status;
+            break;
+        case SAFE_TO_APPROACH:
+
+        	return status;
+            break;
+        case READY:
+
+        	return status;
+            break;
+        case LAUNCH:
+
+        	return status;
+            break;
+        case COAST:
+
+        	return status;
+            break;
+        case BRAKE:
+
+        	return status;
+            break;
+        case CRAWL:
+
+        	return status;
+            break;
+        case GROUNDWARNING:
+
+        	return status;
+            break;
+        case STDBY:
+
+        	return status;
+            break;
+        default:
+        	//invalid state
+            return 1;
+            break;
+    }
+}
 
 /* USER CODE END 0 */
 
@@ -141,8 +215,11 @@ int main(void)
   MX_I2C3_Init();
   MX_SPI3_Init();
   MX_LPUART1_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+  enum PodState Curr_State = INIT;
+  Fault_Flag = Run_State(Curr_State);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -167,21 +244,24 @@ void SystemClock_Config(void)
 
   /** Configure the main internal regulator output voltage
   */
-  HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1);
+  HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST);
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSI48
+                              |RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
+  RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
-  RCC_OscInitStruct.PLL.PLLN = 12;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
+  RCC_OscInitStruct.PLL.PLLN = 85;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV4;
+  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -192,15 +272,19 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }
+
+  /** Enables the Clock Security System
+  */
+  HAL_RCC_EnableCSS();
 }
 
 /**
@@ -225,7 +309,7 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.GainCompensation = 0;
@@ -316,7 +400,7 @@ static void MX_ADC5_Init(void)
   /** Common config
   */
   hadc5.Instance = ADC5;
-  hadc5.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc5.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc5.Init.Resolution = ADC_RESOLUTION_12B;
   hadc5.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc5.Init.GainCompensation = 0;
@@ -371,19 +455,19 @@ static void MX_FDCAN1_Init(void)
   /* USER CODE END FDCAN1_Init 1 */
   hfdcan1.Instance = FDCAN1;
   hfdcan1.Init.ClockDivider = FDCAN_CLOCK_DIV1;
-  hfdcan1.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
+  hfdcan1.Init.FrameFormat = FDCAN_FRAME_FD_BRS;
   hfdcan1.Init.Mode = FDCAN_MODE_NORMAL;
-  hfdcan1.Init.AutoRetransmission = DISABLE;
+  hfdcan1.Init.AutoRetransmission = ENABLE;
   hfdcan1.Init.TransmitPause = DISABLE;
   hfdcan1.Init.ProtocolException = DISABLE;
-  hfdcan1.Init.NominalPrescaler = 16;
-  hfdcan1.Init.NominalSyncJumpWidth = 1;
-  hfdcan1.Init.NominalTimeSeg1 = 2;
+  hfdcan1.Init.NominalPrescaler = 2;
+  hfdcan1.Init.NominalSyncJumpWidth = 2;
+  hfdcan1.Init.NominalTimeSeg1 = 167;
   hfdcan1.Init.NominalTimeSeg2 = 2;
-  hfdcan1.Init.DataPrescaler = 1;
-  hfdcan1.Init.DataSyncJumpWidth = 1;
-  hfdcan1.Init.DataTimeSeg1 = 1;
-  hfdcan1.Init.DataTimeSeg2 = 1;
+  hfdcan1.Init.DataPrescaler = 17;
+  hfdcan1.Init.DataSyncJumpWidth = 4;
+  hfdcan1.Init.DataTimeSeg1 = 5;
+  hfdcan1.Init.DataTimeSeg2 = 4;
   hfdcan1.Init.StdFiltersNbr = 0;
   hfdcan1.Init.ExtFiltersNbr = 0;
   hfdcan1.Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
@@ -414,19 +498,19 @@ static void MX_FDCAN2_Init(void)
   /* USER CODE END FDCAN2_Init 1 */
   hfdcan2.Instance = FDCAN2;
   hfdcan2.Init.ClockDivider = FDCAN_CLOCK_DIV1;
-  hfdcan2.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
+  hfdcan2.Init.FrameFormat = FDCAN_FRAME_FD_BRS;
   hfdcan2.Init.Mode = FDCAN_MODE_NORMAL;
-  hfdcan2.Init.AutoRetransmission = DISABLE;
+  hfdcan2.Init.AutoRetransmission = ENABLE;
   hfdcan2.Init.TransmitPause = DISABLE;
   hfdcan2.Init.ProtocolException = DISABLE;
-  hfdcan2.Init.NominalPrescaler = 16;
-  hfdcan2.Init.NominalSyncJumpWidth = 1;
-  hfdcan2.Init.NominalTimeSeg1 = 2;
+  hfdcan2.Init.NominalPrescaler = 2;
+  hfdcan2.Init.NominalSyncJumpWidth = 2;
+  hfdcan2.Init.NominalTimeSeg1 = 167;
   hfdcan2.Init.NominalTimeSeg2 = 2;
-  hfdcan2.Init.DataPrescaler = 1;
-  hfdcan2.Init.DataSyncJumpWidth = 1;
-  hfdcan2.Init.DataTimeSeg1 = 1;
-  hfdcan2.Init.DataTimeSeg2 = 1;
+  hfdcan2.Init.DataPrescaler = 17;
+  hfdcan2.Init.DataSyncJumpWidth = 4;
+  hfdcan2.Init.DataTimeSeg1 = 5;
+  hfdcan2.Init.DataTimeSeg2 = 4;
   hfdcan2.Init.StdFiltersNbr = 0;
   hfdcan2.Init.ExtFiltersNbr = 0;
   hfdcan2.Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
@@ -457,19 +541,19 @@ static void MX_FDCAN3_Init(void)
   /* USER CODE END FDCAN3_Init 1 */
   hfdcan3.Instance = FDCAN3;
   hfdcan3.Init.ClockDivider = FDCAN_CLOCK_DIV1;
-  hfdcan3.Init.FrameFormat = FDCAN_FRAME_CLASSIC;
+  hfdcan3.Init.FrameFormat = FDCAN_FRAME_FD_BRS;
   hfdcan3.Init.Mode = FDCAN_MODE_NORMAL;
-  hfdcan3.Init.AutoRetransmission = DISABLE;
+  hfdcan3.Init.AutoRetransmission = ENABLE;
   hfdcan3.Init.TransmitPause = DISABLE;
   hfdcan3.Init.ProtocolException = DISABLE;
-  hfdcan3.Init.NominalPrescaler = 16;
-  hfdcan3.Init.NominalSyncJumpWidth = 1;
-  hfdcan3.Init.NominalTimeSeg1 = 2;
+  hfdcan3.Init.NominalPrescaler = 2;
+  hfdcan3.Init.NominalSyncJumpWidth = 2;
+  hfdcan3.Init.NominalTimeSeg1 = 167;
   hfdcan3.Init.NominalTimeSeg2 = 2;
-  hfdcan3.Init.DataPrescaler = 1;
-  hfdcan3.Init.DataSyncJumpWidth = 1;
-  hfdcan3.Init.DataTimeSeg1 = 1;
-  hfdcan3.Init.DataTimeSeg2 = 1;
+  hfdcan3.Init.DataPrescaler = 17;
+  hfdcan3.Init.DataSyncJumpWidth = 4;
+  hfdcan3.Init.DataTimeSeg1 = 5;
+  hfdcan3.Init.DataTimeSeg2 = 4;
   hfdcan3.Init.StdFiltersNbr = 0;
   hfdcan3.Init.ExtFiltersNbr = 0;
   hfdcan3.Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
@@ -499,7 +583,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x00303D5B;
+  hi2c1.Init.Timing = 0x10A0A6FB;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -547,7 +631,7 @@ static void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x00303D5B;
+  hi2c2.Init.Timing = 0x10A0A6FB;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -595,7 +679,7 @@ static void MX_I2C3_Init(void)
 
   /* USER CODE END I2C3_Init 1 */
   hi2c3.Instance = I2C3;
-  hi2c3.Init.Timing = 0x00303D5B;
+  hi2c3.Init.Timing = 0x10A0A6FB;
   hi2c3.Init.OwnAddress1 = 0;
   hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -672,7 +756,7 @@ static void MX_LPUART1_UART_Init(void)
 
   /* USER CODE END LPUART1_Init 1 */
   hlpuart1.Instance = LPUART1;
-  hlpuart1.Init.BaudRate = 209700;
+  hlpuart1.Init.BaudRate = 9600;
   hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
   hlpuart1.Init.StopBits = UART_STOPBITS_1;
   hlpuart1.Init.Parity = UART_PARITY_NONE;
@@ -784,6 +868,51 @@ static void MX_SPI3_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 16999;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_DOWN;
+  htim2.Init.Period = 10000;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
   * @brief USB Initialization Function
   * @param None
   * @retval None
@@ -839,6 +968,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel4_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 
 }
 
