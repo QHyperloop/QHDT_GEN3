@@ -42,7 +42,14 @@ uint8_t acc_init(void){
 	 return 0;
 
 }
+
+int read_accelerometer_x() {
+	bno.acc(&bno ,&acc);
+	return acc.x;
+}
+
 /*
+ *
  * bno.temperature(&bno, &temperature);
         bno.acc(&bno, &acc);
         bno.linear_acc(&bno, &lia);
