@@ -31,6 +31,19 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+typedef enum{
+	INIT,
+	FAULT,
+	SAFE_TO_APPROACH,
+	READY,
+	LAUNCH,
+	COAST,
+	BRAKE,
+	CRAWL,
+	TRACK
+}PodState;
+extern PodState Curr_State;
+extern uint8_t ISO_STATE;
 
 /* USER CODE END Includes */
 

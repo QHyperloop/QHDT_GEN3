@@ -73,19 +73,8 @@ TIM_HandleTypeDef htim2;
 PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN PV */
-enum PodState {
-	INIT,
-	FAULT,
-	SAFE_TO_APPROACH,
-	READY,
-	LAUNCH,
-	COAST,
-	BRAKE,
-	CRAWL,
-	GROUNDWARNING,
-	STDBY
-};
 volatile uint8_t Fault_Flag;
+uint8_t ISO_STATE;
 
 /* USER CODE END PV */
 
@@ -113,7 +102,7 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t Run_State(enum PodState state) {
+uint8_t Run_State(PodState state) {
 	uint8_t status = 0;
 
     switch (state) {
@@ -156,11 +145,7 @@ uint8_t Run_State(enum PodState state) {
 
         	return status;
             break;
-        case GROUNDWARNING:
-
-        	return status;
-            break;
-        case STDBY:
+        case TRACK:
 
         	return status;
             break;
@@ -218,7 +203,7 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-  enum PodState Curr_State = INIT;
+  PodState Curr_State = INIT;
   Fault_Flag = Run_State(Curr_State);
   /* USER CODE END 2 */
 
