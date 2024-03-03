@@ -1,1 +1,2 @@
 ../Core/Src/accelerometer.c:23:9:acc_init	192	static
+../Core/Src/accelerometer.c:46:5:read_accelerometer_x	8	static

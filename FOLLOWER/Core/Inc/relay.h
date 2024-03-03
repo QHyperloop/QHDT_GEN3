@@ -21,4 +21,6 @@ extern void greenstatus(uint8_t state);
 extern void brake_state(uint8_t state);
 extern void pump_control(uint8_t state);
 
+extern uint16_t RelayStates;
+
 #endif /* RELAY_H_ */
