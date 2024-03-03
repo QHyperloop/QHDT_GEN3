@@ -73,6 +73,7 @@ typedef enum PodState {
 	INIT,
 	FAULT,
 	SAFE_TO_APPROACH,
+	READY_TO_LAUNCH,
 	LAUNCH,
 	COAST,
 	BRAKE,
@@ -156,14 +157,32 @@ int main(void)
   /* USER CODE BEGIN 2 */
   unsigned long previousMillis = 0;
   PodState the_STATE = FAULT;
-  PodState currentState = INIT;
+  PodState currentState = STDBY;
 
   switch (currentState){
+  case STDBY:
+	  //First make checks for any ground faults. Done on power up
+	  isoState = readIsolationState(IMD_Frame); //Check for ground faults
+	  if(isoState == 0){
+		  currentState = FAULT;
+		 //fprintf(dataFile, "Isolation State: GOOD"); //Temporary. Send information via CAN packet.
+	  } else if(isoState == 7){
+		  currentState = GROUNDWARNING;
+		  //fprintf(dataFile, "Isolation State: WARNING");
+	  } else{
+		  currentState = STDBY;
+		  //fpinrtf(dataFile, "IsolationState: DANGER");
+	  }
+
+	  currentState = INIT;
+
   case INIT:
 	  bool EStopReady = false;
 	  //We wait to initialize the pod. Make sure it is mounted and everything is ready.
 	  while(!EStopReady){
+		  if (Serial3.available()) { //Check for communication 'serial3' is temporary
 
+		  }
 	  }
 
 	  bool PodMounted = false;
@@ -178,17 +197,22 @@ int main(void)
 			  PodMounted = true;
 		  }
 	  }
-
-
-
 	  break;
-  case SAFE_TO_APPROACH:
+
+ case SAFE_TO_APPROACH:
 	  bool RTL = false;
 	  //Ready To Launch:
 	  while(!RTL){
-
+		  //Ready incoming data
+		  //int currentState = Serial3.read() - '0';
+		  //if(theState = READY_TO_LAUNCH){
+		  //	RTL = true;
+		  //}
+		  if(current)
 	  }
+	  break;
 
+ case READY_TO_LAUNCH:
 	  bool groundFault = false;
 	  bool lossOfSerial = false;
 	  bool launch = false;
@@ -198,25 +222,14 @@ int main(void)
 		  //Perform ready-to-launch procedures. Make sure brakes are still on, apply current brakes.
 		  //Continue checking for ground faults or loss of communication on radios.
 		  //isoState = ... - Check for ground faults
-		  isoState = readIsolationState(IMD_Frame);
-		  if(isoState == 0){
-			  currentState = FAULT;
-			  fprintf(dataFile, "Isolation State: GOOD"); //Temporary. Send information via CAN packet.
-		  }
-		  else if(isoState == 7){
-			  currentState = GROUNDWARNING;
-			  fprintf(dataFile, "Isolation State: WARNING");
-		  }
-		  else{
-			  currentState = STDBY;
-			  fpinrtf(dataFile, "IsolationState: DANGER")
-		  }
+
 		  if(Serial3.available){ //'Serial3.available' is temporary. Currently checking for loss of communication.
 			  int theState = Serial3.read() - '0'; //Comms are available, read the state.
 			  if(theState == -1){
 				  //faultState();
 			  }
 		  }
+
 		  unsigned long currentMillis = millis();
 		  if(currentMillis - previousMillis >= 750){
 			  previousMillis = currentMillis;
@@ -229,31 +242,28 @@ int main(void)
 
 		}
 
-
+	  break;
 
   case LAUNCH:
-		  break;
+
+	  break;
 
   case COAST:
-		  break;
+	  break;
 
   case BRAKE:
-		  break;
+	  break;
 
   case CRAWL:
-		  break;
+	  break;
 
   case GROUNDWARNING:
-		  break;
+	  break;
 
-  case STDBY:
-		  break;
   case FAULT:
-  		  break;
+	  break;
 
   }
-
-  fclose(dataFile);
 
   /* USER CODE END 2 */
 
