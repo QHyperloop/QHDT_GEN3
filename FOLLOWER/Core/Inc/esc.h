@@ -8,10 +8,13 @@
 #ifndef ESC_H_
 #define ESC_H_
 
-class esc {
-public:
-	esc();
-	virtual ~esc();
-};
+#include "stm32g4xx_hal.h"
 
-#endif /* ESC_H_ */
+
+extern uint32_t M_RPM;
+extern uint16_t M_Current;
+extern uint16_t M_Temp_fet;
+extern uint16_t M_Temp_motor;
+extern uint16_t M_Current_in;
+
+#endif

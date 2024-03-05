@@ -23,7 +23,7 @@ bno055_vec4_t qua = {0, 0, 0};
 uint8_t acc_init(void){
 
     bno = (bno055_t){
-    	.i2c = &hi2c3, .addr = 0x28, .mode = BNO_MODE_IMU, ._temp_unit = 0,
+    	.i2c = &hi2c3, .addr = IMU_ID, .mode = BNO_MODE_IMU, ._temp_unit = 0,
     };
 
 	 if((err = bno055_init(&bno)) == BNO_OK){

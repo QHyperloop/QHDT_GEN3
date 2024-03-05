@@ -13,7 +13,7 @@
 #include "stm32g4xx_hal.h"
 
 extern uint8_t tempsensor_init();
-extern uint8_t temp_update();
+extern uint8_t Update_Temp();
 extern volatile int32_t temps[8];
 extern volatile int32_t pressure[1];
 

@@ -1,2 +1,2 @@
-../Core/Src/bms.cpp:20:14:unsigned int checksum(uint8_t*)	2
-../Core/Src/bms.cpp:31:6:void data_in()	1
+../Core/Src/bms.c:20:14:checksum	2
+../Core/Src/bms.c:31:6:data_in	1

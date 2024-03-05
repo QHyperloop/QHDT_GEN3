@@ -4,16 +4,14 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-CPP_SRCS += \
-../Core/Src/bms.cpp \
-../Core/Src/esc.cpp 
-
 C_SRCS += \
 ../Core/Src/accelerometer.c \
+../Core/Src/bms.c \
 ../Core/Src/bno055.c \
 ../Core/Src/can.c \
 ../Core/Src/driver_mcp9600.c \
 ../Core/Src/driver_mcp9600_interface_stm32.c \
+../Core/Src/esc.c \
 ../Core/Src/main.c \
 ../Core/Src/relay.c \
 ../Core/Src/stm32g4xx_hal_msp.c \
@@ -25,10 +23,12 @@ C_SRCS += \
 
 C_DEPS += \
 ./Core/Src/accelerometer.d \
+./Core/Src/bms.d \
 ./Core/Src/bno055.d \
 ./Core/Src/can.d \
 ./Core/Src/driver_mcp9600.d \
 ./Core/Src/driver_mcp9600_interface_stm32.d \
+./Core/Src/esc.d \
 ./Core/Src/main.d \
 ./Core/Src/relay.d \
 ./Core/Src/stm32g4xx_hal_msp.d \
@@ -55,16 +55,10 @@ OBJS += \
 ./Core/Src/system_stm32g4xx.o \
 ./Core/Src/temperature.o 
 
-CPP_DEPS += \
-./Core/Src/bms.d \
-./Core/Src/esc.d 
-
 
 # Each subdirectory must supply rules for building sources it contributes
 Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.c Core/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
-Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.cpp Core/Src/subdir.mk
-	arm-none-eabi-g++ "$<" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G474xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
 clean: clean-Core-2f-Src
 

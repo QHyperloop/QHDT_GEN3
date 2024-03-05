@@ -24,9 +24,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "relay.h"
-#include "temperature.h"
-#include "accelerometer.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,6 +73,7 @@ PCD_HandleTypeDef hpcd_USB_FS;
 /* USER CODE BEGIN PV */
 volatile uint8_t Fault_Flag;
 uint8_t ISO_STATE;
+PodState Curr_State = INIT;
 
 /* USER CODE END PV */
 
@@ -115,41 +114,82 @@ uint8_t Run_State(PodState state) {
         	if(status != 0){
         		return 1;
         	}
+        	status = CAN_INIT();
+        	if(status != 0){
+        		return 1;
+        	}
+        	status = tempsensor_init();
+        	if(status != 0){
+        		return 1;
+        	}
+        	status = acc_init();
+        	if(status != 0){
+        		return 1;
+        	}
+        	pump_control(1);
+        	Curr_State = SAFE_TO_APPROACH;
         	return status;
             break;
         case FAULT:
+        	HV_off();
+        	yellowstatus(0);
+        	greenstatus(0);
+        	redstatus(1);
+        	pump_control(0);
+        	brake_state(0);
 
         	return status;
             break;
         case SAFE_TO_APPROACH:
+        	HV_off();
+        	yellowstatus(0);
+        	greenstatus(0);
+        	brake_state(1);
 
         	return status;
             break;
         case READY:
-
+        	precharge();
+        	yellowstatus(1);
+        	brake_state(0);
         	return status;
             break;
         case LAUNCH:
+        	yellowstatus(0);
+        	greenstatus(1);
 
         	return status;
             break;
         case COAST:
+        	yellowstatus(0);
+        	greenstatus(1);
 
         	return status;
             break;
         case BRAKE:
+        	yellowstatus(0);
+        	greenstatus(1);
+        	brake_state(1);
 
         	return status;
             break;
         case CRAWL:
+        	yellowstatus(0);
+        	greenstatus(1);
+        	brake_state(0);
 
         	return status;
             break;
         case TRACK:
+        	HV_off();
+        	yellowstatus(0);
+        	greenstatus(0);
+        	brake_state(0);
 
         	return status;
             break;
         default:
+        	Curr_State = FAULT;
         	//invalid state
             return 1;
             break;
@@ -203,7 +243,7 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-  PodState Curr_State = INIT;
+
   Fault_Flag = Run_State(Curr_State);
   /* USER CODE END 2 */
 
@@ -212,6 +252,9 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  Fault_Flag = Update_Temp();
+	  Fault_Flag = IMD_Req_Isolation();
+	  Fault_Flag = Run_State(Curr_State);
 
     /* USER CODE BEGIN 3 */
   }

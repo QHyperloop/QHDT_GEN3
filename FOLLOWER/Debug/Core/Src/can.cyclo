@@ -4,5 +4,5 @@
 ../Core/Src/can.c:140:9:IMD_Req_Isolation	2
 ../Core/Src/can.c:151:9:State_Received	2
 ../Core/Src/can.c:165:9:Sensor_Data	2
-../Core/Src/can.c:205:6:HAL_FDCAN_RxFifo0Callback	1
-../Core/Src/can.c:261:6:HAL_FDCAN_RxFifo1Callback	5
+../Core/Src/can.c:205:6:HAL_FDCAN_RxFifo0Callback	12
+../Core/Src/can.c:261:6:HAL_FDCAN_RxFifo1Callback	8
