@@ -22,6 +22,9 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g4xx_hal.h"
@@ -47,6 +50,7 @@ typedef enum{
 }PodState;
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
+extern volatile uint8_t Fault_Flag;
 
 /* USER CODE END Includes */
 
@@ -78,6 +82,8 @@ void Error_Handler(void);
 
 /* USER CODE END Private defines */
 
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __MAIN_H */

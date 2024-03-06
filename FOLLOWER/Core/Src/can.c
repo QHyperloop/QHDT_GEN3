@@ -270,8 +270,10 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 				IMD_Req_Isolation();
 			}else if((RxData_Pod[1] & 0x03) == 0b11){
 				ISO_STATE = 0xFF; //fault set LED to Red and full estop
+				Curr_State = FAULT;
 			}else{
 				ISO_STATE = 0x00; //all good
+
 			}
 		}
 	}else{
