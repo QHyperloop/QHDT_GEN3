@@ -48,6 +48,20 @@ typedef enum{
 	CRAWL,
 	TRACK
 }PodState;
+
+typedef enum _error_handler {
+	CAN_INIT_OK,
+	CAN_INIT_ERR,
+	CAN3_MSG_ERR,
+	CAN2_MSG_ERR,
+	CAN1_MSG_ERR,
+	CAN_OK
+
+
+
+
+} error_handler;
+
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
 extern volatile uint8_t Fault_Flag;

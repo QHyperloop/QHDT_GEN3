@@ -11,6 +11,7 @@
 #define IMU_ID ((uint8_t)0x28)
 
 #include "stm32g4xx_hal.h"
+#include "main.h"
 #include "bno055.h"
 #include "bno_config.h"
 #include <stdbool.h>

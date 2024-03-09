@@ -20,26 +20,28 @@ bno055_vec3_t grv = {0, 0, 0};
 bno055_euler_t eul = {0, 0, 0};
 bno055_vec4_t qua = {0, 0, 0};
 
-uint8_t acc_init(void){
+error_handler acc_init(void){
+	error_handler err;
+	err = ACC_INIT_OK;
 
     bno = (bno055_t){
     	.i2c = &hi2c3, .addr = IMU_ID, .mode = BNO_MODE_IMU, ._temp_unit = 0,
     };
 
-	 if((err = bno055_init(&bno)) == BNO_OK){
+	 if(bno055_init(&bno) == BNO_OK){
 	    printf("[+] BNO055 init success\r\n");
 	 }else{
-		 return 1;
+		 err = ACC_INIT_ERR;
 	    //Error_Handler();
 	 }
 
-	 err = bno055_set_unit(&bno, BNO_TEMP_UNIT_C, BNO_GYR_UNIT_DPS,BNO_ACC_UNITSEL_M_S2, BNO_EUL_UNIT_DEG);
-	 if(err != BNO_OK) {
-		 return 1;
+
+	 if(bno055_set_unit(&bno, BNO_TEMP_UNIT_C, BNO_GYR_UNIT_DPS,BNO_ACC_UNITSEL_M_S2, BNO_EUL_UNIT_DEG) != BNO_OK) {
+		 err = ACC_UNIT_ERR;
 	 }else{
 		 printf("[BNO] Unit selection success\r\n");
 	 }
-	 return 0;
+	 return err;
 
 }
 
