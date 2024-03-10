@@ -24,9 +24,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "relay.h"
-#include "temperature.h"
-#include "accelerometer.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -69,12 +67,14 @@ SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi3;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim5;
 
 PCD_HandleTypeDef hpcd_USB_FS;
 
 /* USER CODE BEGIN PV */
 volatile uint8_t Fault_Flag;
 uint8_t ISO_STATE;
+PodState Curr_State = INIT;
 
 /* USER CODE END PV */
 
@@ -96,6 +96,7 @@ static void MX_I2C3_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_LPUART1_UART_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_TIM5_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -115,41 +116,83 @@ uint8_t Run_State(PodState state) {
         	if(status != 0){
         		return 1;
         	}
+        	status = CAN_INIT();
+        	if(status != 0){
+        		return 1;
+        	}
+        	status = tempsensor_init();
+        	if(status != 0){
+        		return 1;
+        	}
+        	status = acc_init();
+        	if(status != 0){
+        		return 1;
+        	}
+        	pump_control(1);
+        	HAL_TIM_Base_Start_IT(&htim5);
+        	Curr_State = SAFE_TO_APPROACH;
         	return status;
             break;
         case FAULT:
+        	HV_off();
+        	yellowstatus(0);
+        	greenstatus(0);
+        	redstatus(1);
+        	pump_control(0);
+        	brake_state(0);
 
         	return status;
             break;
         case SAFE_TO_APPROACH:
+        	HV_off();
+        	yellowstatus(0);
+        	greenstatus(0);
+        	brake_state(1);
 
         	return status;
             break;
         case READY:
-
+        	precharge();
+        	yellowstatus(1);
+        	brake_state(0);
         	return status;
             break;
         case LAUNCH:
+        	yellowstatus(0);
+        	greenstatus(1);
 
         	return status;
             break;
         case COAST:
+        	yellowstatus(0);
+        	greenstatus(1);
 
         	return status;
             break;
         case BRAKE:
+        	yellowstatus(0);
+        	greenstatus(1);
+        	brake_state(1);
 
         	return status;
             break;
         case CRAWL:
+        	yellowstatus(0);
+        	greenstatus(1);
+        	brake_state(0);
 
         	return status;
             break;
         case TRACK:
+        	HV_off();
+        	yellowstatus(0);
+        	greenstatus(0);
+        	brake_state(0);
 
         	return status;
             break;
         default:
+        	Curr_State = FAULT;
         	//invalid state
             return 1;
             break;
@@ -201,9 +244,10 @@ int main(void)
   MX_SPI3_Init();
   MX_LPUART1_UART_Init();
   MX_TIM2_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
-  PodState Curr_State = INIT;
+
   Fault_Flag = Run_State(Curr_State);
   /* USER CODE END 2 */
 
@@ -211,6 +255,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  Fault_Flag = Run_State(Curr_State);
+	  if(Fault_Flag != 0){
+		  Curr_State = FAULT;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -871,9 +919,9 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 16999;
+  htim2.Init.Prescaler = 1699;
   htim2.Init.CounterMode = TIM_COUNTERMODE_DOWN;
-  htim2.Init.Period = 10000;
+  htim2.Init.Period = 5000000;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -894,6 +942,51 @@ static void MX_TIM2_Init(void)
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
+  * @brief TIM5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM5_Init(void)
+{
+
+  /* USER CODE BEGIN TIM5_Init 0 */
+
+  /* USER CODE END TIM5_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM5_Init 1 */
+
+  /* USER CODE END TIM5_Init 1 */
+  htim5.Instance = TIM5;
+  htim5.Init.Prescaler = 1699;
+  htim5.Init.CounterMode = TIM_COUNTERMODE_DOWN;
+  htim5.Init.Period = 1.5E7;
+  htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim5, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM5_Init 2 */
+
+  /* USER CODE END TIM5_Init 2 */
 
 }
 

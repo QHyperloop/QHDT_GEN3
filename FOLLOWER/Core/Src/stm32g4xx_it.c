@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "can.h"
 #include "relay.h"
+#include "main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,6 +67,7 @@ extern DMA_HandleTypeDef hdma_i2c1_rx;
 extern DMA_HandleTypeDef hdma_i2c1_tx;
 extern DMA_HandleTypeDef hdma_i2c3_rx;
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim5;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -299,6 +301,7 @@ void FDCAN1_IT0_IRQHandler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
+	// T_out = ((ARR+1)(PSC+1))/F_clk
 
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
@@ -306,6 +309,21 @@ void TIM2_IRQHandler(void)
   HAL_TIM_Base_Stop_IT(&htim2);
   HV_on();
   /* USER CODE END TIM2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM5 global interrupt.
+  */
+void TIM5_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM5_IRQn 0 */
+
+  /* USER CODE END TIM5_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim5);
+  /* USER CODE BEGIN TIM5_IRQn 1 */
+  Fault_Flag = Update_Temp();
+  Fault_Flag = IMD_Req_Isolation();
+  /* USER CODE END TIM5_IRQn 1 */
 }
 
 /**

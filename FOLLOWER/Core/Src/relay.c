@@ -37,7 +37,7 @@ void precharge(void){
 	HAL_GPIO_WritePin(GPIOE, RELAY9, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, RELAY15, GPIO_PIN_SET); //RESISTOR ON
 	HAL_GPIO_WritePin(GPIOE, RELAY10, GPIO_PIN_SET);
-	RelayStates = RelayStates ^ 0x00C6;
+	RelayStates = RelayStates | 0x00C6;
 	HAL_TIM_Base_Start_IT(&htim2);
 }
 void HV_on(void){
@@ -45,7 +45,8 @@ void HV_on(void){
 	HAL_GPIO_WritePin(GPIOE, RELAY16, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, RELAY15, GPIO_PIN_RESET); //RESISTOR OFF
 	HAL_GPIO_WritePin(GPIOE, RELAY10, GPIO_PIN_RESET);
-	RelayStates = RelayStates ^ 0x0063;
+	RelayStates = RelayStates | 0x0021;
+	RelayStates = RelayStates & 0xFFBD;
 
 }
 
@@ -54,16 +55,16 @@ void HV_off(void){
 	HAL_GPIO_WritePin(GPIOE, RELAY16, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(GPIOE, RELAY14, GPIO_PIN_RESET); //LOW SIDE OFF
 	HAL_GPIO_WritePin(GPIOE, RELAY9, GPIO_PIN_RESET);
-	RelayStates = RelayStates ^ 0x00A5;
+	RelayStates = RelayStates & 0xFF5A;
 }
 
 void redstatus(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY1, GPIO_PIN_SET);
-		RelayStates = RelayStates ^ 0x8000;
+		RelayStates = RelayStates | 0x8000;
 	}else{
 		HAL_GPIO_WritePin(GPIOD, RELAY1, GPIO_PIN_RESET);
-		RelayStates = RelayStates ^ 0x8000;
+		RelayStates = RelayStates & 0x7FFF;
 	}
 
 }
@@ -71,30 +72,30 @@ void redstatus(uint8_t state){
 void yellowstatus(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY2, GPIO_PIN_SET);
-		RelayStates = RelayStates ^ 0x4000;
+		RelayStates = RelayStates | 0x4000;
 	}else{
 		HAL_GPIO_WritePin(GPIOD, RELAY2, GPIO_PIN_RESET);
-		RelayStates = RelayStates ^ 0x4000;
+		RelayStates = RelayStates & 0xBFFF;
 	}
 }
 
 void greenstatus(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY3, GPIO_PIN_SET);
-		RelayStates = RelayStates ^ 0x2000;
+		RelayStates = RelayStates | 0x2000;
 	}else{
 		HAL_GPIO_WritePin(GPIOD, RELAY3, GPIO_PIN_RESET);
-		RelayStates = RelayStates ^ 0x2000;
+		RelayStates = RelayStates & 0xDFFF;
 	}
 }
 
 void brake_state(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY4, GPIO_PIN_SET);
-		RelayStates = RelayStates ^ 0x1000;
+		RelayStates = RelayStates | 0x1000;
 	}else{
 		HAL_GPIO_WritePin(GPIOD, RELAY4, GPIO_PIN_RESET);
-		RelayStates = RelayStates ^ 0x1000;
+		RelayStates = RelayStates & 0xEFFF;
 	}
 }
 
@@ -102,11 +103,11 @@ void pump_control(uint8_t state){
 	if(state == 1){
 		HAL_GPIO_WritePin(GPIOD, RELAY5, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOD, RELAY6, GPIO_PIN_RESET);
-		RelayStates = RelayStates ^ 0x0C00;
+		RelayStates = RelayStates | 0x0C00;
 	}else{
 		HAL_GPIO_WritePin(GPIOD, RELAY5, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(GPIOD, RELAY6, GPIO_PIN_RESET);
-		RelayStates = RelayStates ^ 0x0C00;
+		RelayStates = RelayStates & 0xF7FF;
 	}
 }
 

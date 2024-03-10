@@ -31,6 +31,12 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "relay.h"
+#include "temperature.h"
+#include "accelerometer.h"
+#include "can.h"
+
+
 typedef enum{
 	INIT,
 	FAULT,
@@ -44,6 +50,7 @@ typedef enum{
 }PodState;
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
+extern volatile uint8_t Fault_Flag;
 
 /* USER CODE END Includes */
 

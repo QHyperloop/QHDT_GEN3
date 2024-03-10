@@ -1,8 +1,8 @@
 ../Core/Src/relay.c:34:6:precharge	8	static
 ../Core/Src/relay.c:43:6:HV_on	8	static
-../Core/Src/relay.c:52:6:HV_off	8	static
-../Core/Src/relay.c:60:6:redstatus	16	static
-../Core/Src/relay.c:71:6:yellowstatus	16	static
-../Core/Src/relay.c:81:6:greenstatus	16	static
-../Core/Src/relay.c:91:6:brake_state	16	static
-../Core/Src/relay.c:101:6:pump_control	16	static
+../Core/Src/relay.c:53:6:HV_off	8	static
+../Core/Src/relay.c:61:6:redstatus	16	static
+../Core/Src/relay.c:72:6:yellowstatus	16	static
+../Core/Src/relay.c:82:6:greenstatus	16	static
+../Core/Src/relay.c:92:6:brake_state	16	static
+../Core/Src/relay.c:102:6:pump_control	16	static

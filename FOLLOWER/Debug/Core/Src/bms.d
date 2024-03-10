@@ -1,4 +1,4 @@
-Core/Src/bms.o: ../Core/Src/bms.cpp ../Core/Inc/bms.h \
+Core/Src/bms.o: ../Core/Src/bms.c ../Core/Inc/bms.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h \
  ../Core/Inc/stm32g4xx_hal_conf.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_rcc.h \

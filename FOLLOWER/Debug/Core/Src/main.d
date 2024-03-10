@@ -44,7 +44,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/driver_mcp9600_interface.h ../Core/Inc/driver_mcp9600.h \
  ../Core/Inc/accelerometer.h ../Core/Inc/bno055.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h \
- ../Core/Inc/bno_config.h
+ ../Core/Inc/bno_config.h ../Core/Inc/can.h ../Core/Inc/main.h \
+ ../Core/Inc/esc.h
 ../Core/Inc/main.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -95,3 +96,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/bno055.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h:
 ../Core/Inc/bno_config.h:
+../Core/Inc/can.h:
+../Core/Inc/main.h:
+../Core/Inc/esc.h:

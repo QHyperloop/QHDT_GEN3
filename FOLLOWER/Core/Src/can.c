@@ -31,7 +31,7 @@ uint8_t RxData_Master[64];
 uint8_t CAN_INIT(){
 	TxHeader_Master_State.Identifier = 0x10000000;
 	TxHeader_Master_State.IdType = FDCAN_EXTENDED_ID;
-	TxHeader_Master_State.TxFrameType = FDCAN_REMOTE_FRAME;
+	TxHeader_Master_State.TxFrameType = FDCAN_DATA_FRAME;
 	TxHeader_Master_State.ErrorStateIndicator = FDCAN_ESI_ACTIVE;
 	TxHeader_Master_State.DataLength = FDCAN_DLC_BYTES_1;
 	TxHeader_Master_State.BitRateSwitch = FDCAN_BRS_ON;
@@ -149,8 +149,8 @@ uint8_t IMD_Req_Isolation(){
 }
 
 uint8_t State_Received(uint32_t state_r){
-	TxHeader_Master_State.Identifier = state_r + FOLLOWER_ID;
-	TxHeader_Master_State.TxFrameType = FDCAN_REMOTE_FRAME;
+	TxHeader_Master_State.Identifier = state_r | FOLLOWER_ID;
+	TxHeader_Master_State.TxFrameType = FDCAN_DATA_FRAME;
 	TxHeader_Master_State.DataLength = FDCAN_DLC_BYTES_1;
 	uint8_t temp_data[] = {0x00};
 
@@ -163,7 +163,7 @@ uint8_t State_Received(uint32_t state_r){
 }
 
 uint8_t Sensor_Data(){
-	TxHeader_Master_Data.Identifier = 0x01000100+FOLLOWER_ID;
+	TxHeader_Master_Data.Identifier = 0x01000100 | FOLLOWER_ID;
 	TxHeader_Master_Data.TxFrameType = FDCAN_DATA_FRAME;
 	TxHeader_Master_Data.DataLength = FDCAN_DLC_BYTES_16;
 	uint8_t Temperature_Data[] = {};
@@ -172,7 +172,7 @@ uint8_t Sensor_Data(){
 	}
 	return 0;
 
-	TxHeader_Master_Data.Identifier = 0x01000200+FOLLOWER_ID;
+	TxHeader_Master_Data.Identifier = 0x01000200 | FOLLOWER_ID;
 	TxHeader_Master_Data.DataLength = FDCAN_DLC_BYTES_16;
 	uint8_t ESC_Data[] = {};
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader_Master_Data, ESC_Data)!= HAL_OK){
@@ -180,7 +180,7 @@ uint8_t Sensor_Data(){
 	}
 	return 0;
 
-	TxHeader_Master_Data.Identifier = 0x01000300+FOLLOWER_ID;
+	TxHeader_Master_Data.Identifier = 0x01000300 | FOLLOWER_ID;
 	TxHeader_Master_Data.DataLength = FDCAN_DLC_BYTES_2;
 	uint8_t Relay_Data[] = {0x00,0x00};
 	Relay_Data[0] = (RelayStates & 0xFF00) >> 8;
@@ -190,7 +190,7 @@ uint8_t Sensor_Data(){
 	}
 	return 0;
 
-	TxHeader_Master_Data.Identifier = 0x01000400+FOLLOWER_ID;
+	TxHeader_Master_Data.Identifier = 0x01000400 | FOLLOWER_ID;
 	TxHeader_Master_Data.DataLength = FDCAN_DLC_BYTES_16;
 	uint8_t Batt_Data[] = {};
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader_Master_Data, Batt_Data)!= HAL_OK){
@@ -206,7 +206,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader_Master, RxData_Master) != HAL_OK){
 		//Error_Handler();
 	}
-	if(RxHeader_Master.Identifier && 0x000000FF == 0x00){
+	if((RxHeader_Master.Identifier & 0x000000FF) == 0x00){
 		if(RxHeader_Master.Identifier == 0x00001000){
 			//init
 			Curr_State = INIT;
@@ -244,7 +244,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 			Curr_State = READY;
 		}
 	}
-	if(RxHeader_Master.Identifier && 0x0000FFFF == 0x0000FF00+FOLLOWER_ID){
+	if((RxHeader_Master.Identifier & 0x0000FFFF) == (0x0000FF00 | FOLLOWER_ID)){
 		Sensor_Data();
 
 	}
@@ -252,7 +252,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 			//fault
 	}
 	if (HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK){
-				//fault
+			//fault
 	}
 
 
@@ -270,8 +270,10 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 				IMD_Req_Isolation();
 			}else if((RxData_Pod[1] & 0x03) == 0b11){
 				ISO_STATE = 0xFF; //fault set LED to Red and full estop
+				Curr_State = FAULT;
 			}else{
 				ISO_STATE = 0x00; //all good
+
 			}
 		}
 	}else{
@@ -280,6 +282,8 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 	if((RxHeader_Pod.Identifier & 0x000000FF) == BMS_ID){
 		if((RxHeader_Pod.Identifier & 0x0000FF00) == 0x0900){
 			//status 1
+			M_RPM = (RxData_Pod[7]<<24) | (RxData_Pod[6]<<16) | (RxData_Pod[5]<<8) | (RxData_Pod[4]);
+			M_Current = (RxData_Pod[3]<<8) | (RxData_Pod[2]);
 		}
 		if((RxHeader_Pod.Identifier & 0x0000FF00) == 0x0E00){
 			//status 2
@@ -289,6 +293,9 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 		}
 		if((RxHeader_Pod.Identifier & 0x0000FF00) == 0x1000){
 			//status 4
+			M_Temp_fet = (RxData_Pod[7]<<8) | (RxData_Pod[6]);
+			M_Temp_motor = (RxData_Pod[5]<<8) | (RxData_Pod[4]);
+			M_Current_in = (RxData_Pod[3]<<8) | (RxData_Pod[2]);
 		}
 		if((RxHeader_Pod.Identifier & 0x0000FF00) == 0x1B00){
 			//status 5
