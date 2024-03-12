@@ -31,13 +31,14 @@ error_handler acc_init(void){
 	 if(bno055_init(&bno) == BNO_OK){
 	    printf("[+] BNO055 init success\r\n");
 	 }else{
-		 err = ACC_INIT_ERR;
-	    //Error_Handler();
+		err = ACC_INIT_ERR;
+	    return err;
 	 }
 
 
 	 if(bno055_set_unit(&bno, BNO_TEMP_UNIT_C, BNO_GYR_UNIT_DPS,BNO_ACC_UNITSEL_M_S2, BNO_EUL_UNIT_DEG) != BNO_OK) {
 		 err = ACC_UNIT_ERR;
+		 return err;
 	 }else{
 		 printf("[BNO] Unit selection success\r\n");
 	 }

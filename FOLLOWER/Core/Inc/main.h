@@ -55,7 +55,13 @@ typedef enum _error_handler {
 	CAN3_MSG_ERR,
 	CAN2_MSG_ERR,
 	CAN1_MSG_ERR,
-	CAN_OK
+	CAN_OK,
+	ACC_INIT_OK,
+	ACC_INIT_ERR,
+	ACC_UNIT_ERR
+
+
+
 
 
 
