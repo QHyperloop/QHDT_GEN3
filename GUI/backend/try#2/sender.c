@@ -1,12 +1,15 @@
 #include <stdio.h>
 
+#define PATH "data.txt"
+
 int main(){
 
     FILE *fp;
+     fp = fopen(PATH, "w");
 
-    fp = fopen("data.txt", "w");
-
-    fprintf(fp, "test");
+    for(int i=0; i<100; i++){
+        fprintf(fp, "%d\n", i);
+    }
 
     fclose(fp);
 
