@@ -1,0 +1,15 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend to read SocketCAN from the main C code",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Ryan Silverberg, Kyle _____",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
