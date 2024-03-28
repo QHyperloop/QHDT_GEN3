@@ -88,11 +88,7 @@ static uint8_t a_mcp9600_iic_read(mcp9600_handle_t *handle, uint8_t reg, uint8_t
     uint8_t buf[1];
     
     buf[0] = reg;                                                               /* set reg */
-    if (handle->iic_write_cmd(handle->iic_addr, (uint8_t *)buf, 1) != 0)        /* write command */
-    {   
-        return 1;                                                               /* return error */
-    }
-    if (handle->iic_read_cmd(handle->iic_addr, data, len) != 0)                 /* read data */
+    if (handle->iic_read_cmd(handle->iic_addr, (uint8_t *)buf, 1, data, len) != 0)                 /* read data */
     {   
         return 1;                                                               /* return error */
     }
@@ -120,12 +116,12 @@ static uint8_t a_mcp9600_iic_write(mcp9600_handle_t *handle, uint8_t reg, uint8_
     {
         return 1;                                                                   /* return error */
     }
-    buf[0] = reg;                                                                   /* set MSB of reg */
+                                                                 /* set MSB of reg */
     for (i = 0; i < len; i++)
     {
-        buf[1 + i] = data[i];                                                       /* copy write data */
+        buf[i] = data[i];                                                       /* copy write data */
     }
-    if (handle->iic_write_cmd(handle->iic_addr, (uint8_t *)buf, len + 1) != 0)      /* write iic command */
+    if (handle->iic_write_cmd(handle->iic_addr, (uint8_t *)buf,reg, len + 1) != 0)      /* write iic command */
     {   
         return 1;                                                                   /* return error */
     }

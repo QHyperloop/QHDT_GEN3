@@ -223,8 +223,8 @@ typedef struct mcp9600_handle_s
 {
     uint8_t (*iic_init)(void);                                                 /**< point to an iic_init function address */
     uint8_t (*iic_deinit)(void);                                               /**< point to an iic_deinit function address */
-    uint8_t (*iic_write_cmd)(uint8_t addr, uint8_t *buf, uint16_t len);        /**< point to an iic_write_cmd function address */
-    uint8_t (*iic_read_cmd)(uint8_t addr, uint8_t *buf, uint16_t len);         /**< point to an iic_read_cmd function address */
+    uint8_t (*iic_write_cmd)(uint8_t addr, uint8_t *buf,uint8_t reg, uint16_t len);        /**< point to an iic_write_cmd function address */
+    uint8_t (*iic_read_cmd)(uint8_t addr, uint8_t *buf, uint16_t len1, uint8_t *data, uint16_t len_d);         /**< point to an iic_read_cmd function address */
     void (*delay_ms)(uint32_t ms);                                             /**< point to a delay_ms function address */
     void (*debug_print)(const char *const fmt, ...);                           /**< point to a debug_print function address */
     uint8_t inited;                                                            /**< inited flag */
