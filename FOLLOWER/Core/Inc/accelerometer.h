@@ -17,6 +17,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-extern uint8_t acc_init(void);
+extern error_handler acc_init(void);
 
 #endif /* SRC_ACCELEROMETER_H_ */

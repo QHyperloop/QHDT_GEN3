@@ -108,30 +108,22 @@ uint8_t Run_State(PodState state) {
 
     switch (state) {
         case INIT:
-        	status = tempsensor_init();
-        	if(status != 0){
+
+        	if(TEMP_INIT() != TEMP_INIT_SUCCESS){
         		return 1;
         	}
-        	status = acc_init();
-        	if(status != 0){
+        	if(acc_init() != ACC_INIT_OK){
         		return 1;
         	}
-        	status = CAN_INIT();
-        	if(status != 0){
+        	if(CAN_INIT() != CAN_INIT_OK){
         		return 1;
         	}
-        	status = tempsensor_init();
-        	if(status != 0){
-        		return 1;
-        	}
-        	status = acc_init();
-        	if(status != 0){
-        		return 1;
-        	}
+
+
         	pump_control(1);
         	HAL_TIM_Base_Start_IT(&htim5);
         	Curr_State = SAFE_TO_APPROACH;
-        	return status;
+        	return 0;
             break;
         case FAULT:
         	HV_off();

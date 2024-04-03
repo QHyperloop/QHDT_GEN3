@@ -31,11 +31,6 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "relay.h"
-#include "temperature.h"
-#include "accelerometer.h"
-#include "can.h"
-
 
 typedef enum{
 	INIT,
@@ -58,12 +53,24 @@ typedef enum _error_handler {
 	CAN_OK,
 	ACC_INIT_OK,
 	ACC_INIT_ERR,
-	ACC_UNIT_ERR
-
-
-
-
-
+	ACC_UNIT_ERR,
+	MCP_ID_FAIL,
+	ERROR_MCP_REG,
+	ERROR_MCP_THERMO,
+	MCP_CONFIG_OK,
+	MCP_TEMP_OK,
+	MCP_0_READFAIL,
+	MCP_1_READFAIL,
+	ADC1_1_TEMPFAULT,
+	ADC1_2_TEMPFAULT,
+	ADC1_3_TEMPFAULT,
+	ADC1_4_TEMPFAULT,
+	MCP0_TEMPFAULT,
+	MCP1_TEMPFAULT,
+	TEMP_OK,
+	ADC_CONVERT_FAIL,
+	TEMP_INIT_SUCCESS,
+	MCP_TEMP_FAIL
 
 
 } error_handler;
@@ -71,6 +78,11 @@ typedef enum _error_handler {
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
 extern volatile uint8_t Fault_Flag;
+
+#include "relay.h"
+#include "temperature.h"
+#include "accelerometer.h"
+#include "can.h"
 
 /* USER CODE END Includes */
 

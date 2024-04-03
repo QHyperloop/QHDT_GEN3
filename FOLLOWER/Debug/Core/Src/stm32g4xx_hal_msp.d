@@ -40,9 +40,9 @@ Core/Src/stm32g4xx_hal_msp.o: ../Core/Src/stm32g4xx_hal_msp.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h \
- ../Core/Inc/relay.h ../Core/Inc/temperature.h \
- ../Core/Inc/driver_mcp9600_interface.h ../Core/Inc/driver_mcp9600.h \
- ../Core/Inc/accelerometer.h ../Core/Inc/main.h ../Core/Inc/bno055.h \
+ ../Core/Inc/relay.h ../Core/Inc/temperature.h ../Core/Inc/main.h \
+ ../Core/Inc/mcp9600driver.h ../Core/Inc/accelerometer.h \
+ ../Core/Inc/bno055.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h \
  ../Core/Inc/bno_config.h ../Core/Inc/can.h ../Core/Inc/esc.h
 ../Core/Inc/main.h:
@@ -89,10 +89,9 @@ Core/Src/stm32g4xx_hal_msp.o: ../Core/Src/stm32g4xx_hal_msp.c \
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h:
 ../Core/Inc/relay.h:
 ../Core/Inc/temperature.h:
-../Core/Inc/driver_mcp9600_interface.h:
-../Core/Inc/driver_mcp9600.h:
-../Core/Inc/accelerometer.h:
 ../Core/Inc/main.h:
+../Core/Inc/mcp9600driver.h:
+../Core/Inc/accelerometer.h:
 ../Core/Inc/bno055.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_i2c_ex.h:
 ../Core/Inc/bno_config.h:
