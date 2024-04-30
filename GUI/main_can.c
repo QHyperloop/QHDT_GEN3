@@ -1,7 +1,3 @@
-
-
-
-
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -11,8 +7,6 @@
 #include <sys/ioctl.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
-
-
 
 // Sensor Request
 #define MASTER_REQUEST 0x0000FF01 // 01 is first follower
@@ -30,7 +24,6 @@
 
 unsigned int current_state;
 
-
 #define FOLLOWERS 3;
 
 // For storing confirm responses from sending states
@@ -39,7 +32,7 @@ int state_responses[FOLLOWERS][2];
 // For storing all the sensor data after master request
 int sensors[FOLLOWERS][4][20];
 
-
+// Function to create a socket (CAN bus)
 int create_socket(const char* ifname) {
     struct sockaddr_can addr;
     struct ifreq ifr;
@@ -61,13 +54,13 @@ int create_socket(const char* ifname) {
     addr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-        perror("Error in socket bind");
+        perror("Error in socket bind"); 
         return -1;
     }
 
     // Enable BRS
     if (setsockopt(s, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enable_canfd, sizeof(enable_canfd)) < 0) {
-        perror("Error while enabling CAN FD for BRS");
+        perror("Error while enabling CAN FD for BRS"); 
         return -1;
     }
 
@@ -78,7 +71,8 @@ int create_socket(const char* ifname) {
 void send_state(int s, int current_state) {
 
     struct canfd_frame frame;
-
+    
+    // Can modify this for whatever we happens on the READY state
     if (current_state == READY){
         frame.can_id = current_state | CAN_EFF_FLAG;
         frame.can_dlc = 4;
@@ -93,20 +87,21 @@ void send_state(int s, int current_state) {
     }
 
     if (write(s, &frame, sizeof(frame)) != sizeof(frame)){
-        perror("Error in sending CAN frame");
+        perror("Error in sending CAN frame"); 
     }
 
     read_state_responses(s);
 
 }
 
+// Function to read the responses and store data into state_responses array
 void read_state_responses(int s) {
 
     struct canfd_frame frame_received;
     int responses_received = 0;
     int nbytes;
 
-    printf("waiting for Can frame");
+    printf("waiting for Can frame"); // to help with testing
 
     while (responses_received < FOLLOWERS){
 
@@ -114,10 +109,10 @@ void read_state_responses(int s) {
 
         if (nbytes == sizeof(struct can_frame)) {
 
-            printf("Recieved response\n");
+            printf("Recieved response\n"); // to help with testing
             state_responses[responses_received][0] = frame_received.can_id;
             state_responses[responses_received][1] = frame_received.data[0];
-            printf("Stored frame");
+            printf("Stored frame"); // to help with testing
 
             responses_received++;
 
@@ -150,16 +145,16 @@ void master_request(int s) {
         int responses_received = 0;
         int nbytes;
 
-        printf("waiting for Can frame");
+        printf("waiting for Can frame"); // to help with testing
 
-       
+       // Store data into sensors array
         for (int j = 0; j < 4; j++ ){    
 
             nbytes = read(s, &frame_received, sizeof(struct can_frame));
             
             if (nbytes == sizeof(struct can_frame)) {
 
-                printf("Recieved response\n");
+                printf("Recieved response\n"); // to help with testing
 
                 sensors[i][j][0] = frame_received.can_id;       // first index will be id
                 
@@ -167,28 +162,30 @@ void master_request(int s) {
                     sensors[i][j][k+1] = frame_received.data[k];    // follower | sensor (packet) | data 
                 }
                 
-                printf("Stored frame");
+                printf("Stored frame"); // to help with testing
 
             }
         }
     } 
 }
 
+// main function, change as needed
 int main() {
-
+    
+    // Create the 3 CANs
     int can0 = create_socket("can0"); // States
     int can1 = create_socket("can1"); // Sensor data
     int can2 = create_socket("can2"); // Internal
 
-    // Initial READY command
+    // Initial READY command on can0
     current_state = READY;
     send_state(can0, current_state);
-
+    
+    // Send master request on can1
     master_request(can1);
 
-    
 
-
+    // Close
     close(can0);
     close(can1);
     close(can2);
