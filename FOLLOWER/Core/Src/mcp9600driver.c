@@ -39,6 +39,11 @@ error_handler MCP_INIT(uint8_t addr){
 	if(HAL_I2C_Mem_Write(&hi2c1, addr, reg, len_reg, buf ,len_buf ,20) != HAL_OK){
 		return ERROR_MCP_REG;
 	}
+
+	if(HAL_I2C_Mem_Read(&hi2c1,addr, reg, len_reg, buf ,len_buf,20) != HAL_OK){
+		return ERROR_MCP_REG;
+	}
+
 	if(buf[0] != 0b01100000){
 		return ERROR_MCP_REG;
 	}
@@ -52,7 +57,13 @@ error_handler MCP_INIT(uint8_t addr){
 	if(HAL_I2C_Mem_Write(&hi2c1, addr, reg, len_reg, buf ,len_buf ,20) != HAL_OK){
 		return ERROR_MCP_THERMO;
 	}
-	if(buf != 0b00000000){
+
+
+	if(HAL_I2C_Mem_Read(&hi2c1,addr, reg, len_reg, buf ,len_buf,20) != HAL_OK){
+		return ERROR_MCP_THERMO;
+	}
+
+	if(buf[0] != 0b00000000){
 		return ERROR_MCP_THERMO;
 	}
 

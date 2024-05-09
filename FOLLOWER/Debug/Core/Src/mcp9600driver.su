@@ -1,2 +1,2 @@
 ../Core/Src/mcp9600driver.c:12:15:MCP_INIT	48	static
-../Core/Src/mcp9600driver.c:62:15:MCP_TEMP_READ	48	static
+../Core/Src/mcp9600driver.c:73:15:MCP_TEMP_READ	48	static

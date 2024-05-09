@@ -1,3 +1,3 @@
 ../Core/Src/temperature.c:29:15:TEMP_INIT	16	static
-../Core/Src/temperature.c:67:15:UPDATE_TEMP	72	static
+../Core/Src/temperature.c:67:15:UPDATE_TEMP	8	static
 ../Core/Src/temperature.c:116:6:HAL_ADC_ConvCpltCallback	16	static
