@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2024 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -23,7 +23,6 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include <stdio.h>
-
 
 /* USER CODE END Includes */
 
@@ -55,6 +54,9 @@ FDCAN_HandleTypeDef hfdcan3;
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 I2C_HandleTypeDef hi2c3;
+DMA_HandleTypeDef hdma_i2c1_rx;
+DMA_HandleTypeDef hdma_i2c1_tx;
+DMA_HandleTypeDef hdma_i2c3_rx;
 
 IWDG_HandleTypeDef hiwdg;
 
@@ -105,90 +107,89 @@ static void MX_TIM6_Init(void);
 uint8_t Run_State(PodState state) {
 	uint8_t status = 0;
 
-    switch (state) {
-        case INIT:
+	switch (state) {
+	case INIT:
 
-        	if(TEMP_INIT() != TEMP_INIT_SUCCESS){
-        		return 1;
-        	}
-        	/*if(acc_init() != ACC_INIT_OK){
-        		return 1;
-        	}
-        	if(CAN_INIT() != CAN_INIT_OK){
-        		return 1;
-        	}*/
+		//if(TEMP_INIT() != TEMP_INIT_SUCCESS){
+		//	return 1;
+		//}
+		/*if(acc_init() != ACC_INIT_OK){
+		 return 1;
+		 }
+		 if(CAN_INIT() != CAN_INIT_OK){
+		 return 1;
+		 }*/
 
+		pump_control(1);
 
-        	pump_control(1);
+		//UPDATE_TEMP();
+		Curr_State = SAFE_TO_APPROACH;
+		return 0;
+		break;
+	case FAULT:
+		HV_off();
+		yellowstatus(0);
+		greenstatus(0);
+		redstatus(1);
+		pump_control(0);
+		brake_state(0);
 
-        	UPDATE_TEMP();
-        	Curr_State = SAFE_TO_APPROACH;
-        	return 0;
-            break;
-        case FAULT:
-        	HV_off();
-        	yellowstatus(0);
-        	greenstatus(0);
-        	redstatus(1);
-        	pump_control(0);
-        	brake_state(0);
+		return status;
+		break;
+	case SAFE_TO_APPROACH:
+		/*HV_off();
+		 yellowstatus(0);
+		 greenstatus(0);
+		 brake_state(1);*/
 
-        	return status;
-            break;
-        case SAFE_TO_APPROACH:
-        	/*HV_off();
-        	yellowstatus(0);
-        	greenstatus(0);
-        	brake_state(1);*/
+		return status;
+		break;
+	case READY:
+		precharge();
+		yellowstatus(1);
+		brake_state(0);
+		return status;
+		break;
+	case LAUNCH:
+		yellowstatus(0);
+		greenstatus(1);
 
-        	return status;
-            break;
-        case READY:
-        	precharge();
-        	yellowstatus(1);
-        	brake_state(0);
-        	return status;
-            break;
-        case LAUNCH:
-        	yellowstatus(0);
-        	greenstatus(1);
+		return status;
+		break;
+	case COAST:
+		yellowstatus(0);
+		greenstatus(1);
 
-        	return status;
-            break;
-        case COAST:
-        	yellowstatus(0);
-        	greenstatus(1);
+		return status;
+		break;
+	case BRAKE:
+		yellowstatus(0);
+		greenstatus(1);
+		brake_state(1);
 
-        	return status;
-            break;
-        case BRAKE:
-        	yellowstatus(0);
-        	greenstatus(1);
-        	brake_state(1);
+		return status;
+		break;
+	case CRAWL:
+		yellowstatus(0);
+		greenstatus(1);
+		brake_state(0);
 
-        	return status;
-            break;
-        case CRAWL:
-        	yellowstatus(0);
-        	greenstatus(1);
-        	brake_state(0);
+		return status;
+		break;
+	case TRACK:
+		HV_off();
+		yellowstatus(0);
+		greenstatus(0);
+		brake_state(0);
 
-        	return status;
-            break;
-        case TRACK:
-        	HV_off();
-        	yellowstatus(0);
-        	greenstatus(0);
-        	brake_state(0);
-
-        	return status;
-            break;
-        default:
-        	Curr_State = FAULT;
-        	//invalid state
-            return 1;
-            break;
-    }
+		return status;
+		break;
+	default:
+		Curr_State = FAULT;
+		//invalid state
+		return 1;
+		break;
+	}
 }
 
 /* USER CODE END 0 */
@@ -240,33 +241,31 @@ int main(void)
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
-  //timer_val = __HAL_TIM_GET_COUNTER(&htim6);
+	//timer_val = __HAL_TIM_GET_COUNTER(&htim6);
 
-
-  Fault_Flag = Run_State(Curr_State);
-  HAL_TIM_Base_Start_IT(&htim6);
-  //HAL_TIM_Base_Start_IT(&htim6);
-
-
+	//Fault_Flag = Run_State(Curr_State);
+	//HAL_TIM_Base_Start_IT(&htim6);
+	//HAL_TIM_Base_Start_IT(&htim6);
+	//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_11, GPIO_PIN_SET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1) {
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+		HAL_Delay(500);
 
-	  Fault_Flag = Run_State(Curr_State);
-	  if(Fault_Flag != 0){
-		  Curr_State = FAULT;
-	  }
+		//Fault_Flag = Run_State(Curr_State);
+		//if(Fault_Flag != 0){
+		//  Curr_State = FAULT;
+		// }
 
-	  //HAL_UART_Transmit(&huart2,(uint8_t *)temps[4],sizeof(temps[4]),100);
-
+		//HAL_UART_Transmit(&huart2,(uint8_t *)temps[4],sizeof(temps[4]),100);
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -281,22 +280,21 @@ void SystemClock_Config(void)
 
   /** Configure the main internal regulator output voltage
   */
-  HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST);
+  HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSI48
-                              |RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+                              |RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
-  RCC_OscInitStruct.PLL.PLLN = 85;
+  RCC_OscInitStruct.PLL.PLLN = 12;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
@@ -310,18 +308,14 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
     Error_Handler();
   }
-
-  /** Enables the Clock Security System
-  */
-  HAL_RCC_EnableCSS();
 }
 
 /**
@@ -346,12 +340,12 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.GainCompensation = 0;
   hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.NbrOfConversion = 4;
@@ -389,6 +383,7 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
+  sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = ADC_REGULAR_RANK_2;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
@@ -397,6 +392,7 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
+  sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = ADC_REGULAR_RANK_3;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
@@ -405,6 +401,7 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
+  sConfig.Channel = ADC_CHANNEL_4;
   sConfig.Rank = ADC_REGULAR_RANK_4;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
@@ -437,7 +434,7 @@ static void MX_ADC5_Init(void)
   /** Common config
   */
   hadc5.Instance = ADC5;
-  hadc5.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc5.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc5.Init.Resolution = ADC_RESOLUTION_12B;
   hadc5.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc5.Init.GainCompensation = 0;
@@ -620,7 +617,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x10A0A6FB;
+  hi2c1.Init.Timing = 0x40000A0B;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -668,7 +665,7 @@ static void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x10A0A6FB;
+  hi2c2.Init.Timing = 0x40000A0B;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -716,7 +713,7 @@ static void MX_I2C3_Init(void)
 
   /* USER CODE END I2C3_Init 1 */
   hi2c3.Instance = I2C3;
-  hi2c3.Init.Timing = 0x10A0A6FB;
+  hi2c3.Init.Timing = 0x40000A0B;
   hi2c3.Init.OwnAddress1 = 0;
   hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -1012,8 +1009,7 @@ static void MX_TIM6_Init(void)
   TIM_MasterConfigTypeDef sMasterConfig = {0};
 
   /* USER CODE BEGIN TIM6_Init 1 */
-  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
   htim6.Init.Prescaler = 26009;
@@ -1083,6 +1079,15 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  /* DMA1_Channel2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
+  /* DMA1_Channel3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
+  /* DMA1_Channel4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
   /* DMA1_Channel5_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
@@ -1103,26 +1108,29 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9
-                          |GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_13|GPIO_PIN_14
-                          |GPIO_PIN_15, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_6, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10
+                          |GPIO_PIN_11|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11
-                          |GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15
-                          |GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4, GPIO_PIN_RESET);
+                          |GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PE2 PE3 PE4 PE5 */
   GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
@@ -1177,15 +1185,15 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	test = test+1;
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	test = test + 1;
 	//UPDATE_TEMP();
-	if(htim == &htim6){
-		UPDATE_TEMP();
+	if (htim == &htim6) {
+
+		//UPDATE_TEMP();
 		//Fault_Flag = IMD_Req_Isolation();
 	}
-	if(htim == &htim2){
+	if (htim == &htim2) {
 		HV_on();
 		HAL_TIM_Base_Stop_IT(&htim2);
 	}
@@ -1199,11 +1207,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
