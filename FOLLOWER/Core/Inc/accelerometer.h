@@ -11,11 +11,12 @@
 #define IMU_ID ((uint8_t)0x28)
 
 #include "stm32g4xx_hal.h"
+#include "main.h"
 #include "bno055.h"
 #include "bno_config.h"
 #include <stdbool.h>
 #include <stdio.h>
 
-extern uint8_t acc_init(void);
+extern error_handler acc_init(void);
 
 #endif /* SRC_ACCELEROMETER_H_ */

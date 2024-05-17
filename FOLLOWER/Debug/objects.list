@@ -6,6 +6,7 @@
 "./Core/Src/driver_mcp9600_interface_stm32.o"
 "./Core/Src/esc.o"
 "./Core/Src/main.o"
+"./Core/Src/mcp9600driver.o"
 "./Core/Src/relay.o"
 "./Core/Src/stm32g4xx_hal_msp.o"
 "./Core/Src/stm32g4xx_it.o"

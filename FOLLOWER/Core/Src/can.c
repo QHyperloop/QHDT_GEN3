@@ -28,7 +28,8 @@ uint8_t RxData_Master[64];
 
 
 
-uint8_t CAN_INIT(){
+error_handler CAN_INIT(){
+	error_handler err;
 	TxHeader_Master_State.Identifier = 0x10000000;
 	TxHeader_Master_State.IdType = FDCAN_EXTENDED_ID;
 	TxHeader_Master_State.TxFrameType = FDCAN_DATA_FRAME;
@@ -82,103 +83,113 @@ uint8_t CAN_INIT(){
 	Filter_DATA.FilterID1 = 0x000000FF;
 	Filter_DATA.FilterID2 = FOLLOWER_ID;
 
-
+	err = CAN_INIT_OK;
 	if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK){
-		return 1;
+		err = CAN_INIT_ERR;
 	}
 	if (HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK){
-		return 1;
+		err = CAN_INIT_ERR;
 	}
 	if(HAL_FDCAN_Start(&hfdcan2)!= HAL_OK){
-		return 1;
+		err = CAN_INIT_ERR;
 	}
 	if (HAL_FDCAN_ActivateNotification(&hfdcan2, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK){
-		return 1;
+		err = CAN_INIT_ERR;
 	}
 	if(HAL_FDCAN_Start(&hfdcan3)!= HAL_OK){
-		return 1;
+		err = CAN_INIT_ERR;
 	}
 	if (HAL_FDCAN_ConfigFilter(&hfdcan1, &Filter_STATE) != HAL_OK){
-		return 1;
+		err = CAN_INIT_ERR;
 	}
 	if (HAL_FDCAN_ConfigFilter(&hfdcan2, &Filter_DATA) != HAL_OK){
-			return 1;
+		err = CAN_INIT_ERR;
 	}
 	if (HAL_FDCAN_ConfigFilter(&hfdcan3, &Filter_BATT) != HAL_OK){
-			return 1;
+		err = CAN_INIT_ERR;
 	}
 	if (HAL_FDCAN_ConfigFilter(&hfdcan3, &Filter_ESC) != HAL_OK){
-			return 1;
+		err = CAN_INIT_ERR;
 	}
 	if (HAL_FDCAN_ActivateNotification(&hfdcan3, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0) != HAL_OK){
-		return 1;
+		err = CAN_INIT_ERR;
 	}
-	return 0;
+	return err;
 
 }
 
-uint8_t Set_ESC_CURR(uint8_t esc_id, uint8_t current[4]){
+error_handler Set_ESC_CURR(uint8_t esc_id, uint8_t current[4]){
+	error_handler err;
+	err = CAN_OK;
 	TxHeader_Pod.Identifier = 0x00000100 | esc_id;
 	TxHeader_Pod.DataLength = FDCAN_DLC_BYTES_8;
 	uint8_t temp_data[] = {current[3],current[2],current[1],current[0],0x00,0x00,0x00,0x00};
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan3, &TxHeader_Pod, temp_data)!= HAL_OK){
-		return 1;
+		err = CAN3_MSG_ERR;
 	}
-	return 0;
+	return err;
 }
 
-uint8_t Set_ESC_RPM(uint8_t esc_id, uint8_t RPM[4]){
+error_handler Set_ESC_RPM(uint8_t esc_id, uint8_t RPM[4]){
+	error_handler err;
+	err = CAN_OK;
 	TxHeader_Pod.Identifier = 0x00000300 | esc_id;
 	TxHeader_Pod.DataLength = FDCAN_DLC_BYTES_8;
 	uint8_t temp_data[] = {RPM[3],RPM[2],RPM[1],RPM[0],0x00,0x00,0x00,0x00};
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan3, &TxHeader_Pod, temp_data)!= HAL_OK){
-		return 1;
+		err = CAN3_MSG_ERR;
 	}
-	return 0;
+	return err;
 }
 
-uint8_t IMD_Req_Isolation(){
+error_handler IMD_Req_Isolation(){
+	error_handler err;
+	err = CAN_OK;
 	TxHeader_Pod.Identifier = IMD_ID;
 	TxHeader_Pod.DataLength = FDCAN_DLC_BYTES_1;
 	uint8_t temp_data[] = {0xE0};
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan3, &TxHeader_Pod, temp_data)!= HAL_OK){
-		return 1;
+		err = CAN3_MSG_ERR;
 	}
-	return 0;
+	return err;
 
 }
 
-uint8_t State_Received(uint32_t state_r){
+error_handler State_Received(uint32_t state_r){
+	error_handler err;
+	err = CAN_OK;
 	TxHeader_Master_State.Identifier = state_r | FOLLOWER_ID;
 	TxHeader_Master_State.TxFrameType = FDCAN_DATA_FRAME;
 	TxHeader_Master_State.DataLength = FDCAN_DLC_BYTES_1;
 	uint8_t temp_data[] = {0x00};
 
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &TxHeader_Master_State, temp_data)!= HAL_OK){
-		return 1;
+		err = CAN1_MSG_ERR;
 	}
-	return 0;
+	return err;
 
 
 }
 
-uint8_t Sensor_Data(){
+error_handler Sensor_Data(){
+	error_handler err;
+	err = CAN_OK;
 	TxHeader_Master_Data.Identifier = 0x01000100 | FOLLOWER_ID;
 	TxHeader_Master_Data.TxFrameType = FDCAN_DATA_FRAME;
 	TxHeader_Master_Data.DataLength = FDCAN_DLC_BYTES_16;
 	uint8_t Temperature_Data[] = {};
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader_Master_Data, Temperature_Data)!= HAL_OK){
-		return 1;
+		err = CAN1_MSG_ERR;
 	}
-	return 0;
+
 
 	TxHeader_Master_Data.Identifier = 0x01000200 | FOLLOWER_ID;
 	TxHeader_Master_Data.DataLength = FDCAN_DLC_BYTES_16;
 	uint8_t ESC_Data[] = {};
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader_Master_Data, ESC_Data)!= HAL_OK){
-		return 1;
+		err = CAN2_MSG_ERR;
 	}
-	return 0;
+
 
 	TxHeader_Master_Data.Identifier = 0x01000300 | FOLLOWER_ID;
 	TxHeader_Master_Data.DataLength = FDCAN_DLC_BYTES_2;
@@ -186,19 +197,17 @@ uint8_t Sensor_Data(){
 	Relay_Data[0] = (RelayStates & 0xFF00) >> 8;
 	Relay_Data[1] = (RelayStates & 0x00FF);
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader_Master_Data, Relay_Data)!= HAL_OK){
-		return 1;
+		err = CAN2_MSG_ERR;
 	}
-	return 0;
+
 
 	TxHeader_Master_Data.Identifier = 0x01000400 | FOLLOWER_ID;
 	TxHeader_Master_Data.DataLength = FDCAN_DLC_BYTES_16;
 	uint8_t Batt_Data[] = {};
 	if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2, &TxHeader_Master_Data, Batt_Data)!= HAL_OK){
-		return 1;
+		err = CAN2_MSG_ERR;
 	}
-	return 0;
-
-
+	return err;
 }
 
 

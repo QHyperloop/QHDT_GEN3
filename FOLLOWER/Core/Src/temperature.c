@@ -10,117 +10,63 @@
 
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc5;
-static mcp9600_handle_t MCP_0;
-static mcp9600_handle_t MCP_1;
-volatile uint16_t adc1_result_dma[4];
-volatile uint16_t adc5_result_dma[1];
+extern DMA_HandleTypeDef hdam_adc1;
+extern DMA_HandleTypeDef hdam_adc5;
+static uint8_t MCP_0 = 0xC0;
+static uint8_t MCP_1 = 0xCC;
+volatile uint32_t adc1_result_dma[4];
+volatile uint32_t adc5_result_dma[1];
 const int adc1_count = sizeof(adc1_result_dma)/sizeof(adc1_result_dma[0]);
 const int adc5_count = sizeof(adc5_result_dma)/sizeof(adc5_result_dma[0]);
 volatile int adc1_convert = 0;
 volatile int adc5_convert = 0;
 volatile int32_t temps[8] = {0};
 volatile int32_t pressure[1] = {0};
+volatile uint8_t adc1_pos = 0;
+volatile uint8_t adc5_pos = 0;
 
 
-uint8_t i2c_temp_init(mcp9600_handle_t *handle, mcp9600_address_t addr_pin, mcp9600_thermocouple_type_t type){
-	uint8_t status;
 
-	DRIVER_MCP9600_LINK_INIT(handle, mcp9600_handle_t);
-	DRIVER_MCP9600_LINK_IIC_INIT(handle, mcp9600_interface_iic_init);
-	DRIVER_MCP9600_LINK_IIC_DEINIT(handle, mcp9600_interface_iic_deinit);
-	DRIVER_MCP9600_LINK_IIC_READ_COMMAND(handle, mcp9600_interface_iic_read_cmd);
-	DRIVER_MCP9600_LINK_IIC_WRITE_COMMAND(handle, mcp9600_interface_iic_write_cmd);
-	DRIVER_MCP9600_LINK_IIC_DELAY_MS(handle, mcp9600_interface_delay_ms);
-	DRIVER_MCP9600_LINK_DEBUG_PRINT(handle, mcp9600_interface_debug_print);
 
-	status = mcp9600_set_addr_pin(handle, addr_pin); //set i2c address
-	if(status !=0){
-		return 1;
-	}
-	status = mcp9600_init(handle); //chip init
-	if(status !=0){
-		return 1;
-	}
-	status = mcp9600_set_mode(handle, MCP9600_MODE_NORMAL); //set normal
-	if(status !=0){
-		(void)mcp9600_deinit(handle);
-		return 1;
-	}
-	status = mcp9600_set_filter_coefficient(handle, MCP9600_FILTER_COEFFICIENT_0); //set filter
-	if(status !=0){
-		(void)mcp9600_deinit(handle);
-		return 1;
-	}
-	status = mcp9600_set_thermocouple_type(handle, type); //thermocouple type
-	if(status !=0){
-		(void)mcp9600_deinit(handle);
-		return 1;
-	}
-	status = mcp9600_set_cold_junction_resolution(handle,MCP9600_COLD_JUNCTION_RESOLUTION_0P0625);
-	if(status !=0){
-		(void)mcp9600_deinit(handle);
-		return 1;
-	}
-	status = mcp9600_set_adc_resolution(handle,MCP9600_ADC_RESOLUTION_12_BIT);
-	if(status !=0){
-		(void)mcp9600_deinit(handle);
-		return 1;
-	}
-	status = mcp9600_set_adc_resolution(handle, MCP9600_BURST_MODE_SAMPLE_4);
-	if(status !=0){
-		(void)mcp9600_deinit(handle);
-		return 1;
-	}
-	return 0;
-}
-uint8_t mcp9600_read(mcp9600_handle_t *handle, int16_t *hot_raw, float *hot_s,int16_t *delta_raw, float *delta_s, int16_t *cold_raw, float *cold_s){
-	uint8_t status;
-	status = mcp9600_single_read(handle, hot_raw, hot_s, delta_raw, delta_s, cold_raw, cold_s);
-	if(status !=0){
-		return 1;
-	}
-	return 0;
-}
 
-uint8_t tempsensor_init(){
-	uint8_t status;
-	status = i2c_temp_init(&MCP_0, MCP9600_ADDRESS_0, MCP9600_THERMOCOUPLE_TYPE_K);
-	if(status !=0){
-		return 1;
+error_handler TEMP_INIT(){
+
+	error_handler status = TEMP_INIT_SUCCESS;
+/* WORKING
+	status = MCP_INIT(MCP_0);
+	if(status != MCP_CONFIG_OK){
+		return status;
 	}
-	status = i2c_temp_init(&MCP_1, MCP9600_ADDRESS_1, MCP9600_THERMOCOUPLE_TYPE_K);
-	if(status !=0){
-		return 1;
+
+	//status = MCP_INIT(MCP_1);
+	if(status != MCP_CONFIG_OK){
+		return status;
 	}
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc1_result_dma,adc1_count);
+*/
+
+	if(HAL_ADC_Start_IT(&hadc1) != HAL_OK){
+		return ADC_CONVERT_FAIL;
+	}
 	while(adc1_convert == 0){
+		adc1_result_dma[adc1_pos] = HAL_ADC_GetValue(&hadc1);
 		//will hold until ready used to make sure all temp sensors are connected
 	}
-	adc1_convert = 0;
-	for(int i = 0; i < adc1_count; i++){
-		if(adc1_result_dma[i] <= 0){
-			return 1;
-		}
-	}
+
+
+
 	HAL_ADC_Start_DMA(&hadc5, (uint32_t*)adc5_result_dma,adc5_count);
 	while(adc5_convert == 0){
 			//will hold until ready used to make sure all pressure sensors are connected
 	}
 	adc5_convert = 0;
 	if(adc5_result_dma[0] <= 0){
-		return 1;
+		return ADC_CONVERT_FAIL;
 	}
-	return 0;
+	return TEMP_INIT_SUCCESS;
 }
 
-uint8_t Update_Temp(){
-	uint8_t status;
-	int16_t hot_raw;
-	float hot_s;
-	int16_t delta_raw;
-	float delta_s;
-	int16_t cold_raw;
-	float cold_s;
+error_handler UPDATE_TEMP(){
+	error_handler status = TEMP_OK;
 
 	if(adc1_convert == 1){ //when adc is done convert value to degree C and add to global temp variable
 		for(int i = 0; i < adc1_count; i++){
@@ -134,42 +80,49 @@ uint8_t Update_Temp(){
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc1_result_dma,adc1_count); //starts adc conversion sets convert to 2, indicates running prevents restarting while running.
 		adc1_convert = 2;
 	}
-	status = mcp9600_read(&MCP_0,(int16_t *)&hot_raw, (float *)&hot_s, (int16_t *)&delta_raw, (float *)&delta_s, (int16_t *)&cold_raw, (float *)&cold_s);
-	temps[4] = (int32_t)roundf(hot_s*10.0f);
-	if(status !=0){
-		return 1; //read fail
-	}
 
-	status = mcp9600_read(&MCP_1,(int16_t *)&hot_raw, (float *)&hot_s, (int16_t *)&delta_raw, (float *)&delta_s, (int16_t *)&cold_raw, (float *)&cold_s);
-	temps[5] = (int32_t)roundf(hot_s*10.0f);
-	if(status !=0){
-		return 1; //read fail
+/* WORKING
+	if(MCP_TEMP_READ(MCP_0) != MCP_TEMP_OK){
+		return MCP_0_READFAIL; //read fail
 	}
+	temps[4] = (int32_t)roundf((mcp_temp_data[0]*16 + mcp_temp_data[1]/16)*10.0f);
+
+	//if(MCP_TEMP_READ(MCP_1) == MCP_TEMP_OK){
+		//return MCP_1_READFAIL; //read fail
+	//}
+	temps[5] = (int32_t)roundf((mcp_temp_data[0]*16 + mcp_temp_data[1]/16)*10.0f);
+*/
 
 	if(temps[0] > ADC1_1_MAX_TEMP || temps[0] < ADC1_1_MIN_TEMP ){
-		return 1; //temp fault
+		status = ADC1_1_TEMPFAULT; //temp fault
 	}
 	if(temps[1] > ADC1_2_MAX_TEMP || temps[1] < ADC1_2_MIN_TEMP ){
-		return 1; //temp fault
+		status = ADC1_2_TEMPFAULT; //temp fault
 	}
 	if(temps[2] > ADC1_3_MAX_TEMP || temps[2] < ADC1_3_MIN_TEMP ){
-		return 1; //temp fault
+		status = ADC1_3_TEMPFAULT; //temp fault
 	}
 	if(temps[3] > ADC1_4_MAX_TEMP || temps[3] < ADC1_4_MIN_TEMP ){
-		return 1; //temp fault
+		status = ADC1_4_TEMPFAULT; //temp fault
 	}
 	if((float)(temps[4]/16.0f) > MCP_0_MAX_TEMP || (float)(temps[4]/16.0f) < MCP_0_MIN_TEMP ){
-		return 1; //temp fault
+		status = MCP0_TEMPFAULT; //temp fault
 	}
 	if((float)(temps[5]/16.0f) > MCP_1_MAX_TEMP || (float)(temps[5]/16.0f) < MCP_1_MIN_TEMP ){
-		return 1; //temp fault
+		status = MCP1_TEMPFAULT; //temp fault
 	}
-	return 0;
+	return status;
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc){
 	if(hadc->Instance == ADC1){ // inidcates which adc is done running conversion and raises flag
-		adc1_convert = 1;
+		if(adc1_pos == 3){
+			adc1_pos = 0;
+			adc1_convert = 1;
+		}else{
+			adc1_pos = adc1_pos+1;
+		}
+
 	}
 	if(hadc->Instance == ADC5){
 		adc5_convert = 1;

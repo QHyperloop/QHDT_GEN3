@@ -1,6 +1,6 @@
 ../Core/Src/driver_mcp9600_interface_stm32.c:47:9:mcp9600_interface_iic_init	4	static
 ../Core/Src/driver_mcp9600_interface_stm32.c:59:9:mcp9600_interface_iic_deinit	4	static
-../Core/Src/driver_mcp9600_interface_stm32.c:74:9:mcp9600_interface_iic_write_cmd	16	static
-../Core/Src/driver_mcp9600_interface_stm32.c:90:9:mcp9600_interface_iic_read_cmd	16	static
-../Core/Src/driver_mcp9600_interface_stm32.c:101:6:mcp9600_interface_delay_ms	16	static
-../Core/Src/driver_mcp9600_interface_stm32.c:111:6:mcp9600_interface_debug_print	4	static
+../Core/Src/driver_mcp9600_interface_stm32.c:74:9:mcp9600_interface_iic_write_cmd	32	static
+../Core/Src/driver_mcp9600_interface_stm32.c:93:9:mcp9600_interface_iic_read_cmd	40	static
+../Core/Src/driver_mcp9600_interface_stm32.c:107:6:mcp9600_interface_delay_ms	16	static
+../Core/Src/driver_mcp9600_interface_stm32.c:117:6:mcp9600_interface_debug_print	4	static

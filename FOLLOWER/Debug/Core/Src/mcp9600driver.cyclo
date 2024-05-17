@@ -1,0 +1,2 @@
+../Core/Src/mcp9600driver.c:12:15:MCP_INIT	9
+../Core/Src/mcp9600driver.c:73:15:MCP_TEMP_READ	2

@@ -9,11 +9,12 @@
 #ifndef SRC_TEMPERATURE_H_
 #define SRC_TEMPERATURE_H_
 
-#include "driver_mcp9600_interface.h"
+#include "main.h"
+#include "mcp9600driver.h"
 #include "stm32g4xx_hal.h"
 
-extern uint8_t tempsensor_init();
-extern uint8_t Update_Temp();
+extern error_handler TEMP_INIT();
+extern error_handler UPDATE_TEMP();
 extern volatile int32_t temps[8];
 extern volatile int32_t pressure[1];
 

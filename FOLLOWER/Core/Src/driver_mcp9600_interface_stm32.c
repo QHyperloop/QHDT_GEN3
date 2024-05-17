@@ -71,10 +71,13 @@ uint8_t mcp9600_interface_iic_deinit(void)
  *            - 1 write failed
  * @note      none
  */
-uint8_t mcp9600_interface_iic_write_cmd(uint8_t addr, uint8_t *buf, uint16_t len)
+uint8_t mcp9600_interface_iic_write_cmd(uint8_t addr, uint8_t *buf, uint8_t reg, uint16_t len)
 {
-	HAL_I2C_Master_Transmit_DMA(&hi2c1,addr,buf,len);
-    return 0;
+
+	if(HAL_I2C_Mem_Write(&hi2c1,addr, reg, 1, buf ,len,20) != HAL_OK){
+		return 1;
+	}
+	 return 0;
 }
 
 /**
@@ -87,9 +90,12 @@ uint8_t mcp9600_interface_iic_write_cmd(uint8_t addr, uint8_t *buf, uint16_t len
  *             - 1 read failed
  * @note       none
  */
-uint8_t mcp9600_interface_iic_read_cmd(uint8_t addr, uint8_t *buf, uint16_t len)
+uint8_t mcp9600_interface_iic_read_cmd(uint8_t addr, uint8_t *buf, uint16_t len1, uint8_t *data, uint16_t len_d)
 {
-	HAL_I2C_Master_Receive_DMA(&hi2c1, addr, buf, len);
+
+	if(HAL_I2C_Mem_Read(&hi2c1,addr, *buf, len1, data ,len_d,20) != HAL_OK){
+		return 1;
+	}
     return 0;
 }
 

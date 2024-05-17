@@ -79,7 +79,7 @@ uint8_t mcp9600_interface_iic_deinit(void);
  *            - 1 write failed
  * @note      none
  */
-uint8_t mcp9600_interface_iic_write_cmd(uint8_t addr, uint8_t *buf, uint16_t len);
+uint8_t mcp9600_interface_iic_write_cmd(uint8_t addr, uint8_t *buf, uint8_t reg, uint16_t len);
 
 /**
  * @brief      interface iic bus read command
@@ -91,7 +91,7 @@ uint8_t mcp9600_interface_iic_write_cmd(uint8_t addr, uint8_t *buf, uint16_t len
  *             - 1 read failed
  * @note       none
  */
-uint8_t mcp9600_interface_iic_read_cmd(uint8_t addr, uint8_t *buf, uint16_t len);
+uint8_t mcp9600_interface_iic_read_cmd(uint8_t addr, uint8_t *buf, uint16_t len1, uint8_t *data, uint16_t len_d);
 
 /**
  * @brief     interface delay ms

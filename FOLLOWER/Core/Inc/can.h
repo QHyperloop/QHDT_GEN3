@@ -19,8 +19,8 @@
 #define IMD_ID ((uint32_t)0xA100101)
 #define BMS_ID ((uint32_t)0x99)
 
-extern uint8_t CAN_INIT();
-extern uint8_t IMD_Req_Isolation();
+extern error_handler CAN_INIT();
+extern error_handler IMD_Req_Isolation();
 
 
 #endif /* SRC_CAN_H_ */
