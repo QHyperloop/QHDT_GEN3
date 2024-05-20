@@ -30,7 +30,7 @@ typedef enum _error_handler {
 
 
 } error_handler;
-typedef enum{
+typedef enum _PodState{
 	INIT,
 	FAULT,
 	SAFE_TO_APPROACH,

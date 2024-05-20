@@ -16,7 +16,8 @@ uint8_t Run_State(PodState state) {
         	if(TEMP_INIT() != TEMP_INIT_SUCCESS){
         		return 1;
         	}
-        	
+        	can_init();
+			
         	pump_control(1);
         	
         	Curr_State = SAFE_TO_APPROACH;
