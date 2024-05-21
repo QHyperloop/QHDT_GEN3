@@ -45,10 +45,10 @@ void set_esc_curr(uint8_t curr[4]){
     struct canfd_frame frame;
     frame.can_id =  0x100 | esc_id | CAN_EFF_FLAG;
     frame.can_len = 8;
-    frame.data[0] = curr[3];
-    frame.data[1] = curr[2];
-    frame.data[2] = curr[1];
-    frame.data[3] = curr[0];
+    frame.data[0] = curr[0];
+    frame.data[1] = curr[1];
+    frame.data[2] = curr[2];
+    frame.data[3] = curr[3];
     frame.data[4] = 0x00;
     frame.data[5] = 0x00;
     frame.data[6] = 0x00;

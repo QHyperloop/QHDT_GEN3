@@ -11,7 +11,7 @@ uint8_t Run_State(PodState state) {
 	error_handler status = OK;
 
     switch (state) {
-        case INIT:
+        case INIT: //Auto state
         	
         	if(TEMP_INIT() != TEMP_INIT_SUCCESS){
         		return 1;
@@ -23,7 +23,7 @@ uint8_t Run_State(PodState state) {
         	Curr_State = SAFE_TO_APPROACH;
         	return status;
             break;
-        case FAULT:
+        case FAULT: // auto/manual state
         	HV_off();
         	yellowstatus(0);
         	greenstatus(0);
@@ -33,7 +33,7 @@ uint8_t Run_State(PodState state) {
 
         	return status;
             break;
-        case SAFE_TO_APPROACH:
+        case SAFE_TO_APPROACH: //manual state
         	HV_off();
         	yellowstatus(0);
         	greenstatus(0);
@@ -41,39 +41,39 @@ uint8_t Run_State(PodState state) {
 
         	return status;
             break;
-        case READY:
+        case READY: //manual state
         	precharge();
         	yellowstatus(1);
         	brake_state(0);
         	return status;
             break;
-        case LAUNCH:
+        case LAUNCH: //manual state
         	yellowstatus(0);
         	greenstatus(1);
 
         	return status;
             break;
-        case COAST:
+        case COAST: //auto state
         	yellowstatus(0);
         	greenstatus(1);
 
         	return status;
             break;
-        case BRAKE:
+        case BRAKE: //auto state
         	yellowstatus(0);
         	greenstatus(1);
         	brake_state(1);
 
         	return status;
             break;
-        case CRAWL:
+        case CRAWL: //auto state
         	yellowstatus(0);
         	greenstatus(1);
         	brake_state(0);
 
         	return status;
             break;
-        case TRACK:
+        case TRACK: //manual state
         	HV_off();
         	yellowstatus(0);
         	greenstatus(0);
@@ -105,10 +105,13 @@ int main(void){
   
   while (1)
   {
-	  Fault_Flag = Run_State(Curr_State);
-	  if(Fault_Flag != 0){
-		  Curr_State = FAULT;
-	  }
+	if(msg_wait() < 0){
+		printf("CAN Error");
+	}
+	Fault_Flag = Run_State(Curr_State);
+	if(Fault_Flag != 0){
+		Curr_State = FAULT;
+	}
     
   }
 }
