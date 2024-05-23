@@ -52,7 +52,7 @@ void pid_init() {
 void update_esc(actual_rpm, dist_curr){
     double dt = dist_curr-dist_prev;
     dist_prev = dist_curr;
-    int setpoint_rpm = run[dist_curr,1]; 
+    int setpoint_rpm = run[round(dist_curr),1]; 
     double new_curr = previous_curr + PID_Compute(&pid, setpoint_rpm, actual_rpm, dt);
     previous_curr = new_curr;
     new_curr = new_curr*10;

@@ -7,12 +7,12 @@
 CC = gcc
 
 # define any compile-time flags
-CFLAGS	:= -Wall -o -Wextra -g -lpigpio -lrt
+CFLAGS	:= -Wall -o -Wextra -g 
 
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
-LFLAGS =
+LFLAGS = -lpigpio -lrt
 
 # define output directory
 OUTPUT	:= output
