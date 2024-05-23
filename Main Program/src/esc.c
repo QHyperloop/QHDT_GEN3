@@ -2,7 +2,16 @@
 
 uint8_t current[4];
 double previous_curr = 0.0;
+uint8_t dist_prev;
 
+int run[][] = {
+{0,100},{1,100},{2,100},{3,100},{4,100},{5,100},{6,100},{7,100},{8,100},{9,100},{10,100},
+{11,100},{12,100},{13,100},{14,100},{15,100},{16,100},{17,100},{18,100},{19,100},{20,100},
+{21,100},{22,100},{23,100},{24,100},{25,100},{26,100},{27,100},{28,100},{29,100},{30,100},
+{31,100},{32,100},{33,100},{34,100},{35,100},{36,100},{37,100},{38,100},{39,100},{40,100},
+{41,100},{42,100},{43,100},{44,100},{45,100},{46,100},{47,100},{48,100},{49,100},{50,100},
+{51,-999}
+}
 
 typedef struct {
     double kp;  // Proportional gain
@@ -40,9 +49,10 @@ void pid_init() {
     return 0;
 }
 
-void update_esc(actual_rpm, setpoint_rpm){
-    double dt = 1.0;
-
+void update_esc(actual_rpm, dist_curr){
+    double dt = dist_curr-dist_prev;
+    dist_prev = dist_curr;
+    int setpoint_rpm = run[dist_curr,1]; 
     double new_curr = previous_curr + PID_Compute(&pid, setpoint_rpm, actual_rpm, dt);
     previous_curr = new_curr;
     new_curr = new_curr*10;

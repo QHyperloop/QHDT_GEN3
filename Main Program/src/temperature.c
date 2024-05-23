@@ -28,10 +28,10 @@ int temp;
 error_handler TEMP_INIT(){
     MCP[0] = i2cOpen(I2C_BUS, MCP9600_ID0, I2C_FLAGS);
     MCP[1] = i2cOpen(I2C_BUS, MCP9600_ID1, I2C_FLAGS);
-    MCP[2] = i2cOpen(I2C_BUS, MCP9600_ID2, I2C_FLAGS);
-    MCP[3] = i2cOpen(I2C_BUS, MCP9600_ID3, I2C_FLAGS);
+    //MCP[2] = i2cOpen(I2C_BUS, MCP9600_ID2, I2C_FLAGS);
+    //MCP[3] = i2cOpen(I2C_BUS, MCP9600_ID3, I2C_FLAGS);
     ADS[0] = i2cOpen(I2C_BUS, ADS1115_ID0, I2C_FLAGS);
-    ADS[1] = i2cOpen(I2C_BUS, ADS1115_ID1, I2C_FLAGS);
+    //ADS[1] = i2cOpen(I2C_BUS, ADS1115_ID1, I2C_FLAGS);
 
     if(i2cWriteByteData(MCP[0], MCP_CONFIG, 0b00100000)<0){
         return MCP_CONFIG_FAIL;
@@ -45,7 +45,8 @@ error_handler TEMP_INIT(){
     if(i2cWriteByteData(MCP[1], MCP_THERMO, 0b00000000)<0){
         return MCP_CONFIG_FAIL;
     }
-    if(i2cWriteByteData(MCP[2], MCP_CONFIG, 0b00100000)<0){
+/* 
+   if(i2cWriteByteData(MCP[2], MCP_CONFIG, 0b00100000)<0){
         return MCP_CONFIG_FAIL;
     }
     if(i2cWriteByteData(MCP[2], MCP_THERMO, 0b00000000)<0){
@@ -57,7 +58,7 @@ error_handler TEMP_INIT(){
     if(i2cWriteByteData(MCP[3], MCP_THERMO, 0b00000000)<0){
         return MCP_CONFIG_FAIL;
     }
-
+*/
     if(i2cWriteWordData(ADS[0], ADS_CONFIG, ADS_CON1)<0){
         return ADS_CONFIG_FAIL;
     }
@@ -70,7 +71,7 @@ error_handler TEMP_INIT(){
     if(i2cWriteWordData(ADS[0], ADS_CONFIG, ADS_CON4)<0){
         return ADS_CONFIG_FAIL;
     }
-    
+/*    
     if(i2cWriteWordData(ADS[1], ADS_CONFIG, ADS_CON1)<0){
         return ADS_CONFIG_FAIL;
     }
@@ -83,6 +84,7 @@ error_handler TEMP_INIT(){
     if(i2cWriteWordData(ADS[1], ADS_CONFIG, ADS_CON4)<0){
         return ADS_CONFIG_FAIL;
     }
+*/
     return TEMP_INIT_SUCCESS;
 
 }
@@ -107,7 +109,7 @@ error_handler UPDATE_TEMP(){
         return ADS_CONFIG_FAIL;
     }
     TEMP_ADS[3] =  i2cReadWordData(ADS[0], ADS_CONVER)/(2^16);
-
+    /*
     if(i2cWriteWordData(ADS[1], ADS_CONFIG, ADS_CON1)<0){
         return ADS_CONFIG_FAIL;
     }
@@ -127,7 +129,7 @@ error_handler UPDATE_TEMP(){
         return ADS_CONFIG_FAIL;
     }
     TEMP_ADS[7] =  i2cReadWordData(ADS[1], ADS_CONVER)/(2^16);
-
+   */
 
     temp = i2cReadWordData(MCP[0],0x00);
 
@@ -136,7 +138,7 @@ error_handler UPDATE_TEMP(){
     temp = i2cReadWordData(MCP[1],0x00);
 
     TEMP_MCP[1] = ((((uint_8t)temp & 0xFF00)>>8)*16.0 + ((uint_8t)temp & 0xFF)/16.0);
-
+/*
     temp = i2cReadWordData(MCP[2],0x00);
 
     TEMP_MCP[2] = ((((uint_8t)temp & 0xFF00)>>8)*16.0 + ((uint_8t)temp & 0xFF)/16.0);
@@ -144,6 +146,6 @@ error_handler UPDATE_TEMP(){
     temp = i2cReadWordData(MCP[3],0x00);
 
     TEMP_MCP[3] = ((((uint_8t)temp & 0xFF00)>>8)*16.0 + ((uint_8t)temp & 0xFF)/16.0);
-
+*/
 
 }

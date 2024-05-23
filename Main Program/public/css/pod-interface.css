@@ -1,0 +1,1305 @@
+.pod1-progress-bar-state0-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.pod1-progress-bar-state0-pod1-progress-bar-state0 {
+  width: 100%;
+  height: 1670px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  align-items: flex-start;
+  flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 1);
+}
+.pod1-progress-bar-state0-rectangle6 {
+  top: 0px;
+  left: 0px;
+  width: 1440px;
+  height: 108px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-qh-logo2 {
+  top: 9px;
+  left: 28px;
+  width: 181px;
+  height: 93px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-pod1-button {
+  top: 1px;
+  left: 408.548828125px;
+  width: 136.513671875px;
+  height: 104px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+  background-color: rgba(44, 44, 44, 1);
+}
+.pod1-progress-bar-state0-text {
+  top: 29px;
+  left: 26.451171875px;
+  color: rgba(255, 255, 255, 1);
+  width: 79px;
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) ;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-pod1-button1 {
+  top: 1px;
+  left: 272.548828125px;
+  width: 136.513671875px;
+  height: 104px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+  background-color: rgba(44, 44, 44, 1);
+}
+.pod1-progress-bar-state0-text002 {
+  top: 29px;
+  left: 26.451171875px;
+  color: rgba(255, 255, 255, 1);
+  width: 79px;
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) ;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-pod2-button {
+  top: 1px;
+  left: 544px;
+  width: 136.513671875px;
+  height: 104px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+  background-color: rgba(44, 44, 44, 1);
+}
+.pod1-progress-bar-state0-text004 {
+  top: 29px;
+  left: 26.451171875px;
+  color: rgba(255, 255, 255, 1);
+  width: 85px;
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-settings-button {
+  top: 1px;
+  left: 951px;
+  width: 136.513671875px;
+  height: 104px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+  background-color: rgba(44, 44, 44, 1);
+}
+.pod1-progress-bar-state0-text006 {
+  top: 29px;
+  left: 9px;
+  color: rgba(255, 255, 255, 1);
+  width: 118px;
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-pod3-button {
+  top: 1px;
+  left: 679px;
+  width: 136.513671875px;
+  height: 104px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+  background-color: rgba(44, 44, 44, 1);
+}
+.pod1-progress-bar-state0-text008 {
+  top: 29px;
+  left: 26.451171875px;
+  color: rgba(255, 255, 255, 1);
+  width: 85px;
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-pod3-button1 {
+  top: 1px;
+  left: 815px;
+  width: 136.513671875px;
+  height: 104px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 1;
+  background-color: rgba(44, 44, 44, 1);
+}
+.pod1-progress-bar-state0-text010 {
+  top: 21px;
+  left: 13px;
+  color: rgba(255, 255, 255, 1);
+  width: 110px;
+  height: auto;
+  position: absolute;
+  font-size: 24px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-rectangle8 {
+  top: 148px;
+  left: 26px;
+  width: 465px;
+  height: 105px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text012 {
+  top: 148px;
+  left: 281px;
+  color: rgba(0, 0, 0, 1);
+  width: 450px;
+  height: auto;
+  position: absolute;
+  font-size: 48px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-rectangle9 {
+  top: 148px;
+  left: 506px;
+  width: 225px;
+  height: 105px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text014 {
+  top: 425px;
+  left: 222px;
+  color: rgba(0, 0, 0, 1);
+  width: 124px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-emergency-stop-button {
+  top: 1px;
+  left: 1121px;
+  width: 317px;
+  height: 104px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle10 {
+  top: 0px;
+  left: 0px;
+  width: 317px;
+  height: 104px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text016 {
+  top: 23px;
+  left: 22px;
+  color: rgba(255, 255, 255, 1);
+  height: auto;
+  position: absolute;
+  font-size: 44px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-rectangle11 {
+  top: 284px;
+  left: 26px;
+  width: 338px;
+  height: 244px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text018 {
+  top: 284px;
+  left: 31px;
+  color: rgba(0, 0, 0, 1);
+  width: 234px;
+  height: auto;
+  position: absolute;
+  font-size: 180px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-trip-status {
+  top: 284px;
+  left: 399px;
+  width: 332px;
+  height: 244px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text020 {
+  top: 284px;
+  left: 411px;
+  color: rgba(0, 0, 0, 1);
+  width: 313px;
+  height: auto;
+  position: absolute;
+  font-size: 48px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-sensor-graph {
+  top: 148px;
+  left: 757px;
+  width: 636px;
+  height: 380px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-safeto-approach-button {
+  top: 559px;
+  left: 733px;
+  width: 213px;
+  height: 147px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle32 {
+  top: 0px;
+  left: 0px;
+  width: 213px;
+  height: 147px;
+  position: absolute;
+  border-radius: 20px;
+}
+.pod1-progress-bar-state0-text028 {
+  top: 28px;
+  left: 44px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-readyto-launch-button {
+  top: 559px;
+  left: 956px;
+  width: 213px;
+  height: 147px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle33 {
+  top: 0px;
+  left: 0px;
+  width: 213px;
+  height: 147px;
+  position: absolute;
+  border-radius: 20px;
+}
+.pod1-progress-bar-state0-text030 {
+  top: 28px;
+  left: 47px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-destination-reached-button {
+  top: 732px;
+  left: 1180px;
+  width: 213px;
+  height: 147px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle331 {
+  top: 0px;
+  left: 0px;
+  width: 213px;
+  height: 147px;
+  position: absolute;
+  border-radius: 20px;
+}
+.pod1-progress-bar-state0-text034 {
+  top: 28px;
+  left: 28px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-track-mounting-button {
+  top: 559px;
+  left: 510px;
+  width: 214px;
+  height: 147px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle31 {
+  top: 0px;
+  left: 0px;
+  width: 214px;
+  height: 147px;
+  position: absolute;
+  border-radius: 20px;
+}
+.pod1-progress-bar-state0-text038 {
+  top: 28px;
+  left: 40px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-launch-button {
+  top: 559px;
+  left: 1180px;
+  width: 213px;
+  height: 147px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle34 {
+  top: 0px;
+  left: 0px;
+  width: 213px;
+  height: 147px;
+  position: absolute;
+  border-radius: 20px;
+}
+.pod1-progress-bar-state0-text040 {
+  top: 51px;
+  left: 51px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-coast-button {
+  top: 732px;
+  left: 510px;
+  width: 213px;
+  height: 147px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle27 {
+  top: 0px;
+  left: 0px;
+  width: 213px;
+  height: 147px;
+  position: absolute;
+  border-radius: 20px;
+}
+.pod1-progress-bar-state0-text042 {
+  top: 54px;
+  left: 66px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-brake-button {
+  top: 732px;
+  left: 733px;
+  width: 213px;
+  height: 147px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle28 {
+  top: 0px;
+  left: 0px;
+  width: 213px;
+  height: 147px;
+  position: absolute;
+  border-radius: 20px;
+}
+.pod1-progress-bar-state0-text044 {
+  top: 51px;
+  left: 68px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-crawl-button {
+  top: 732px;
+  left: 956px;
+  width: 213px;
+  height: 147px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle29 {
+  top: 0px;
+  left: 0px;
+  width: 213px;
+  height: 147px;
+  position: absolute;
+  border-radius: 20px;
+}
+.pod1-progress-bar-state0-text046 {
+  top: 51px;
+  left: 68px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-speed-sensor {
+  top: 1040px;
+  left: 28px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle35 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text048 {
+  left: 112px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text050 {
+  top: 63px;
+  left: 5px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-speed-sensor1 {
+  top: 1450px;
+  left: 28px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle351 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text052 {
+  left: 71px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text054 {
+  top: 63px;
+  left: 5px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-speed-sensor2 {
+  top: 1450px;
+  left: 377px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle352 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text056 {
+  left: 71px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text058 {
+  top: 63px;
+  left: 5px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-speed-sensor3 {
+  top: 1450px;
+  left: 726px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle353 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text060 {
+  left: 71px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text062 {
+  top: 63px;
+  left: 5px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-speed-sensor4 {
+  top: 1450px;
+  left: 1075px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle354 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text064 {
+  left: 71px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text066 {
+  top: 63px;
+  left: 5px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-speed-sensor5 {
+  top: 1245px;
+  left: 1075px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle355 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text068 {
+  left: 71px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text070 {
+  top: 63px;
+  left: 5px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-battery-temp-sensor {
+  top: 1040px;
+  left: 377px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle37 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text072 {
+  left: 58px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text074 {
+  top: 63px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-motor-temp-sensor {
+  top: 1040px;
+  left: 726px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle38 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text076 {
+  left: 70px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text078 {
+  top: 63px;
+  left: 3px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-caliper-pressure-sensor {
+  top: 1245px;
+  left: 726px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle41 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text080 {
+  left: 35px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text082 {
+  top: 63px;
+  left: 3px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-tank-pressure-sensor {
+  top: 1245px;
+  left: 377px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle40 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text084 {
+  left: 52px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text086 {
+  top: 63px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-air-system-temp-sensor {
+  top: 1245px;
+  left: 28px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle36 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text088 {
+  left: 32px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text090 {
+  top: 63px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-battery-voltage-sensor {
+  top: 1040px;
+  left: 1075px;
+  width: 319px;
+  height: 175px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-rectangle39 {
+  top: 0px;
+  left: 0px;
+  width: 319px;
+  height: 175px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text092 {
+  left: 42px;
+  color: rgba(0, 0, 0, 1);
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text094 {
+  top: 63px;
+  left: 1px;
+  color: rgba(0, 0, 0, 1);
+  width: 314px;
+  height: auto;
+  position: absolute;
+  font-size: 40px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-error-log-heading {
+  top: 559px;
+  left: 26px;
+  width: 465px;
+  height: 80px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-text096 {
+  color: rgba(158, 24, 57, 1);
+  width: 465px;
+  height: auto;
+  position: absolute;
+  font-size: 36px;
+  font-style: Regular;
+  text-align: center;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-rectangle42 {
+  top: 0px;
+  left: 0px;
+  width: 465px;
+  height: 80px;
+  position: absolute;
+}
+.pod1-progress-bar-state0-text098 {
+  top: 639px;
+  left: 26px;
+  color: rgba(0, 0, 0, 1);
+  width: 465px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text100 {
+  top: 689px;
+  left: 26px;
+  color: rgba(0, 0, 0, 1);
+  width: 465px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text102 {
+  top: 739px;
+  left: 26px;
+  color: rgba(0, 0, 0, 1);
+  width: 465px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text104 {
+  top: 789px;
+  left: 26px;
+  color: rgba(0, 0, 0, 1);
+  width: 465px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text106 {
+  top: 839px;
+  left: 26px;
+  color: rgba(0, 0, 0, 1);
+  width: 465px;
+  height: auto;
+  position: absolute;
+  font-size: 20px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-text108 {
+  top: 148px;
+  left: 18px;
+  color: rgba(0, 0, 0, 1);
+  width: 204px;
+  height: auto;
+  position: absolute;
+  font-size: 80px;
+  font-style: Regular;
+  text-align: left;
+  font-family: Abel;
+  font-weight: 400;
+  line-height: normal;
+  font-stretch: normal;
+  text-decoration: none;
+}
+.pod1-progress-bar-state0-progressindicator {
+  top: 907px;
+  left: 33px;
+  width: 1365px;
+  height: 100px;
+  display: flex;
+  position: absolute;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.pod1-progress-bar-state0-union {
+  top: 22.857149124145508px;
+  left: 0px;
+  width: 1366px;
+  height: 53px;
+  opacity: 0.80;
+  position: absolute;
+  box-sizing: content-box;
+}
+.pod1-progress-bar-state0-hyperloop-pod2 {
+  top: 0px;
+  left: -40px;
+  width: 79px;
+  height: 100px;
+  position: absolute;
+}

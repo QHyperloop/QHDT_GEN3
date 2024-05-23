@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="english">
+<head>
+    <title>exported project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta property="twitter:card" content="summary_large_image" />
+
+    <style data-tag="reset-style-sheet">
+        html { line-height: 1.15; }
+        body { margin: 0; }
+        * { box-sizing: border-box; border-width: 0; border-style: solid; }
+        p, li, ul, pre, div, h1, h2, h3, h4, h5, h6, figure, blockquote, figcaption { margin: 0; padding: 0; }
+        button { background-color: transparent; }
+        button, input, optgroup, select, textarea { font-family: inherit; font-size: 100%; line-height: 1.15; margin: 0; }
+        button, select { text-transform: none; }
+        button, [type="button"], [type="reset"], [type="submit"] { -webkit-appearance: button; }
+        button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner { border-style: none; padding: 0; }
+        button:-moz-focus, [type="button"]:-moz-focus, [type="reset"]:-moz-focus, [type="submit"]:-moz-focus { outline: 1px dotted ButtonText; }
+        a { color: inherit; text-decoration: inherit; }
+        input { padding: 2px 4px; }
+        img { display: block; }
+        html { scroll-behavior: smooth }
+    </style>
+    <style data-tag="default-style-sheet">
+        html {
+            font-family: Noto Sans;
+            font-size: 16px;
+        }
+        body {
+            font-weight: 400;
+            font-style: normal;
+            text-decoration: none;
+            text-transform: none;
+            letter-spacing: normal;
+            line-height: 1.15;
+            color: var(--dl-color-theme-neutral-dark);
+            background-color: var(--dl-color-theme-neutral-light);
+            fill: var(--dl-color-theme-neutral-dark);
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" data-tag="font" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" data-tag="font" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abel:wght@400&amp;display=swap" data-tag="font" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&amp;display=swap" data-tag="font" />
+    <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+</head>
+<body>
+    <link rel="stylesheet" href="/css/style.css" />
+    <div>
+        <link href="/css/home-screen.css" rel="stylesheet" />
+        <div class="home-screen-container">
+            <div class="home-screen-home-screen">
+                <img src="/images/external/rectangle62131-ooa.svg" alt="Rectangle62131" class="home-screen-rectangle6" />
+                <img src="/images/external/qhlogo22131-7ih7-200h.png" alt="QHLogo22131" class="home-screen-qh-logo2" />
+                <span class="home-screen-text"><span>Welcome!</span></span>
+                <span class="home-screen-text02"><span>Begin by selecting a page below:</span></span>
+                <img src="/images/external/pods2131-z6ce-300h.png" alt="Pods2131" class="home-screen-pods" />
+                <img src="/images/external/errorlogwarningthresholds2131-q1un-300h.png" alt="ErrorLogWarningThresholds2131" class="home-screen-error-log-warning-thresholds" />
+                <img src="/images/external/rectangle242131-okna-300h.png" alt="Rectangle242131" class="home-screen-rectangle24" />
+                <img src="/images/external/pods2131-3d0i-300h.png" alt="Pods2131" class="home-screen-pods1" />
+                <img src="/images/external/errorlogwarningthresholds2131-yu8pe-300h.png" alt="ErrorLogWarningThresholds2131" class="home-screen-error-log-warning-thresholds1" />
+                <img src="/images/external/rectangle252131-75r-300h.png" alt="Rectangle252131" class="home-screen-rectangle25" />
+                <button onclick="goToSettings()" class="home-screen-text04"><span>Settings</span></button>
+                <img src="/images/external/rectangle262131-vqch-300h.png" alt="Rectangle262131" class="home-screen-rectangle26" />
+                <button onclick="goToErrors()" class="home-screen-text06"><span>Error Log / Warnings</span></button>
+                <span class="home-screen-text08"><span>Queen’s Hyperloop Design Team</span></span>
+                <button onclick="navigateToPodInterface()" class="home-screen-button"><span class="home-screen-text10">Pod Interface</span></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateToPodInterface() {
+            console.log("Navigating to the Pod Interface page...");
+            window.location.href = '/pod-interface';
+        }
+
+        function goToSettings(){
+            console.log("Navigating to the settings page...");
+            window.location.href = '/settings';
+        }
+  
+        function goToErrors(){
+            console.log("Navigating to the errors page...");
+            window.location.href = '/error-log-warnings';
+        }
+    </script>
+</body>
+</html>

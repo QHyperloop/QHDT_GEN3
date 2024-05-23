@@ -1,6 +1,7 @@
 #include "main.h"
 
 extern error_handler TEMP_INIT();
+extern error_handler UPDATE_TEMP();
 
 #define ADC0_1_MAX_TEMP		250  //25.0 = 250, 25.3 = 253
 #define ADC0_1_MIN_TEMP		0

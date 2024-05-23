@@ -1,7 +1,23 @@
-#include <string.h>
-#include <stdio.h>
+#include <pigpio.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+#include <net/if.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <linux/can.h>
+#include <linux/can/raw.h>
 
+  
+#include <libwebsockets.h>
+#include <json-c/json.h>
+
+
+extern double sensors_data[6];
 
 typedef enum _error_handler {
 	CAN_INIT_OK,

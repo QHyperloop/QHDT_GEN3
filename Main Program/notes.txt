@@ -1,0 +1,8 @@
+Environment Setup
+
+Node.js
+
+Libraries:
+libwebsockets
+json-c
+OpenSSL (might just be for windows install)
