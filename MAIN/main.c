@@ -404,7 +404,7 @@ void pid_init() {
 void update_esc(int actual_rpm, double dist_curr){
     double dt = dist_curr-dist_prev;
     dist_prev = dist_curr;
-    int setpoint_rpm = run[round(dist_curr)][1]; 
+    int setpoint_rpm = run[(int)round(dist_curr)][1]; 
     double new_curr = previous_curr + PID_Compute(&pid, setpoint_rpm, actual_rpm, dt);
     previous_curr = new_curr;
     new_curr = new_curr*10;
@@ -413,7 +413,7 @@ void update_esc(int actual_rpm, double dist_curr){
     current[1] = (unsigned int)new_curr>>8 & 0xFF;
     current[2] = (unsigned int)new_curr>>16 & 0xFF;
     current[3] = (unsigned int)new_curr>>24 & 0xFF;
-    set_esc_curr((uint8_t)currrent[]);
+    set_esc_curr((uint8_t)current);
 
 };
 
@@ -649,9 +649,9 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
             if (response_flag){
                 success_or_fail = 0;
                 if (success_or_fail){
-                    //response = "Success";
+                    unsigned char response = "Success";
                 }else{
-                    //response = "Fail";
+                    unsigned char response = "Fail";
                 }
                 lws_write(wsi, (unsigned char *) response, strlen(response), LWS_WRITE_TEXT);
                 response_flag = 0;
