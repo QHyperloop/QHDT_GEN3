@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -pthread -o -Wextra -g
-LFLAGS = -lpigpio -lrt
+LFLAGS = -lpigpio -lrt -lm -ljson-c -lwebsockets
 
 TARGET = hyperloop
 
