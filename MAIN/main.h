@@ -18,11 +18,6 @@
 #include <libwebsockets.h>
 #include <json-c/json.h>
 
-#include "relay.h"
-#include "can.h"
-#include "esc.h"
-#include "temperature.h"
-
 
 extern double sensors_data[6];
 
@@ -67,6 +62,3 @@ typedef enum _PodState{
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
 extern volatile uint8_t Fault_Flag;
-
-#include "relay.h"
-#include "temperature.h"
