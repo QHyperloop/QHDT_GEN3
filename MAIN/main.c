@@ -695,18 +695,24 @@ uint8_t Run_State(PodState state) {
 
     switch (state) {
         case INIT: //Auto state
+            printf("INIT\n");
         	
         	if(TEMP_INIT() != TEMP_INIT_SUCCESS){
-        		return 1;
-        	}
-        	
+        		printf("TEMP_INIT FAIL\n");
+                return 1;
+        	}else{
+                printf("TEMP_INIT Success\n");
+            }
+                	
 			pid_init();
+            printf("PID_INIT\n");
         	//pump_control(1);
         	
         	Curr_State = SAFE_TO_APPROACH;
         	return status;
             break;
         case FAULT: // auto/manual state
+            printf("FAULT\n");
         	HV_off();
         	yellowstatus(0);
         	greenstatus(0);
@@ -717,6 +723,7 @@ uint8_t Run_State(PodState state) {
         	return status;
             break;
         case SAFE_TO_APPROACH: //manual state
+            printf("SAFE_TO_APPROACH\n");
         	HV_off();
         	yellowstatus(0);
         	greenstatus(0);
@@ -725,24 +732,28 @@ uint8_t Run_State(PodState state) {
         	return status;
             break;
         case READY: //manual state
+            printf("READY\n");
         	precharge();
         	yellowstatus(1);
         	brake_state(0);
         	return status;
             break;
         case LAUNCH: //manual state
+            printf("LAUNCH\n");
         	yellowstatus(0);
         	greenstatus(1);
 
         	return status;
             break;
         case COAST: //auto state
+            printf("COAST\n");
         	yellowstatus(0);
         	greenstatus(1);
 
         	return status;
             break;
         case BRAKE: //auto state
+            printf("BRAKE\n");
         	yellowstatus(0);
         	greenstatus(1);
         	brake_state(1);
@@ -750,6 +761,7 @@ uint8_t Run_State(PodState state) {
         	return status;
             break;
         case CRAWL: //auto state
+            printf("CRAWL\n");
         	yellowstatus(0);
         	greenstatus(1);
         	brake_state(0);
@@ -757,6 +769,7 @@ uint8_t Run_State(PodState state) {
         	return status;
             break;
         case TRACK: //manual state
+            printf("TRACk\n");
         	HV_off();
         	yellowstatus(0);
         	greenstatus(0);
@@ -839,13 +852,14 @@ int main(void){
   	while (1){
 		int n = lws_service(context, 1000);
     	if (n < 0) { 
-            printf("LWS ERROR OCCURRED")
+            printf("LWS ERROR OCCURRED\n");
         	fprintf(stderr, "Error occurred\n");
         	break;
     	}
 
     	// write array sensor data every 10 seconds
     	if (time(NULL) - last_request_time >= 10) {
+            printf("Data Sent\n");
         	last_request_time = time(NULL);
         	sensor_flag = 1;
         	lws_callback_on_writable(wsi);
@@ -855,7 +869,7 @@ int main(void){
 
 
 		if(msg_wait() < 0){
-			printf("CAN Error");
+			printf("CAN Error\n");
 		}
 		Fault_Flag = Run_State(Curr_State);
 		if(Fault_Flag != 0){
