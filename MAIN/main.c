@@ -14,6 +14,14 @@ uint8_t current[4];
 double previous_curr = 0.0;
 uint8_t dist_prev;
 
+typedef struct {
+    double kp;  // Proportional gain
+    double ki;  // Integral gain
+    double kd;  // Derivative gain
+    double previous_error;  // Previous error value
+    double integral;  // Integral value
+} PIDController;
+
 PIDController pid;
 
 int run[][2] = {
@@ -251,7 +259,7 @@ int create_socket(const char* ifname) {
 void set_esc_curr(uint8_t curr[4]){
     struct canfd_frame frame;
     frame.can_id =  0x100 | ESC_ID | CAN_EFF_FLAG;
-    frame.can_dlc = 8;
+    frame.len = 8;
     frame.data[0] = curr[0];
     frame.data[1] = curr[1];
     frame.data[2] = curr[2];
@@ -270,7 +278,7 @@ void set_esc_curr(uint8_t curr[4]){
 void IMD_REQ_ISO(){
     struct canfd_frame frame;
     frame.can_id =   IMD_ID | CAN_EFF_FLAG;
-    frame.can_dlc = 1;
+    frame.len = 1;
     frame.data[0] = 0xE0;
     if (write(can0, &frame, sizeof(frame)) != sizeof(frame)){
         perror("Error in sending CAN frame"); 
@@ -298,7 +306,7 @@ void read_state_responses() {
     }
     printf("Recieved response\n"); // to help with testing
     
-    if(frame.can_id == IMD_ID | (CAN_EFF_FLAG & 0xE)){
+    if(frame.can_id == (IMD_ID | (CAN_EFF_FLAG & 0xE))){
         if((frame.data[0] & 0x40) == 0x40){
             if((frame.data[0] & 0x03) == 0b10){
                 ISO_STATE = 0xF0; // set LED to yellow
@@ -316,8 +324,8 @@ void read_state_responses() {
         }
     }
 
-    if((frame.can_id == IMD_ID | (CAN_EFF_FLAG & 0xFF)) == ESC_ID){
-        if((frame.can_id == IMD_ID | (CAN_EFF_FLAG & 0xFF00)) == 0x9000){
+    if((frame.can_id | IMD_ID | (CAN_EFF_FLAG & 0xFF)) == ESC_ID){
+        if((frame.can_id | IMD_ID | (CAN_EFF_FLAG & 0xFF00)) == 0x9000){
             M_RPM = frame.data[3]<<24 | frame.data[2]<<16 | frame.data[1]<<8 | frame.data[0];
             M_CURR = (frame.data[5]<<8 | frame.data[4])*10;
             return;
@@ -363,13 +371,7 @@ int msg_wait() {
 /*ESC #######################################################################################################################################*/
 
 
-typedef struct {
-    double kp;  // Proportional gain
-    double ki;  // Integral gain
-    double kd;  // Derivative gain
-    double previous_error;  // Previous error value
-    double integral;  // Integral value
-} PIDController;
+
 
 void PID_Init(PIDController *pid, double kp, double ki, double kd) {
     pid->kp = kp;
