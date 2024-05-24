@@ -34,8 +34,8 @@ int run[][2] = {
 };
 
 /*CAN #######################################################################################################################################*/
-uint8_t M_RPM[4];
-uint8_t M_CURR[2];
+uint32_t M_RPM;
+uint16_t M_CURR;
 uint8_t ISO_STATE;
 
 #define ESC_ID 0x65
@@ -413,7 +413,7 @@ void update_esc(int actual_rpm, double dist_curr){
     current[1] = (unsigned int)new_curr>>8 & 0xFF;
     current[2] = (unsigned int)new_curr>>16 & 0xFF;
     current[3] = (unsigned int)new_curr>>24 & 0xFF;
-    set_esc_curr(uint8_t currrent[4]);
+    set_esc_curr((uint8_t)currrent[]);
 
 };
 
@@ -609,7 +609,7 @@ char* serialize_sensors() {
 
 
 // Callback function. Caleld by libwebsockets whenever an event occurs
-static int callback_websockets(const struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len) {
+static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len) {
     switch (reason) {
         case LWS_CALLBACK_CLIENT_RECEIVE:
             // Copy the received message into the state variable
@@ -647,11 +647,11 @@ static int callback_websockets(const struct lws *wsi, enum lws_callback_reasons 
                 sensor_flag = 0;
             }    
             if (response_flag){
-                int success_or_fail = 0;
+                success_or_fail = 0;
                 if (success_or_fail){
-                    response = "Success";
+                    //response = "Success";
                 }else{
-                    response = "Fail";
+                    //response = "Fail";
                 }
                 lws_write(wsi, (unsigned char *) response, strlen(response), LWS_WRITE_TEXT);
                 response_flag = 0;
@@ -678,7 +678,7 @@ static int callback_websockets(const struct lws *wsi, enum lws_callback_reasons 
 }
 
 // Protocols Array, specifies protocols supported by the client
-static const struct lws_protocols protocols[] = {
+static struct lws_protocols protocols[] = {
     {
         "default-protocol",
         callback_websockets,
