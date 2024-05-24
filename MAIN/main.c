@@ -780,11 +780,15 @@ uint8_t Run_State(PodState state) {
 int main(void){
     if (gpioInitialise() < 0)
     {
+        printf("GPIO INIT FAIL\n");
         Curr_State = FAULT;
+    }else{
+        printf("GPIO INIT SUCCESS\n");
     }
 
     //init can
     can0 = create_socket("can0");
+    printf("CAN INIT SUCCESS\n");
 
 	// WebSocket initialization
     struct lws_context_creation_info info;
@@ -812,8 +816,11 @@ int main(void){
     struct lws *wsi = lws_client_connect_via_info(&connect_info);
     if (wsi == NULL) {
         fprintf(stderr, "Connection failed\n");
+        printf("LWS Connection Failed\n");
         lws_context_destroy(context);
         return -1;
+    }else{
+        printf("LWS Connected\n");
     }
     
 
@@ -832,6 +839,7 @@ int main(void){
   	while (1){
 		int n = lws_service(context, 1000);
     	if (n < 0) { 
+            printf("LWS ERROR OCCURRED")
         	fprintf(stderr, "Error occurred\n");
         	break;
     	}
@@ -854,7 +862,7 @@ int main(void){
 			Curr_State = FAULT;
 		}
 	
-  		}
+  	}
 	close(can0);
 	lws_context_destroy(context);
 	return 0;
