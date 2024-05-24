@@ -778,6 +778,14 @@ uint8_t Run_State(PodState state) {
 
 
 int main(void){
+    if (gpioInitialise() < 0)
+    {
+        Curr_State = FAULT;
+    }
+
+    //init can
+    can0 = create_socket("can0");
+
 	// WebSocket initialization
     struct lws_context_creation_info info;
     memset(&info, 0, sizeof info);
@@ -809,8 +817,7 @@ int main(void){
     }
     
 
-    //init can
-    can0 = create_socket("can0");
+    
     
 
 
@@ -818,10 +825,7 @@ int main(void){
 	time_t last_request_time = time(NULL);
 
     //i2c init
-    if (gpioInitialise() < 0)
-    {
-        Curr_State = FAULT;
-    }
+    
 
     Fault_Flag = Run_State(Curr_State);
   
