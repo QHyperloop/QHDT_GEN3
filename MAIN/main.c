@@ -256,7 +256,7 @@ int create_socket(const char* ifname) {
     return s;
 }
 
-void set_esc_curr(uint8_t * curr[4]){
+void set_esc_curr(uint8_t curr[]){
     struct canfd_frame frame;
     frame.can_id =  0x100 | ESC_ID | CAN_EFF_FLAG;
     frame.len = 8;
@@ -409,11 +409,11 @@ void update_esc(int actual_rpm, double dist_curr){
     previous_curr = new_curr;
     new_curr = new_curr*10;
     
-    current[0] = (unsigned int)new_curr & 0xFF;
-    current[1] = (unsigned int)new_curr>>8 & 0xFF;
-    current[2] = (unsigned int)new_curr>>16 & 0xFF;
-    current[3] = (unsigned int)new_curr>>24 & 0xFF;
-    set_esc_curr((uint8_t)current);
+    current[0] = (uint8_t)new_curr & 0xFF;
+    current[1] = (uint8_t)new_curr>>8 & 0xFF;
+    current[2] = (uint8_t)new_curr>>16 & 0xFF;
+    current[3] = (uint8_t)new_curr>>24 & 0xFF;
+    set_esc_curr(current);
 
 };
 
