@@ -138,8 +138,8 @@ uint8_t Run_State(PodState state) {
         		return 1;
         	}
         	can_init();
-			
-        	pump_control(1);
+			pid_init();
+        	//pump_control(1);
         	
         	Curr_State = SAFE_TO_APPROACH;
         	return status;
@@ -149,7 +149,7 @@ uint8_t Run_State(PodState state) {
         	yellowstatus(0);
         	greenstatus(0);
         	redstatus(1);
-        	pump_control(0);
+        	//pump_control(0);
         	brake_state(0);
 
         	return status;

@@ -16,6 +16,11 @@
 #include <libwebsockets.h>
 #include <json-c/json.h>
 
+#include "relay.h"
+#include "can.h"
+#include "esc.h"
+#include "temperature.h"
+
 
 extern double sensors_data[6];
 
