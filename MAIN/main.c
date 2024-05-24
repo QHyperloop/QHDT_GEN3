@@ -14,6 +14,8 @@ uint8_t current[4];
 double previous_curr = 0.0;
 uint8_t dist_prev;
 
+PIDController pid;
+
 int run[][2] = {
 {0,100},{1,100},{2,100},{3,100},{4,100},{5,100},{6,100},{7,100},{8,100},{9,100},{10,100},
 {11,100},{12,100},{13,100},{14,100},{15,100},{16,100},{17,100},{18,100},{19,100},{20,100},
@@ -131,7 +133,13 @@ int temp;
 
 /*############################################################################################################################################*/
 
-void precharge(void){
+void HV_on(){
+
+    i2cWriteByteData(mcp[0], MCP23017_OLATB,  RelayStatesB ^ RELAY10 ^ RELAY11 ^ RELAY15 ^ RELAY16);
+	RelayStatesB = RelayStatesB ^ RELAY10 ^ RELAY11 ^ RELAY15 ^ RELAY16;
+}
+
+void precharge(){
  //high side on, low side precharge resitor on wait 500ms then low side main on, resistor off
 
     i2cWriteByteData(mcp[0], MCP23017_OLATB, RelayStatesB ^ RELAY9 ^ RELAY10 ^ RELAY14 ^ RELAY15);
@@ -141,15 +149,9 @@ void precharge(void){
     HV_on();
 	
 }
-void HV_on(void){
-
-    i2cWriteByteData(mcp[0], MCP23017_OLATB,  RelayStatesB ^ RELAY10 ^ RELAY11 ^ RELAY15 ^ RELAY16);
-	RelayStatesB = RelayStatesB ^ RELAY10 ^ RELAY11 ^ RELAY15 ^ RELAY16;
 
 
-}
-
-void HV_off(void){
+void HV_off(){
 
     i2cWriteByteData(mcp[0], MCP23017_OLATB, RelayStatesB ^ RELAY9 ^ RELAY11 ^ RELAY14 ^ RELAY16);
 
@@ -249,7 +251,7 @@ int create_socket(const char* ifname) {
 void set_esc_curr(uint8_t curr[4]){
     struct canfd_frame frame;
     frame.can_id =  0x100 | ESC_ID | CAN_EFF_FLAG;
-    frame..can_dlc = 8;
+    frame.can_dlc = 8;
     frame.data[0] = curr[0];
     frame.data[1] = curr[1];
     frame.data[2] = curr[2];
@@ -268,7 +270,7 @@ void set_esc_curr(uint8_t curr[4]){
 void IMD_REQ_ISO(){
     struct canfd_frame frame;
     frame.can_id =   IMD_ID | CAN_EFF_FLAG;
-    frame..can_dlc = 1;
+    frame.can_dlc = 1;
     frame.data[0] = 0xE0;
     if (write(can0, &frame, sizeof(frame)) != sizeof(frame)){
         perror("Error in sending CAN frame"); 
@@ -296,7 +298,7 @@ void read_state_responses() {
     }
     printf("Recieved response\n"); // to help with testing
     
-    if(frame.can_id == IMD_ID | (CAN_EFF_FLAG & 0xE){
+    if(frame.can_id == IMD_ID | (CAN_EFF_FLAG & 0xE)){
         if((frame.data[0] & 0x40) == 0x40){
             if((frame.data[0] & 0x03) == 0b10){
                 ISO_STATE = 0xF0; // set LED to yellow
@@ -314,8 +316,8 @@ void read_state_responses() {
         }
     }
 
-    if((frame.can_id == IMD_ID | CAN_EFF_FLAG & 0xFF) == ESC_ID){
-        if((frame.can_id == IMD_ID | CAN_EFF_FLAG & 0xFF00) == 0x9000){
+    if((frame.can_id == IMD_ID | (CAN_EFF_FLAG & 0xFF)) == ESC_ID){
+        if((frame.can_id == IMD_ID | (CAN_EFF_FLAG & 0xFF00)) == 0x9000){
             M_RPM = frame.data[3]<<24 | frame.data[2]<<16 | frame.data[1]<<8 | frame.data[0];
             M_CURR = (frame.data[5]<<8 | frame.data[4])*10;
             return;
@@ -387,7 +389,7 @@ double PID_Compute(PIDController *pid, double set_rpm, double actual_rpm, double
 }
 
 void pid_init() {
-    PIDController pid;
+    
     double kp = 1.0;  // Proportional gain
     double ki = 0.1;  // Integral gain
     double kd = 0.01; // Derivative gain
@@ -397,10 +399,10 @@ void pid_init() {
     return;
 }
 
-void update_esc(actual_rpm, dist_curr){
+void update_esc(int actual_rpm, double dist_curr){
     double dt = dist_curr-dist_prev;
     dist_prev = dist_curr;
-    int setpoint_rpm = run[round(dist_curr),1]; 
+    int setpoint_rpm = run[round(dist_curr)][1]; 
     double new_curr = previous_curr + PID_Compute(&pid, setpoint_rpm, actual_rpm, dt);
     previous_curr = new_curr;
     new_curr = new_curr*10;
@@ -794,7 +796,7 @@ int main(void){
     connect_info.port = 3000;
     connect_info.path = "/";
     connect_info.protocol = protocols[0].name;
-    connect_info.host = lws_canonical_hostname(context)
+    connect_info.host = lws_canonical_hostname(context);
 
     struct lws *wsi = lws_client_connect_via_info(&connect_info);
     if (wsi == NULL) {
