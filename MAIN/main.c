@@ -1,7 +1,7 @@
 #include "main.h"
 
 /* MAIN ######################################################################################################################################*/
-PodState Fault_Flag;
+error_handler Fault_Flag;
 uint8_t ISO_STATE;
 PodState Curr_State = INIT;
 int sensor_flag = 0;
