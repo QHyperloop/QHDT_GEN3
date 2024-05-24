@@ -2,10 +2,16 @@ CC = gcc
 CFLAGS = -Wall -pthread -o -Wextra -g
 LFLAGS = -lpigpio -lrt
 
-default: hyperloop
+TARGET = hyperloop
 
-hyperloop:	main.c main.h
-	$(CC) $(CFLAGS) hyperloop main.c $(LFLAGS)
+default: $(TARGET)
 
+$(TARGET): main.o
+	$(CC) $(CFLAGS) -o $(TARGET) main.o $(LFLAGS)
+
+main.o: main.c main.h
+	$(CC) $(CFLAGS) -c main.c -o main.o
+
+# Clean up
 clean:
-	$(RM) hyperloop *.o *~
+	$(RM) $(TARGET) *.o *~
