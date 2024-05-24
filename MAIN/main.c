@@ -256,7 +256,7 @@ int create_socket(const char* ifname) {
     return s;
 }
 
-void set_esc_curr(uint8_t curr[4]){
+void set_esc_curr(uint8_t * curr[4]){
     struct canfd_frame frame;
     frame.can_id =  0x100 | ESC_ID | CAN_EFF_FLAG;
     frame.len = 8;
@@ -646,14 +646,15 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
                 free(json_data);
                 sensor_flag = 0;
             }    
+            char * response;
             if (response_flag){
                 success_or_fail = 0;
                 if (success_or_fail){
-                    unsigned char response = "Success";
+                    response = "Success";
                 }else{
-                    unsigned char response = "Fail";
+                    response = "Fail";
                 }
-                lws_write(wsi, (unsigned char *) response, strlen(response), LWS_WRITE_TEXT);
+                lws_write(wsi, (unsigned char *)response, strlen(response), LWS_WRITE_TEXT);
                 response_flag = 0;
             }     
             break;
