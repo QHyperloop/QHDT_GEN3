@@ -1,7 +1,7 @@
 #include "main.h"
 
 /* MAIN ######################################################################################################################################*/
-volatile uint8_t Fault_Flag;
+PodState Fault_Flag;
 uint8_t ISO_STATE;
 PodState Curr_State = INIT;
 int sensor_flag = 0;
@@ -699,7 +699,7 @@ uint8_t Run_State(PodState state) {
         	
         	if(TEMP_INIT() != TEMP_INIT_SUCCESS){
         		printf("TEMP_INIT FAIL\n");
-                return 1;
+                //status = 1;
         	}else{
                 printf("TEMP_INIT Success\n");
             }
@@ -872,7 +872,7 @@ int main(void){
 			printf("CAN Error\n");
 		}
 		Fault_Flag = Run_State(Curr_State);
-		if(Fault_Flag != 0){
+		if(Fault_Flag != OK){
 			Curr_State = FAULT;
 		}
 	
