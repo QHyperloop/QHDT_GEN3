@@ -12,6 +12,8 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
+#include <math.h>
+
   
 #include <libwebsockets.h>
 #include <json-c/json.h>
