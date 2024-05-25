@@ -689,28 +689,27 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
             free(json_data);
             sensor_flag = 0;
         }
-        char *response;
         if (response_flag)
         {
             
             if (success_or_fail)
             {
                 printf("Success\n");
-                response = "Success";
+                char *response = "Success";
             }
             else
             {
                 printf("Fail\n");
-                response = "Fail";
+                char *response = "Fail";
             }
-
-            unsigned char buf[LWS_SEND_BUFFER_PRE_PADDING + strlen(response) + LWS_SEND_BUFFER_POST_PADDING];
+            lws_write(wsi, (unsigned char *)response, strlen(response), LWS_WRITE_TEXT);
+           /* unsigned char buf[LWS_SEND_BUFFER_PRE_PADDING + strlen(response)+1 + LWS_SEND_BUFFER_POST_PADDING];
             buf[LWS_SEND_BUFFER_PRE_PADDING] = response;
 			unsigned char *p = &buf[LWS_SEND_BUFFER_PRE_PADDING];
             
 			size_t n = sprintf( (char *)p, "%u", rand() );
 
-            lws_write(wsi, p, n, LWS_WRITE_TEXT);
+            lws_write(wsi, p, n, LWS_WRITE_TEXT);*/
             response_flag = 0;
             success_or_fail = 0;
         }
@@ -944,7 +943,7 @@ int main(void)
         }*/
         
     }
-    printf("SHITS FUCKED\n");
+    
     close(can0);
     lws_context_destroy(context);
     return 0;
