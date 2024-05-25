@@ -835,7 +835,7 @@ uint8_t Run_State(PodState state)
 
 int main(void)
 {
-    if (gpioInitialise() < 0)
+   /* if (gpioInitialise() < 0)
     {
         printf("GPIO INIT FAIL\n");
         Curr_State = FAULT;
@@ -848,7 +848,7 @@ int main(void)
     // init can
     can0 = create_socket("can0");
     printf("CAN INIT SUCCESS\n");
-
+*/
     // WebSocket initialization
     struct lws_context_creation_info info;
     memset(&info, 0, sizeof info);
@@ -893,7 +893,7 @@ int main(void)
 
     // i2c init
 
-    Fault_Flag = Run_State(Curr_State);
+    //Fault_Flag = Run_State(Curr_State);
     printf("INIT_COMPLETE\n");
 
     while (1)
@@ -914,7 +914,7 @@ int main(void)
             sensor_flag = 1;
             lws_callback_on_writable(wsi);
         }
-
+/*
         if (msg_wait() < 0)
         {
             printf("CAN Error\n");
@@ -924,7 +924,7 @@ int main(void)
         {
             printf("CReMy SHits");
             Curr_State = FAULT;
-        }
+        }*/
         printf("BITCH RUNNING");
     }
     printf("SHITS FUCKED");
