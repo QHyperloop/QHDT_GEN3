@@ -666,11 +666,13 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
 
         // Use this if you rather have the extended ID
         // unsigned int state_id = map_state_to_id((char*) in);
-        printf("%c\n",state);
+        printf("States: ");
+        puts(state);
+        printf("\n");
         // DO WHATEVER ACTION WITH STATE HERE
 
         // If send is a success then set this to 1 if not leave at 0
-        int success_or_fail = 1;
+        success_or_fail = 1;
         printf("hit \n");
         // ON A SUCCESSFUL SEND SET FLAG AND CALL WRITE
         response_flag = 1;
