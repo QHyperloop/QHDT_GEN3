@@ -703,7 +703,12 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
                 printf("Fail\n");
                 response = "Fail";
             }
-            lws_write(wsi, (unsigned char *)response, strlen(response), LWS_WRITE_TEXT);
+
+            unsigned char buf[LWS_SEND_BUFFER_PRE_PADDING + strlen(response) + LWS_SEND_BUFFER_POST_PADDING];
+			unsigned char *p = &buf[LWS_SEND_BUFFER_PRE_PADDING+1]=response;
+			size_t n = sprintf( (char *)p, "%u", rand() );
+
+            lws_write(wsi, p, n, LWS_WRITE_TEXT);
             response_flag = 0;
             success_or_fail = 0;
         }
