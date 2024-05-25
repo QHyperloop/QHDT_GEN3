@@ -686,7 +686,7 @@ int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void 
         {
             char *json_data = serialize_sensors();
             lws_write(wsi, (unsigned char *)json_data, strlen(json_data), LWS_WRITE_TEXT);
-            free(json_data);
+            //free(json_data);
             sensor_flag = 0;
         }
         if (response_flag)
@@ -696,18 +696,18 @@ int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void 
             if (success_or_fail)
             {
                 printf("Success\n");
-                *response = "Success";
+                response = "Success";
             }
             else
             {
                 printf("Fail\n");
-                *response = "Fail";
+                response = "Fail";
             }
             
             out = (char *)malloc(sizeof(char)*(LWS_SEND_BUFFER_PRE_PADDING + strlen(response) + LWS_SEND_BUFFER_POST_PADDING));
             memcpy (out + LWS_SEND_BUFFER_PRE_PADDING, response, strlen(response) );
-            lws_write(wsi, out + LWS_SEND_BUFFER_PRE_PADDING, strlen(response), LWS_WRITE_TEXT);
-            free(out);
+            lws_write(wsi,(unsigned char*) out + LWS_SEND_BUFFER_PRE_PADDING, strlen(response), LWS_WRITE_TEXT);
+            //free(out);
            /* unsigned char buf[LWS_SEND_BUFFER_PRE_PADDING + strlen(response)+1 + LWS_SEND_BUFFER_POST_PADDING];
             buf[LWS_SEND_BUFFER_PRE_PADDING] = response;
 			unsigned char *p = &buf[LWS_SEND_BUFFER_PRE_PADDING];
