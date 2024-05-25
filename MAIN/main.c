@@ -649,7 +649,7 @@ char *serialize_sensors()
 }
 
 // Callback function. Caleld by libwebsockets whenever an event occurs
-static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len)
+int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len)
 {
     switch (reason)
     {
@@ -691,7 +691,8 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
         }
         if (response_flag)
         {
-            
+            char *response = "Fail";
+            char *out = NULL;
             if (success_or_fail)
             {
                 printf("Success\n");
@@ -702,7 +703,10 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
                 printf("Fail\n");
                 char *response = "Fail";
             }
-            lws_write(wsi, (unsigned char *)response, strlen(response), LWS_WRITE_TEXT);
+            out = (char *)malloc(sizeof(char)*(LWS_SEND_BUFFER_PRE_PADDING + strlen(response) + LWS_SEND_BUFFER_POST_PADDING));
+            memcpy (out + LWS_SEND_BUFFER_PRE_PADDING, response, strlen(response) );
+            lws_write(wsi, out + LWS_SEND_BUFFER_PRE_PADDING, strlen(response), LWS_WRITE_TEXT);
+            free(out);
            /* unsigned char buf[LWS_SEND_BUFFER_PRE_PADDING + strlen(response)+1 + LWS_SEND_BUFFER_POST_PADDING];
             buf[LWS_SEND_BUFFER_PRE_PADDING] = response;
 			unsigned char *p = &buf[LWS_SEND_BUFFER_PRE_PADDING];
