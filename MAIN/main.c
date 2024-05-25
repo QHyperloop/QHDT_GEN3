@@ -898,13 +898,16 @@ int main(void)
 
     while (1)
     {
+        printf("1\n");
         int n = lws_service(context, 1000);
+        printf("2\n");
         if (n < 0)
         {
             printf("LWS ERROR OCCURRED\n");
             fprintf(stderr, "Error occurred\n");
             break;
         }
+        printf("3\n");
 
         // write array sensor data every 10 seconds
         if (time(NULL) - last_request_time >= 10)
@@ -914,6 +917,7 @@ int main(void)
             sensor_flag = 1;
             lws_callback_on_writable(wsi);
         }
+        printf("4\n");
 /*
         if (msg_wait() < 0)
         {
@@ -925,7 +929,7 @@ int main(void)
             printf("CReMy SHits");
             Curr_State = FAULT;
         }*/
-        printf("BITCH RUNNING\n");
+        
     }
     printf("SHITS FUCKED\n");
     close(can0);

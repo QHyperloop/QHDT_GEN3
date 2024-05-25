@@ -61,4 +61,3 @@ typedef enum _PodState{
 }PodState;
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
-extern volatile uint8_t Fault_Flag;
