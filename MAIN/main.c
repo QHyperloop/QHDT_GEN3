@@ -670,7 +670,7 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
 
         // If send is a success then set this to 1 if not leave at 0
         int success_or_fail = 1;
-
+        printf("hit \n");
         // ON A SUCCESSFUL SEND SET FLAG AND CALL WRITE
         response_flag = 1;
         lws_callback_on_writable(wsi);
@@ -925,9 +925,9 @@ int main(void)
             printf("CReMy SHits");
             Curr_State = FAULT;
         }*/
-        printf("BITCH RUNNING");
+        printf("BITCH RUNNING\n");
     }
-    printf("SHITS FUCKED");
+    printf("SHITS FUCKED\n");
     close(can0);
     lws_context_destroy(context);
     return 0;
