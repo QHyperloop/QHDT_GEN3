@@ -696,13 +696,14 @@ int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void 
             if (success_or_fail)
             {
                 printf("Success\n");
-                char *response = "Success";
+                *response = "Success";
             }
             else
             {
                 printf("Fail\n");
-                char *response = "Fail";
+                *response = "Fail";
             }
+            
             out = (char *)malloc(sizeof(char)*(LWS_SEND_BUFFER_PRE_PADDING + strlen(response) + LWS_SEND_BUFFER_POST_PADDING));
             memcpy (out + LWS_SEND_BUFFER_PRE_PADDING, response, strlen(response) );
             lws_write(wsi, out + LWS_SEND_BUFFER_PRE_PADDING, strlen(response), LWS_WRITE_TEXT);
