@@ -7,6 +7,7 @@ PodState Curr_State = INIT;
 int sensor_flag = 0;
 int response_flag = 0;
 double sensors_data[6];
+int success_or_fail = 0;
 
 /*ESC #######################################################################################################################################*/
 
@@ -690,7 +691,6 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
         if (response_flag)
         {
             
-            success_or_fail = 0;
             if (success_or_fail)
             {
                 printf("Success\n");
@@ -703,6 +703,7 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
             }
             lws_write(wsi, (unsigned char *)response, strlen(response), LWS_WRITE_TEXT);
             response_flag = 0;
+            success_or_fail = 0;
         }
         break;
 
