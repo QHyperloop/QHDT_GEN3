@@ -669,7 +669,7 @@ static int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason
         // DO WHATEVER ACTION WITH STATE HERE
 
         // If send is a success then set this to 1 if not leave at 0
-        int success_or_fail = 0;
+        int success_or_fail = 1;
 
         // ON A SUCCESSFUL SEND SET FLAG AND CALL WRITE
         response_flag = 1;
@@ -860,7 +860,7 @@ int main(void)
     struct lws_context *context = lws_create_context(&info);
     if (context == NULL)
     {
-        printf("LWS INIT FAILED\n")
+        printf("LWS INIT FAILED\n");
         fprintf(stderr, "lws init failed\n");
         return -1;
     }else{
@@ -894,7 +894,7 @@ int main(void)
     // i2c init
 
     Fault_Flag = Run_State(Curr_State);
-    printf("INIT_COMPLETE");
+    printf("INIT_COMPLETE\n");
 
     while (1)
     {
