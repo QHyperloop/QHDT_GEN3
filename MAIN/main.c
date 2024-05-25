@@ -1,7 +1,7 @@
 #include "main.h"
 
 /* MAIN ######################################################################################################################################*/
-error_handler Fault_Flag;
+int Fault_Flag = 0;
 uint8_t ISO_STATE;
 PodState Curr_State = INIT;
 int sensor_flag = 0;
@@ -735,7 +735,7 @@ static struct lws_protocols protocols[] = {
 
 uint8_t Run_State(PodState state)
 {
-    error_handler status = OK;
+    //error_handler status = OK;
 
     switch (state)
     {
@@ -757,7 +757,7 @@ uint8_t Run_State(PodState state)
         // pump_control(1);
 
         Curr_State = SAFE_TO_APPROACH;
-        return status;
+        return 0;
         break;
     case FAULT: // auto/manual state
         printf("FAULT\n");
@@ -768,7 +768,7 @@ uint8_t Run_State(PodState state)
         // pump_control(0);
         brake_state(0);
 
-        return status;
+        return 0;
         break;
     case SAFE_TO_APPROACH: // manual state
         printf("SAFE_TO_APPROACH\n");
@@ -777,28 +777,28 @@ uint8_t Run_State(PodState state)
         greenstatus(0);
         brake_state(1);
 
-        return status;
+        return 0;
         break;
     case READY: // manual state
         printf("READY\n");
         precharge();
         yellowstatus(1);
         brake_state(0);
-        return status;
+        return 0;
         break;
     case LAUNCH: // manual state
         printf("LAUNCH\n");
         yellowstatus(0);
         greenstatus(1);
 
-        return status;
+        return 0;
         break;
     case COAST: // auto state
         printf("COAST\n");
         yellowstatus(0);
         greenstatus(1);
 
-        return status;
+        return 0;
         break;
     case BRAKE: // auto state
         printf("BRAKE\n");
@@ -806,7 +806,7 @@ uint8_t Run_State(PodState state)
         greenstatus(1);
         brake_state(1);
 
-        return status;
+        return 0;
         break;
     case CRAWL: // auto state
         printf("CRAWL\n");
@@ -814,7 +814,7 @@ uint8_t Run_State(PodState state)
         greenstatus(1);
         brake_state(0);
 
-        return status;
+        return 0;
         break;
     case TRACK: // manual state
         printf("TRACk\n");
@@ -823,7 +823,7 @@ uint8_t Run_State(PodState state)
         greenstatus(0);
         brake_state(0);
 
-        return status;
+        return 0;
         break;
     default:
         Curr_State = FAULT;
@@ -860,8 +860,11 @@ int main(void)
     struct lws_context *context = lws_create_context(&info);
     if (context == NULL)
     {
+        printf("LWS INIT FAILED\n")
         fprintf(stderr, "lws init failed\n");
         return -1;
+    }else{
+        printf("LWS INIT SUCCESS\n");
     }
 
     // Connecting to the server
@@ -891,6 +894,7 @@ int main(void)
     // i2c init
 
     Fault_Flag = Run_State(Curr_State);
+    printf("INIT_COMPLETE");
 
     while (1)
     {
@@ -916,11 +920,14 @@ int main(void)
             printf("CAN Error\n");
         }
         Fault_Flag = Run_State(Curr_State);
-        if (Fault_Flag != OK)
+        if (Fault_Flag != 0)
         {
+            printf("CReMy SHits");
             Curr_State = FAULT;
         }
+        printf("BITCH RUNNING");
     }
+    printf("SHITS FUCKED");
     close(can0);
     lws_context_destroy(context);
     return 0;
