@@ -103,17 +103,14 @@
 
 <script>
     var ws;
+    function updateTime() {
+        var now = new Date();
+        var timeString = now.toLocaleTimeString();
+        document.getElementById('liveTime').innerText = timeString;
+    }
+    setInterval(updateTime, 1000); // Update time every second
+
     window.onload = function() {
-
-        
-
-        function updateTime() {
-            var now = new Date();
-            var timeString = now.toLocaleTimeString();
-            document.getElementById('liveTime').innerText = timeString;
-        }
-        setInterval(updateTime, 1000); // Update time every second
-
 
         // Replace "ws://localhost:3000" with your server's WebSocket address
         ws = new WebSocket('ws://localhost:3000');
@@ -123,11 +120,25 @@
         };
 
         ws.onerror = function(error) {
-            console.log('WebSocket Error: ' + error);
+            console.log('WebSocket Error: ', error);
         };
 
         ws.onmessage = function(e) {
-            console.log('Received: ' + e.data);
+            console.log('Received: ', e.data);
+            if (e.data === "Success" || e.data === "Fail") {
+                var confirmationDisplay = document.getElementById('confirmationMessage');
+                confirmationDisplay.textContent = e.data.toUpperCase();
+            } else {
+                try {
+                    var sensorData = JSON.parse(e.data);
+                    updateSensorDisplays(sensorData);
+                } catch (err) {
+                    console.error('Failed to parse sensor data: ', err);
+                }
+            }
+        };
+        /*ws.onmessage = function(e) {
+            console.log('Received: ', e.data);
             if (e.data === "Success" || e.data === "Fail") {
                 var confirmationDisplay = document.getElementById('confirmationMessage');
                 confirmationDisplay.textContent = e.data.toUpperCase();
@@ -136,13 +147,13 @@
                 var sensorData = JSON.parse(e.data);
                 updateSensorDisplays(sensorData);
             }
-        };
+        }; */
     };
 
     function sendState(state) {
         if(ws.readyState === WebSocket.OPEN) {
             ws.send(state);
-            console.log('Sent: ' + state);
+            console.log('Sent: ', state);
             // Update the current state display
             document.getElementById('currentState').innerText = state;
         } else {
@@ -193,7 +204,7 @@
     setInterval(() => {
         if (ws.readyState === WebSocket.OPEN) {
             ws.onmessage({ data: testData[index] });
-            console.log('Simulated receive: ' + testData[index]);
+            console.log('Simulated receive: ', testData[index]);
             index = (index + 1) % testData.length;
         }
     }, 2000); // Send a test message every 2 seconds
