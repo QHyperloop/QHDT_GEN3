@@ -653,7 +653,7 @@ int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void 
 {
     switch (reason)
     {
-    case LWS_CALLBACK_CLIENT_RECEIVE:
+    case LWS_CALLBACK_RECEIVE:
         // Copy the received message into the state variable
         // Data is pointed to by in and has length len
 
@@ -666,9 +666,9 @@ int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void 
 
         // Use this if you rather have the extended ID
         // unsigned int state_id = map_state_to_id((char*) in);
-        printf("States: ");
-        puts(state);
-        printf("\n");
+        //printf("States: ");
+       // puts(state);
+        //printf("\n");
         // DO WHATEVER ACTION WITH STATE HERE
 
         // If send is a success then set this to 1 if not leave at 0
