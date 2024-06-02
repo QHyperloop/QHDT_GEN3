@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="english">
+<head>
+    <title>exported project</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:ital,wght@0,100;0,900;1,100;1,900|Inter:wght@100;900|Abel:400|STIX+Two+Text:ital,wght@0,400;1,700&display=swap" />
+    <link rel="stylesheet" href="https://unpkg.com/@teleporthq/teleport-custom-scripts/dist/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link href="/css/pod-interface.css" rel="stylesheet" />
+    <style>
+        html, body { margin: 0; padding: 0; line-height: 1.15; font-family: Noto Sans; font-size: 16px; }
+        *, *::before, *::after { box-sizing: border-box; }
+        button, input, select, textarea { font: inherit; }
+        img { display: block; }
+        .hidden { display: none; }
+
+        .sensor-displays {
+        margin-top: 520px; /* Increase this value to push it further down */
+        padding: 20px;
+        background-color: #f4f4f4; /* Light gray background for visibility */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+        }
+
+        .confirmation-display {
+        margin-top: 130px; /* Increase this value to push it further down */
+        margin-left: -250px;
+        z-index: 1000;
+        padding: 20px;
+        background-color: #f4f4f4; /* Light gray background for visibility */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */          
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="pod1-progress-bar-state0-container">
+    <div class="pod1-progress-bar-state0-pod1-progress-bar-state0">
+        <img src="/images/external/rectangle62522-syp-200h.png" alt="Rectangle62522" class="pod1-progress-bar-state0-rectangle6" />
+        <img src="/images/external/qhlogo22522-oyh-200h.png" alt="QHLogo22522" class="pod1-progress-bar-state0-qh-logo2" />
+
+        <div class="pod1-progress-bar-state0-pod1-button1" onclick="goToHomepage()" style="cursor: pointer;"><span class="pod1-progress-bar-state0-text002"><span>Home</span></span> </div>
+        <div class="pod1-progress-bar-state0-settings-button" onclick="goToSettings()" style="cursor: pointer;"><span class="pod1-progress-bar-state0-text006"><span>Settings</span></span></div>
+        <div class="pod1-progress-bar-state0-pod3-button1" onclick="goToErrors()" style="cursor: pointer;"><span class="pod1-progress-bar-state0-text010"><span>Errors and Warnings</span></span></div>
+        <img src="/images/external/rectangle82522-10r-500w.png" alt="Rectangle82522" class="pod1-progress-bar-state0-rectangle8" />
+        <span class="pod1-progress-bar-state0-text012"><span>Status: <span id="currentState">None</span></span></span>
+        <img src="/images/external/rectangle92522-m1ovj-300w.png" alt="Rectangle92522" class="pod1-progress-bar-state0-rectangle9" />
+        <span class="pod1-progress-bar-state0-text014"><span>km/h</span></span>
+        <button class="pod1-progress-bar-state0-emergency-stop-button"><img src="/images/external/rectangle10i252-on1h.svg" alt="Rectangle10I252" class="pod1-progress-bar-state0-rectangle10" /><span class="pod1-progress-bar-state0-text016"><span>Emergency Stop</span></span></button>
+        <img src="/images/external/rectangle112522-crrn-400w.png" alt="Rectangle112522" class="pod1-progress-bar-state0-rectangle11" />
+        <span class="pod1-progress-bar-state0-text018"><span>00</span></span>
+        <img src="/images/external/tripstatus2522-46k-400w.png" alt="TripStatus2522" class="pod1-progress-bar-state0-trip-status" />
+        <span class="pod1-progress-bar-state0-text020"><span>Trip</span><br /><span id="liveTime" class="live-time-display"></span><br /><span>00:00 Hr</span><br /><span>000 Km</span></span>
+        <img src="/images/external/sensorgraph2522-6s8p-700w.png" alt="SensorGraph2522" class="pod1-progress-bar-state0-sensor-graph" />
+
+
+        <!-- STATE BUTTONS -->
+        <button class="pod1-progress-bar-state0-safeto-approach-button" onclick="sendState('SAFE_TO_APPROACH')">
+            <span>Safe to Approach</span>
+        </button>
+        <button class="pod1-progress-bar-state0-readyto-launch-button" onclick="sendState('READY_TO_LAUNCH')">
+            <span>Ready to Launch</span>
+        </button>
+        <button class="pod1-progress-bar-state0-destination-reached-button" onclick="sendState('DESTINATION_REACHED')">
+            <span>Destination Reached</span>
+        </button>
+        <button class="pod1-progress-bar-state0-track-mounting-button" onclick="sendState('TRACK_MOUNTING')">
+            <span>Track Mounting</span>
+        </button>
+        <button class="pod1-progress-bar-state0-launch-button" onclick="sendState('LAUNCH')">
+            <span>Launch</span>
+        </button>
+        <button class="pod1-progress-bar-state0-coast-button" onclick="sendState('COAST')">
+            <span>Coast</span>
+        </button>
+        <button class="pod1-progress-bar-state0-brake-button" onclick="sendState('BRAKE')">
+            <span>Brake</span>
+        </button>
+        <button class="pod1-progress-bar-state0-crawl-button" onclick="sendState('CRAWL')">
+            <span>Crawl</span>
+        </button>
+        <!-- STATE BUTTONS -->
+
+        <!-- sensor displays -->
+        <div class="sensor-displays">
+            <h3>Temperature Readings</h3>
+            <div id="temperatureReadings"></div>
+            <h3>Pressure Readings</h3>
+            <div id="pressureReadings"></div>
+        </div>
+        
+        <!-- Confirmation Display -->
+        <div class="confirmation-display">
+            <h3>Confirmation: </h3><span id="confirmationMessage" style="font-weight: bold; color: rgb(0, 0, 0);">Waiting for confirmation...</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    /*var ws;
+    function updateTime() {
+        var now = new Date();
+        var timeString = now.toLocaleTimeString();
+        document.getElementById('liveTime').innerText = timeString;
+    }
+    setInterval(updateTime, 1000); // Update time every second
+
+    window.onload = function() {
+
+        // Replace "ws://localhost:3000" with your server's WebSocket address
+        ws = new WebSocket('ws://localhost:3000');
+
+        ws.onopen = function() {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onerror = function(error) {
+            console.log('WebSocket Error: ', error);
+        };
+
+        ws.onmessage = function(e) {
+            console.log('Received: ', e.data);
+            if (e.data === "Success" || e.data === "Fail") {
+                var confirmationDisplay = document.getElementById('confirmationMessage');
+                confirmationDisplay.textContent = e.data.toUpperCase();
+            } else {
+                try {
+                    var sensorData = JSON.parse(e.data);
+                    updateSensorDisplays(sensorData);
+                } catch (err) {
+                    console.error('Failed to parse sensor data: ', err);
+                }
+            }
+        };
+        ws.onmessage = function(e) {
+            console.log('Received: ', e.data);
+            if (e.data === "Success" || e.data === "Fail") {
+                var confirmationDisplay = document.getElementById('confirmationMessage');
+                confirmationDisplay.textContent = e.data.toUpperCase();
+            } else {
+                // Parse the JSON data
+                var sensorData = JSON.parse(e.data);
+                updateSensorDisplays(sensorData);
+            }
+        }; 
+    };
+
+    function sendState(state) {
+        if(ws.readyState === WebSocket.OPEN) {
+            ws.send(state);
+            console.log('Sent: ', state);
+            // Update the current state display
+            document.getElementById('currentState').innerText = state;
+        } else {
+            console.log('WebSocket is not open.');
+        }
+    }
+
+    function updateSensorDisplays(data) {
+        // Update temperature displays
+        var tempContainer = document.getElementById('temperatureReadings');
+        tempContainer.innerHTML = ''; // Clear previous entries
+        data.temperatures.forEach(function(temp, index) {
+            tempContainer.innerHTML += '<div>Temp ' + (index + 1) + ': ' + temp.toFixed(2) + ' °C</div>';
+        });
+
+        // Update pressure displays
+        var pressureContainer = document.getElementById('pressureReadings');
+        pressureContainer.innerHTML = ''; // Clear previous entries
+        data.pressures.forEach(function(pressure, index) {
+            pressureContainer.innerHTML += '<div>Pressure ' + (index + 1) + ': ' + pressure.toFixed(2) + ' kPa</div>';
+        });
+    }
+
+    function goToHomepage() {
+        console.log("Navigating to the homescreen...");
+        window.location.href = '/';
+    }
+
+    function goToSettings(){
+        console.log("Navigating to the settings page...");
+        window.location.href = '/settings';
+    }
+  
+    function goToErrors(){
+        console.log("Navigating to the errors page...");
+        window.location.href = '/error-log-warnings';
+    }
+
+    // TEST FUNCTION
+    function simulateWebSocketMessages() {
+    var testData = [
+        'Success',
+        'Fail',
+        JSON.stringify({ temperatures: [22.5, 23.0, 21.9, 22.2], pressures: [101.2, 100.8] })
+    ];
+    var index = 0;
+
+    setInterval(() => {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.onmessage({ data: testData[index] });
+            console.log('Simulated receive: ', testData[index]);
+            index = (index + 1) % testData.length;
+        }
+    }, 2000); // Send a test message every 2 seconds
+} */
+    var ws;
+    window.onload = function() {
+        function updateTime() {
+            var now = new Date();
+            var timeString = now.toLocaleTimeString();
+            document.getElementById('liveTime').innerText = timeString;
+        }
+        setInterval(updateTime, 1000); // Update time every second
+
+        // Replace "ws://localhost:3000" with your server's WebSocket address
+        ws = new WebSocket('ws://localhost:3000');
+
+        ws.onopen = function() {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onerror = function(error) {
+            console.log('WebSocket Error: ' + error);
+        };
+
+        ws.onmessage = function(e) {
+            console.log('Received: ' + e.data);
+            if (e.data === "Success" || e.data === "Fail") {
+                var confirmationDisplay = document.getElementById('confirmationMessage');
+                confirmationDisplay.textContent = e.data.toUpperCase();
+            } else {
+                try {
+                    // Parse the JSON data
+                    var sensorData = JSON.parse(e.data);
+                    updateSensorDisplays(sensorData);
+                } catch (error) {
+                    console.error('Failed to parse WebSocket message:', error);
+                }
+            }
+        };
+    };
+
+    function sendState(state) {
+        if(ws.readyState === WebSocket.OPEN) {
+            ws.send(state);
+            console.log('Sent: ' + state);
+            // Update the current state display
+            document.getElementById('currentState').innerText = state;
+        } else {
+            console.log('WebSocket is not open.');
+        }
+    }
+
+    function updateSensorDisplays(data) {
+        // Update temperature displays
+        var tempContainer = document.getElementById('temperatureReadings');
+        tempContainer.innerHTML = ''; // Clear previous entries
+        data.temperatures.forEach(function(temp, index) {
+            var tempDiv = document.createElement('div');
+            tempDiv.textContent = 'Temp ' + (index + 1) + ': ' + temp.toFixed(2) + ' °C';
+            tempContainer.appendChild(tempDiv);
+        });
+
+        // Update pressure displays
+        var pressureContainer = document.getElementById('pressureReadings');
+        pressureContainer.innerHTML = ''; // Clear previous entries
+        data.pressures.forEach(function(pressure, index) {
+            var pressureDiv = document.createElement('div');
+            pressureDiv.textContent = 'Pressure ' + (index + 1) + ': ' + pressure.toFixed(2) + ' kPa';
+            pressureContainer.appendChild(pressureDiv);
+        });
+    }
+
+    function goToHomepage() {
+        console.log("Navigating to the homescreen...");
+        window.location.href = '/';
+    }
+
+    function goToSettings() {
+        console.log("Navigating to the settings page...");
+        window.location.href = '/settings';
+    }
+
+    function goToErrors() {
+        console.log("Navigating to the errors page...");
+        window.location.href = '/error-log-warnings';
+    }
+
+    // TEST FUNCTION
+    function simulateWebSocketMessages() {
+        var testData = [
+            'Success',
+            'Fail',
+            JSON.stringify({ temperatures: [22.5, 23.0, 21.9, 22.2], pressures: [101.2, 100.8] })
+        ];
+        var index = 0;
+
+        setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.onmessage({ data: testData[index] });
+                console.log('Simulated receive: ' + testData[index]);
+                index = (index + 1) % testData.length;
+            }
+        }, 2000); // Send a test message every 2 seconds
+    }
+</script>
+</body>
+</html>
