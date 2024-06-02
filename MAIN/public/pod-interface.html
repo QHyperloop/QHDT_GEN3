@@ -120,7 +120,7 @@
           <span class="pod1-progress-bar-state0-text014">
             <span>km/h</span>
           </span>
-          <button class="pod1-progress-bar-state0-emergency-stop-button" onclick="sendState('FAULT')">
+          <button class="pod1-progress-bar-state0-emergency-stop-button" onclick="sendState('FAULT')" style="cursor: pointer;">
             <img
               src="/images/external/rectangle10i252-on1h.svg"
               alt="Rectangle10I252"
@@ -144,9 +144,9 @@
           <span class="pod1-progress-bar-state0-text020">
             <span>Trip</span>
             <br />
-            <span>11:03 AM</span>
+            <span id="liveTime" class="live-time-display"></span>
             <br />
-            <span>01:05 Hr</span>
+            <span id="triptimer">01:05</span>
             <br />
             <span>330 Km</span>
           </span>
@@ -155,7 +155,7 @@
             alt="SensorGraph2522"
             class="pod1-progress-bar-state0-sensor-graph"
           />
-          <button class="pod1-progress-bar-state0-safeto-approach-button" onclick="sendState('SAFE_TO_APPROACH')">
+          <button class="pod1-progress-bar-state0-safeto-approach-button" onclick="sendState('SAFE_TO_APPROACH')" style="cursor: pointer;">
             <img
               src="/images/external/rectangle32i252-n0kq-300w.png"
               alt="Rectangle32I252"
@@ -165,7 +165,7 @@
               <span>Safe to Approach</span>
             </span>
           </button>
-          <button class="pod1-progress-bar-state0-readyto-launch-button" onclick="sendState('READY_TO_LAUNCH')">
+          <button class="pod1-progress-bar-state0-readyto-launch-button" onclick="sendState('READY_TO_LAUNCH')" style="cursor: pointer;">
             <img
               src="/images/external/rectangle33i252-in-300w.png"
               alt="Rectangle33I252"
@@ -189,7 +189,7 @@
               <span></span>
             </span>
           </button>
-          <button class="pod1-progress-bar-state0-track-mounting-button" onclick="sendState('TRACK_MOUNTING')">
+          <button class="pod1-progress-bar-state0-track-mounting-button" onclick="sendState('TRACK_MOUNTING')" style="cursor: pointer;">
             <img
               src="/images/external/rectangle31i252-vbdq-300w.png"
               alt="Rectangle31I252"
@@ -199,7 +199,7 @@
               <span>Track Mounting</span>
             </span>
           </button>
-          <button class="pod1-progress-bar-state0-launch-button" onclick="sendState('LAUNCH')">
+          <button class="pod1-progress-bar-state0-launch-button" onclick="sendState('LAUNCH')" style="cursor: pointer;">
             <img
               src="/images/external/rectangle34i252-xawj-300w.png"
               alt="Rectangle34I252"
@@ -209,7 +209,7 @@
               <span>Launch</span>
             </span>
           </button>
-          <button class="pod1-progress-bar-state0-coast-button" onclick="sendState('COAST')">
+          <button class="pod1-progress-bar-state0-coast-button" onclick="sendState('COAST')" style="cursor: pointer;">
             <img
               src="/images/external/rectangle27i252-p7lp-300w.png"
               alt="Rectangle27I252"
@@ -219,7 +219,7 @@
               <span>Coast</span>
             </span>
           </button>
-          <button class="pod1-progress-bar-state0-brake-button" onclick="sendState('BRAKE')">
+          <button class="pod1-progress-bar-state0-brake-button" onclick="sendState('BRAKE')" style="cursor: pointer;">
             <img
               src="/images/external/rectangle28i252-xqn-300w.png"
               alt="Rectangle28I252"
@@ -229,7 +229,7 @@
               <span>Brake</span>
             </span>
           </button>
-          <button class="pod1-progress-bar-state0-crawl-button" onclick="sendState('CRAWL')">
+          <button class="pod1-progress-bar-state0-crawl-button" onclick="sendState('CRAWL')" style="cursor: pointer;">
             <img
               src="/images/external/rectangle29i252-jag5-300w.png"
               alt="Rectangle29I252"
