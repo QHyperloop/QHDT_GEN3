@@ -53,12 +53,12 @@ server.listen(PORT, () => {
 const express = require('express');
 const { WebSocketServer } = require('ws');
 const http = require('http');
-const path = require('path');
+
 
 const app = express();
 
 // Serve static files from the "public" directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'home-screen.html'));
@@ -82,14 +82,14 @@ const server = http.createServer(app);
 // Attach WebSocket server to the HTTP server
 const wss = new WebSocketServer({ server });
 
-wss.on('connection', function connection(ws) {
+wss.on('connection', (ws) => {
     console.log('New client connected');
 
-    ws.on('message', function incoming(message) {
+    ws.on('message', (message) => {
         console.log('received: %s', message);
 
         // Broadcast the message to all clients except the sender
-        wss.clients.forEach(function each(client) {
+        wss.clients.forEach((client) => {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 try {
                     client.send(message);

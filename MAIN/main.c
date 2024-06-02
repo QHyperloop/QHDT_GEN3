@@ -908,7 +908,7 @@ int main(void)
     }
 
     time_t last_request_time = time(NULL);
-
+    lws_set_log_level(LLL_ERR | LLL_WARN | LLL_NOTICE | LLL_INFO | LLL_DEBUG, NULL);
     // i2c init
 
     //Fault_Flag = Run_State(Curr_State);
