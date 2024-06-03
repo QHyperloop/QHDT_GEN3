@@ -134,7 +134,7 @@
 </head>
 
 <body>
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
   <div>
     <link href="/css/pod-interface.css" rel="stylesheet" />
 
@@ -435,6 +435,19 @@
       };
       setInterval(updateTime, 1000); // Update time every second
       ws = new WebSocket('ws://localhost:3000');
+
+      ws.onopen = function () {
+        console.log('WebSocket connection established');
+      };
+
+      ws.onmessage = function (event) {
+        console.log('WebSocket message received:', event);
+      };
+
+      ws.onerror = function (error) {
+        console.error('WebSocket error observed:', error);
+      };
+
     }
 
     function goToHomepage() {
@@ -451,7 +464,7 @@
       console.log("Navigating to the errors page...");
       window.location.href = '/error-log-warnings';
     }
-  
+
 
     function sendState(state) {
       if (ws && ws.readyState === WebSocket.OPEN) {
@@ -462,17 +475,7 @@
       }
     }
 
-    ws.onopen = function () {
-      console.log('WebSocket connection established');
-    };
 
-    ws.onmessage = function (event) {
-      console.log('WebSocket message received:', event);
-    };
-
-    ws.onerror = function (error) {
-      console.error('WebSocket error observed:', error);
-    };
 
 
 
