@@ -82,7 +82,7 @@ app.get('/settings', (req, res) => {
 const server = http.createServer(app);
 
 // Attach WebSocket server to the HTTP server
-const wss = new WebSocketServer({ server });
+const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
     console.log('New client connected');
