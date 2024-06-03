@@ -435,19 +435,6 @@
       };
       setInterval(updateTime, 1000); // Update time every second
       ws = new WebSocket('ws://localhost:3000');
-
-      ws.onopen = function () {
-        console.log('WebSocket connection established');
-      };
-
-      ws.onmessage = function (event) {
-        console.log('WebSocket message received:', event);
-      };
-
-      ws.onerror = function (error) {
-        console.error('WebSocket error observed:', error);
-      };
-
     }
 
     function goToHomepage() {
@@ -464,9 +451,8 @@
       console.log("Navigating to the errors page...");
       window.location.href = '/error-log-warnings';
     }
-    window.addEventListener('load', function () {
-      initializeWebSocket();
-    });
+  
+
     function sendState(state) {
       if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(state);
@@ -475,7 +461,20 @@
         console.error('WebSocket is not open. Cannot send state:', state);
       }
     }
-    
+
+    ws.onopen = function () {
+      console.log('WebSocket connection established');
+    };
+
+    ws.onmessage = function (event) {
+      console.log('WebSocket message received:', event);
+    };
+
+    ws.onerror = function (error) {
+      console.error('WebSocket error observed:', error);
+    };
+
+
 
   </script>
 
