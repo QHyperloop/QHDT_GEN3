@@ -888,7 +888,7 @@ int main(void)
     // Connecting to the server
     struct lws_client_connect_info connect_info = {0};
     connect_info.context = context;
-    connect_info.address = "raspberrypi.local";
+    connect_info.address = "wss://raspberrypi.local";
     connect_info.port = 3000;
     connect_info.path = "/";
     connect_info.protocol = protocols[0].name;
