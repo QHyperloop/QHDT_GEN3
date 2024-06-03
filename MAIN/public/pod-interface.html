@@ -449,7 +449,8 @@
         console.error('Error details:', {
           message: error.message,
           type: error.type,
-          target: error.target,
+          target: error.target.url,  // added URL logging
+          readyState: error.target.readyState,
         });
       };
     }
