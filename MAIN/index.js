@@ -50,6 +50,8 @@ server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });*/
 
+
+import { WebSocketServer } from 'ws'
 const express = require('express');
 const { WebSocketServer } = require('ws');
 const http = require('http');
