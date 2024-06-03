@@ -446,8 +446,12 @@
 
       ws.onerror = function (error) {
         console.error('WebSocket error observed:', error);
+        console.error('Error details:', {
+          message: error.message,
+          type: error.type,
+          target: error.target,
+        });
       };
-
     }
 
     function goToHomepage() {
