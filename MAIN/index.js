@@ -51,7 +51,7 @@ server.listen(PORT, () => {
 });*/
 
 
-import { WebSocketServer } from 'ws'
+
 const express = require('express');
 const { WebSocketServer } = require('ws');
 const http = require('http');
@@ -113,6 +113,6 @@ wss.on('connection', (ws) => {
 // Listen on the same PORT for both HTTP and WebSocket
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://raspberrypi.local:${PORT}`);
 });
 

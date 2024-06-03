@@ -434,7 +434,7 @@
         document.getElementById('liveTime').innerText = timeString;
       };
       setInterval(updateTime, 1000); // Update time every second
-      ws = new WebSocket('ws://localhost:3000');
+      ws = new WebSocket('raspberrypi.local:3000');
 
       ws.onopen = function () {
         console.log('WebSocket connection established');
