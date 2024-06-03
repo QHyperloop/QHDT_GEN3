@@ -53,7 +53,7 @@ server.listen(PORT, () => {
 
 
 const express = require('express');
-const { WebSocketServer } = require('ws');
+const { WebSocketServer, WebSocket } = require('ws');
 const http = require('http');
 const path = require('path');
 
