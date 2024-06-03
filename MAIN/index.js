@@ -82,16 +82,16 @@ app.get('/settings', (req, res) => {
 const server = http.createServer(app);
 
 // Attach WebSocket server to the HTTP server
-const wss = new WebSocketServer({ server });
+const wssh = new WebSocketServer({ server });
 
-wss.on('connection', (ws) => {
+wssh.on('connection', (ws) => {
     console.log('New client connected');
 
     ws.on('message', (message) => {
         console.log('received: %s', message);
 
         // Broadcast the message to all clients except the sender
-        wss.clients.forEach((client) => {
+        wssh.clients.forEach((client) => {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 try {
                     client.send(message);
@@ -113,6 +113,6 @@ wss.on('connection', (ws) => {
 // Listen on the same PORT for both HTTP and WebSocket
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server is running on wss://raspberrypi.local:${PORT}`);
+  console.log(`Server is running on ws://raspberrypi.local:${PORT}`);
 });
 
