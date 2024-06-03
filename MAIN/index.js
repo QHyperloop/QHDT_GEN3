@@ -55,10 +55,12 @@ const { WebSocketServer } = require('ws');
 const http = require('http');
 const path = require('path');
 
+
 const app = express();
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'home-screen.html'));
@@ -80,7 +82,7 @@ app.get('/settings', (req, res) => {
 const server = http.createServer(app);
 
 // Attach WebSocket server to the HTTP server
-const wss = new WebSocketServer({ server });
+const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
     console.log('New client connected');
