@@ -891,7 +891,8 @@ int main(void)
     connect_info.address = "raspberrypi.local";
     connect_info.port = 3000;
     connect_info.path = "/";
-    connect_info.protocol = protocols[0].name;
+    connect_info.protocol = "";
+    connect_info.local_protocol_name = protocols[0].name;
     connect_info.host = lws_canonical_hostname(context);
 
     struct lws *wsi = lws_client_connect_via_info(&connect_info);
