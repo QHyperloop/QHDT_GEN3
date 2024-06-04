@@ -688,9 +688,9 @@ int callback_websockets(struct lws *wsi, enum lws_callback_reasons reason, void 
             printf("5\n");
             char *json_data = serialize_sensors();
             printf("6\n");
-            out = (char *)malloc(sizeof(char)*(LWS_SEND_BUFFER_PRE_PADDING + strlen(json_data)));
+            out = (char *)malloc(sizeof(char)*(LWS_SEND_BUFFER_PRE_PADDING + strlen(json_data) + LWS_SEND_BUFFER_POST_PADDING));
             memcpy (out + LWS_SEND_BUFFER_PRE_PADDING, json_data, strlen(json_data)+1 );
-
+            printf("%c\n", json_data);
             lws_write(wsi,(unsigned char*) out + LWS_SEND_BUFFER_PRE_PADDING, strlen(json_data), LWS_WRITE_TEXT);
             free(out);
 
