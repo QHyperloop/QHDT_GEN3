@@ -13,8 +13,14 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
     switch (reason) {
         case LWS_CALLBACK_CLIENT_ESTABLISHED:
             printf("Client connected\n");
-            char *msg = "Hello, WebSocket!";
-            lws_write(wsi, (unsigned char *)msg + LWS_PRE, strlen(msg), LWS_WRITE_TEXT);
+            // Allocate space for the message with LWS_PRE padding
+            {
+                char *msg = "Hello, WebSocket!";
+                size_t msg_len = strlen(msg);
+                unsigned char buf[LWS_PRE + msg_len];
+                memcpy(&buf[LWS_PRE], msg, msg_len);
+                lws_write(wsi, &buf[LWS_PRE], msg_len, LWS_WRITE_TEXT);
+            }
             break;
         case LWS_CALLBACK_CLIENT_RECEIVE:
             printf("Received: %.*s\n", (int)len, (char *)in);
@@ -72,8 +78,8 @@ int main(int argc, char **argv) {
     }
 
     ccinfo.context = context;
-    ccinfo.address = "raspberrypi.local";
-    ccinfo.port = 3000;
+    ccinfo.address = "echo.websocket.org";
+    ccinfo.port = 80;
     ccinfo.path = "/";
     ccinfo.host = lws_canonical_hostname(context);
     ccinfo.origin = "origin";
