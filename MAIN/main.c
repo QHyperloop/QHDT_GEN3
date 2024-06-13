@@ -94,4 +94,24 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    // Creat
+    // Create a thread for the libwebsockets event loop
+    if (pthread_create(&thread_id, NULL, websocket_thread, context)) {
+        fprintf(stderr, "Error creating thread\n");
+        lws_context_destroy(context);
+        return -1;
+    }
+
+    // Main application logic can run here
+    while (!interrupted) {
+        // Simulate doing something useful
+        printf("Main thread working...\n");
+        sleep(1);
+    }
+
+    // Wait for the websocket thread to finish
+    pthread_join(thread_id, NULL);
+
+    lws_context_destroy(context);
+
+    return 0;
+}
