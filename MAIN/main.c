@@ -4,24 +4,27 @@
 #include <pthread.h>
 #include <libwebsockets.h>
 
+#define MESSAGE_INTERVAL 2 * LWS_USEC_PER_SEC
+
 static int interrupted;
 static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
+static void send_message(struct lws *wsi) {
+    char *msg = "Hello, WebSocket!";
+    size_t msg_len = strlen(msg);
+    unsigned char buf[LWS_PRE + msg_len];
+    memset(buf, 0, sizeof(buf));
+    memcpy(&buf[LWS_PRE], msg, msg_len);
+    lws_write(wsi, &buf[LWS_PRE], msg_len, LWS_WRITE_TEXT);
+}
 
 static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
                               void *user, void *in, size_t len) {
     switch (reason) {
         case LWS_CALLBACK_CLIENT_ESTABLISHED:
             printf("Client connected\n");
-            // Allocate space for the message with LWS_PRE padding
-            {
-                char *msg = "Hello, WebSocket!";
-                size_t msg_len = strlen(msg);
-                unsigned char buf[LWS_PRE + msg_len];
-                memset(buf, 0, sizeof(buf));
-                memcpy(&buf[LWS_PRE], msg, msg_len);
-                lws_write(wsi, &buf[LWS_PRE], msg_len, LWS_WRITE_TEXT);
-            }
+            lws_set_timer_usecs(wsi, MESSAGE_INTERVAL);
             break;
         case LWS_CALLBACK_CLIENT_RECEIVE:
             printf("Received: %.*s\n", (int)len, (char *)in);
@@ -31,7 +34,11 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
             interrupted = 1;
             break;
         case LWS_CALLBACK_CLIENT_WRITEABLE:
-            // Here you can queue more messages to send if needed
+            // We do nothing here
+            break;
+        case LWS_CALLBACK_TIMER:
+            send_message(wsi);
+            lws_set_timer_usecs(wsi, MESSAGE_INTERVAL); // Reset the timer
             break;
         default:
             printf("Callback reason: %d\n", reason);
