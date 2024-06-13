@@ -388,7 +388,7 @@
             <span>Battery Voltage</span>
           </span>
           <span class="pod1-progress-bar-state0-text094">
-            <span>123 V</span>
+            <span id="Batt_Volt">123 V</span>
           </span>
         </div>
         <div class="pod1-progress-bar-state0-error-log-heading">
@@ -441,7 +441,8 @@
       };
 
       ws.onmessage = function (event) {
-        console.log('WebSocket message received:', event);
+        console.log('WebSocket message received12:', event.data);
+        document.getElementById('speed').innerText = event.data;
       };
 
       ws.onerror = function (error) {
