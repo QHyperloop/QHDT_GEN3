@@ -18,6 +18,7 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
                 char *msg = "Hello, WebSocket!";
                 size_t msg_len = strlen(msg);
                 unsigned char buf[LWS_PRE + msg_len];
+                memset(buf, 0, sizeof(buf));
                 memcpy(&buf[LWS_PRE], msg, msg_len);
                 lws_write(wsi, &buf[LWS_PRE], msg_len, LWS_WRITE_TEXT);
             }
@@ -33,6 +34,7 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
             // Here you can queue more messages to send if needed
             break;
         default:
+            printf("Callback reason: %d\n", reason);
             break;
     }
     return 0;
@@ -78,8 +80,8 @@ int main(int argc, char **argv) {
     }
 
     ccinfo.context = context;
-    ccinfo.address = "echo.websocket.org";
-    ccinfo.port = 80;
+    ccinfo.address = "raspberrypi.local";
+    ccinfo.port = 3000;
     ccinfo.path = "/";
     ccinfo.host = lws_canonical_hostname(context);
     ccinfo.origin = "origin";
@@ -92,24 +94,4 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    // Create a thread for the libwebsockets event loop
-    if (pthread_create(&thread_id, NULL, websocket_thread, context)) {
-        fprintf(stderr, "Error creating thread\n");
-        lws_context_destroy(context);
-        return -1;
-    }
-
-    // Main application logic can run here
-    while (!interrupted) {
-        // Simulate doing something useful
-        printf("Main thread working...\n");
-        sleep(1);
-    }
-
-    // Wait for the websocket thread to finish
-    pthread_join(thread_id, NULL);
-
-    lws_context_destroy(context);
-
-    return 0;
-}
+    // Creat
