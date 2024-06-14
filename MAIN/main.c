@@ -3,6 +3,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <libwebsockets.h>
+#include <json-c/json.h>
 
 #define MESSAGE_INTERVAL 2 * LWS_USEC_PER_SEC
 

@@ -285,10 +285,10 @@
           <img src="/images/external/rectangle35i275-hrdt-400w.png" alt="Rectangle35I275"
             class="pod1-progress-bar-state0-rectangle351" />
           <span class="pod1-progress-bar-state0-text052">
-            <span>Placeholder</span>
+            <span>Battery Lv Temp</span>
           </span>
           <span class="pod1-progress-bar-state0-text054">
-            <span>123</span>
+            <span id="Batt2_Temp">123</span>
           </span>
         </div>
         <div class="pod1-progress-bar-state0-speed-sensor2">
@@ -378,7 +378,7 @@
             <span>Air System Temp</span>
           </span>
           <span class="pod1-progress-bar-state0-text090">
-            <span>123 °C</span>
+            <span id="Air_Temp">123 °C</span>
           </span>
         </div>
         <div class="pod1-progress-bar-state0-battery-voltage-sensor">
@@ -473,8 +473,8 @@
           // Update the temperature sensor values
           document.getElementById('Batt_Temp').innerText = data.temperature_sensors[0] + " °C";
           document.getElementById('Motor_Temp').innerText = data.temperature_sensors[1] + " °C";
-          document.getElementById('Air_System_Temp').innerText = data.temperature_sensors[2] + " °C";
-          document.getElementById('Placeholder_Temp').innerText = data.temperature_sensors[3] + " °C"; // Example for a fourth temperature sensor
+          document.getElementById('Air_Temp').innerText = data.temperature_sensors[2] + " °C";
+          document.getElementById('Batt2_Temp').innerText = data.temperature_sensors[3] + " °C"; // Example for a fourth temperature sensor
 
           // Update the pressure sensor values
           document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
