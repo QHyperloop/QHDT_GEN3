@@ -426,10 +426,7 @@
   </div>
 
   <script>
-    var reader = new FileReader();
-      reader.onload = function() {
-      alert(reader.result);
-    }
+    
     var ws;
     window.onload = function () {
       function updateTime() {
@@ -439,7 +436,10 @@
       };
       setInterval(updateTime, 1000); // Update time every second
       ws = new WebSocket('ws://raspberrypi.local:3000/');
-
+      var reader = new FileReader();
+      reader.onload = function() {
+        alert(reader.result);
+      }
       ws.onopen = function () {
         console.log('WebSocket connection established');
       };
