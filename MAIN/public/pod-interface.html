@@ -443,32 +443,47 @@
 
       ws.onmessage = function (event) {
         console.log('WebSocket message received:', event.data);
+        console.log('Type of event.data:', typeof event.data);
 
-        // Create a FileReader to read the Blob
-        var reader = new FileReader();
-
-        reader.onload = function () {
+        if (event.data instanceof Blob) {
+          var reader = new FileReader();
+          reader.onload = function () {
+            try {
+              var data = JSON.parse(reader.result);
+              updateSensorValues(data);
+            } catch (e) {
+              console.error('Error parsing JSON:', e);
+            }
+          };
+          reader.readAsText(event.data);
+        } else if (typeof event.data === 'string') {
           try {
-            // Parse the JSON data
-            var data = JSON.parse(reader.result);
-
-            // Update the temperature sensor values
-            document.getElementById('Batt_Temp').innerText = data.temperature_sensors[0] + " °C";
-            document.getElementById('Motor_Temp').innerText = data.temperature_sensors[1] + " °C";
-            document.getElementById('Air_System_Temp').innerText = data.temperature_sensors[2] + " °C";
-            document.getElementById('Placeholder_Temp').innerText = data.temperature_sensors[3] + " °C"; // Example for a fourth temperature sensor
-
-            // Update the pressure sensor values
-            document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
-            document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
+            var data = JSON.parse(event.data);
+            updateSensorValues(data);
           } catch (e) {
             console.error('Error parsing JSON:', e);
           }
-        };
-
-        // Read the Blob as text
-        reader.readAsText(event.data);
+        } else {
+          console.error('Unexpected data type:', typeof event.data);
+        }
       };
+
+      function updateSensorValues(data) {
+        try {
+          // Update the temperature sensor values
+          document.getElementById('Batt_Temp').innerText = data.temperature_sensors[0] + " °C";
+          document.getElementById('Motor_Temp').innerText = data.temperature_sensors[1] + " °C";
+          document.getElementById('Air_System_Temp').innerText = data.temperature_sensors[2] + " °C";
+          document.getElementById('Placeholder_Temp').innerText = data.temperature_sensors[3] + " °C"; // Example for a fourth temperature sensor
+
+          // Update the pressure sensor values
+          document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
+          document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
+        } catch (e) {
+          console.error('Error updating sensor values:', e);
+        }
+      }
+
 
 
       ws.onerror = function (error) {
