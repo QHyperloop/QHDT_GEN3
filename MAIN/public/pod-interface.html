@@ -426,7 +426,7 @@
   </div>
 
   <script>
-    
+
     var ws;
     window.onload = function () {
       function updateTime() {
@@ -436,14 +436,29 @@
       };
       setInterval(updateTime, 1000); // Update time every second
       ws = new WebSocket('ws://raspberrypi.local:3000/');
-      
+
       ws.onopen = function () {
         console.log('WebSocket connection established');
       };
 
       ws.onmessage = function (event) {
-        console.log('WebSocket message received12:', event);
-        document.getElementById('speed').innerText = event;
+        ws.onmessage = function (event) {
+          console.log('WebSocket message received:', event.data);
+
+          // Parse the JSON data
+          var data = JSON.parse(event.data);
+
+          // Update the temperature sensor values
+          document.getElementById('Batt_Temp').innerText = data.temperature_sensors[0] + " °C";
+          document.getElementById('Motor_Temp').innerText = data.temperature_sensors[1] + " °C";
+          document.getElementById('Air_System_Temp').innerText = data.temperature_sensors[2] + " °C";
+          document.getElementById('Placeholder_Temp').innerText = data.temperature_sensors[3] + " °C"; // Example for a fourth temperature sensor
+
+          // Update the pressure sensor values
+          document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
+          document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
+        };
+
       };
 
       ws.onerror = function (error) {
