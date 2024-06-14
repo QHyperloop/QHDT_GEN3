@@ -442,24 +442,34 @@
       };
 
       ws.onmessage = function (event) {
-        ws.onmessage = function (event) {
-          console.log('WebSocket message received:', event.data);
+        console.log('WebSocket message received:', event.data);
 
-          // Parse the JSON data
-          var data = JSON.parse(event.data);
+        // Create a FileReader to read the Blob
+        var reader = new FileReader();
 
-          // Update the temperature sensor values
-          document.getElementById('Batt_Temp').innerText = data.temperature_sensors[0] + " °C";
-          document.getElementById('Motor_Temp').innerText = data.temperature_sensors[1] + " °C";
-          document.getElementById('Air_System_Temp').innerText = data.temperature_sensors[2] + " °C";
-          document.getElementById('Placeholder_Temp').innerText = data.temperature_sensors[3] + " °C"; // Example for a fourth temperature sensor
+        reader.onload = function () {
+          try {
+            // Parse the JSON data
+            var data = JSON.parse(reader.result);
 
-          // Update the pressure sensor values
-          document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
-          document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
+            // Update the temperature sensor values
+            document.getElementById('Batt_Temp').innerText = data.temperature_sensors[0] + " °C";
+            document.getElementById('Motor_Temp').innerText = data.temperature_sensors[1] + " °C";
+            document.getElementById('Air_System_Temp').innerText = data.temperature_sensors[2] + " °C";
+            document.getElementById('Placeholder_Temp').innerText = data.temperature_sensors[3] + " °C"; // Example for a fourth temperature sensor
+
+            // Update the pressure sensor values
+            document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
+            document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
+          } catch (e) {
+            console.error('Error parsing JSON:', e);
+          }
         };
 
+        // Read the Blob as text
+        reader.readAsText(event.data);
       };
+
 
       ws.onerror = function (error) {
         console.error('WebSocket error observed:', error);
