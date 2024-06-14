@@ -426,6 +426,10 @@
   </div>
 
   <script>
+    var reader = new FileReader();
+      reader.onload = function() {
+      alert(reader.result);
+    }
     var ws;
     window.onload = function () {
       function updateTime() {
@@ -441,8 +445,8 @@
       };
 
       ws.onmessage = function (event) {
-        console.log('WebSocket message received12:', event.data);
-        document.getElementById('speed').innerText = event.data;
+        console.log('WebSocket message received12:', reader.readasText(event.data));
+        document.getElementById('speed').innerText = reader.readasText(event.data);
       };
 
       ws.onerror = function (error) {
