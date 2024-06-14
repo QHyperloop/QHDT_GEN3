@@ -436,17 +436,14 @@
       };
       setInterval(updateTime, 1000); // Update time every second
       ws = new WebSocket('ws://raspberrypi.local:3000/');
-      var reader = new FileReader();
-      reader.onload = function() {
-        alert(reader.result);
-      }
+      
       ws.onopen = function () {
         console.log('WebSocket connection established');
       };
 
       ws.onmessage = function (event) {
-        console.log('WebSocket message received12:', reader.readasText(event.data));
-        document.getElementById('speed').innerText = reader.readasText(event.data);
+        console.log('WebSocket message received12:', event);
+        document.getElementById('speed').innerText = event;
       };
 
       ws.onerror = function (error) {

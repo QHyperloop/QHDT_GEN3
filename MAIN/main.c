@@ -9,13 +9,42 @@
 static int interrupted;
 static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+double sensors_data[6] = 0;
+
+char *serialize_sensors()
+{
+    json_object *jroot = json_object_new_object();
+    json_object *jsensor_temps = json_object_new_array();
+    json_object *jsensor_pressures = json_object_new_array();
+
+    // Serialize temperature sensors data
+    for (int i = 0; i < 4; i++)
+    {
+        json_object_array_add(jsensor_temps, json_object_new_double(sensors_data[i]));
+    }
+
+    // Serialize pressure sensors data
+    for (int i = 4; i < 6; i++)
+    {
+        json_object_array_add(jsensor_pressures, json_object_new_double(sensors_data[i]));
+    }
+
+    json_object_object_add(jroot, "temperature_sensors", jsensor_temps);
+    json_object_object_add(jroot, "pressure_sensors", jsensor_pressures);
+
+    const char *json_str = json_object_to_json_string(jroot);
+    char *result = strdup(json_str);
+    json_object_put(jroot);
+    return result;
+}
+
 
 static void send_message(struct lws *wsi) {
-    char *msg = "Hello, WebSocket!";
-    size_t msg_len = strlen(msg);
+    char *json_data = serialize_sensors();
+    size_t msg_len = strlen(json_data);
     unsigned char buf[LWS_PRE + msg_len];
     memset(buf, 0, sizeof(buf));
-    memcpy(&buf[LWS_PRE], msg, msg_len);
+    memcpy(&buf[LWS_PRE], json_data, msg_len);
     lws_write(wsi, &buf[LWS_PRE], msg_len, LWS_WRITE_TEXT);
 }
 
