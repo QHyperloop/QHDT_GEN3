@@ -13,13 +13,11 @@
 #include <linux/can/raw.h>
 
 #include <math.h>
-
-  
+#include <pthread.h>
 #include <libwebsockets.h>
 #include <json-c/json.h>
 
-
-extern double sensors_data[6];
+double sensors_data[6];
 
 typedef enum _error_handler {
 	CAN_INIT_OK,

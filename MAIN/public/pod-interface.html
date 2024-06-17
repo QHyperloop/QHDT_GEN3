@@ -216,7 +216,7 @@
             <span>Safe to Approach</span>
           </span>
         </button>
-        <button class="pod1-progress-bar-state0-readyto-launch-button" onclick="sendState('READY_TO_LAUNCH')"
+        <button class="pod1-progress-bar-state0-readyto-launch-button" onclick="sendState('READY')"
           style="cursor: pointer;">
           <img src="/images/external/rectangle33i252-in-300w.png" alt="Rectangle33I252"
             class="pod1-progress-bar-state0-rectangle33" />
@@ -235,7 +235,7 @@
             <span></span>
           </span>
         </button>
-        <button class="pod1-progress-bar-state0-track-mounting-button" onclick="sendState('TRACK_MOUNTING')"
+        <button class="pod1-progress-bar-state0-track-mounting-button" onclick="sendState('TRACK')"
           style="cursor: pointer;">
           <img src="/images/external/rectangle31i252-vbdq-300w.png" alt="Rectangle31I252"
             class="pod1-progress-bar-state0-rectangle31" />
@@ -472,10 +472,10 @@
         try {
           // Update the temperature sensor values
           document.getElementById('Batt_Temp').innerText = data.temperature_sensors[0] + " °C";
+          document.getElementById('Batt2_Temp').innerText = data.temperature_sensors[3] + " °C"; 
           document.getElementById('Motor_Temp').innerText = data.temperature_sensors[1] + " °C";
           document.getElementById('Air_Temp').innerText = data.temperature_sensors[2] + " °C";
-          document.getElementById('Batt2_Temp').innerText = data.temperature_sensors[3] + " °C"; // Example for a fourth temperature sensor
-
+          
           // Update the pressure sensor values
           document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
           document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";

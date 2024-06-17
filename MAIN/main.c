@@ -1,16 +1,18 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <pthread.h>
-#include <libwebsockets.h>
-#include <json-c/json.h>
+#include "control.h"
 
 #define MESSAGE_INTERVAL 2 * LWS_USEC_PER_SEC
 
 static int interrupted;
 static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-double sensors_data[6] = 0;
+double sensors_data[6] = {0};
+
+int Fault_Flag = 0;
+uint8_t ISO_STATE;
+PodState Curr_State = INIT;
+int sensor_flag = 0;
+int response_flag = 0;
+int success_or_fail = 0;
 
 char *serialize_sensors()
 {
@@ -39,8 +41,8 @@ char *serialize_sensors()
     return result;
 }
 
-
-static void send_message(struct lws *wsi) {
+static void send_message(struct lws *wsi)
+{
     char *json_data = serialize_sensors();
     size_t msg_len = strlen(json_data);
     unsigned char buf[LWS_PRE + msg_len];
@@ -50,37 +52,42 @@ static void send_message(struct lws *wsi) {
 }
 
 static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
-                              void *user, void *in, size_t len) {
-    switch (reason) {
-        case LWS_CALLBACK_CLIENT_ESTABLISHED:
-            printf("Client connected\n");
-            lws_set_timer_usecs(wsi, MESSAGE_INTERVAL);
-            break;
-        case LWS_CALLBACK_CLIENT_RECEIVE:
-            printf("Received: %.*s\n", (int)len, (char *)in);
-            break;
-        case LWS_CALLBACK_CLIENT_CLOSED:
-            printf("Client disconnected\n");
-            interrupted = 1;
-            break;
-        case LWS_CALLBACK_CLIENT_WRITEABLE:
-            // We do nothing here
-            break;
-        case LWS_CALLBACK_TIMER:
-            send_message(wsi);
-            lws_set_timer_usecs(wsi, MESSAGE_INTERVAL); // Reset the timer
-            break;
-        default:
-            printf("Callback reason: %d\n", reason);
-            break;
+                              void *user, void *in, size_t len)
+{
+    switch (reason)
+    {
+    case LWS_CALLBACK_CLIENT_ESTABLISHED:
+        printf("Client connected\n");
+        lws_set_timer_usecs(wsi, MESSAGE_INTERVAL);
+        break;
+    case LWS_CALLBACK_CLIENT_RECEIVE:
+        printf("Received: %.*s\n", (int)len, (char *)in);
+        Curr_State = (char *)in;
+        break;
+    case LWS_CALLBACK_CLIENT_CLOSED:
+        printf("Client disconnected\n");
+        interrupted = 1;
+        break;
+    case LWS_CALLBACK_CLIENT_WRITEABLE:
+        // We do nothing here
+        break;
+    case LWS_CALLBACK_TIMER:
+        send_message(wsi);
+        lws_set_timer_usecs(wsi, MESSAGE_INTERVAL); // Reset the timer
+        break;
+    default:
+        printf("Callback reason: %d\n", reason);
+        break;
     }
     return 0;
 }
 
-void *websocket_thread(void *arg) {
+void *websocket_thread(void *arg)
+{
     struct lws_context *context = (struct lws_context *)arg;
 
-    while (!interrupted) {
+    while (!interrupted)
+    {
         pthread_mutex_lock(&lock);
         lws_service(context, 1000);
         pthread_mutex_unlock(&lock);
@@ -89,7 +96,27 @@ void *websocket_thread(void *arg) {
     return NULL;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
+    /*if (gpioInitialise() < 0)
+    {
+        printf("GPIO INIT FAIL\n");
+        Curr_State = FAULT;
+    }
+    else
+    {
+        printf("GPIO INIT SUCCESS\n");
+    }
+
+    // init can
+    can0 = create_socket("can0");
+    printf("CAN INIT SUCCESS\n");
+
+    // i2c init
+
+    Fault_Flag = Run_State(Curr_State);
+    printf("INIT_COMPLETE\n");*/
+
     struct lws_context_creation_info info;
     struct lws_client_connect_info ccinfo = {0};
     struct lws_context *context;
@@ -111,7 +138,8 @@ int main(int argc, char **argv) {
     info.protocols = protocols;
 
     context = lws_create_context(&info);
-    if (!context) {
+    if (!context)
+    {
         fprintf(stderr, "lws_create_context failed\n");
         return -1;
     }
@@ -125,25 +153,38 @@ int main(int argc, char **argv) {
     ccinfo.protocol = protocols[0].name;
     ccinfo.pwsi = &client_wsi;
 
-    if (!lws_client_connect_via_info(&ccinfo)) {
+    if (!lws_client_connect_via_info(&ccinfo))
+    {
         fprintf(stderr, "Client connection failed\n");
         lws_context_destroy(context);
         return -1;
     }
 
     // Create a thread for the libwebsockets event loop
-    if (pthread_create(&thread_id, NULL, websocket_thread, context)) {
+    if (pthread_create(&thread_id, NULL, websocket_thread, context))
+    {
         fprintf(stderr, "Error creating thread\n");
         lws_context_destroy(context);
         return -1;
     }
 
     // Main application logic can run here
-    while (!interrupted) {
-        // Simulate doing something useful
-        printf("Main thread working...\n");
-        sleep(1);
+    while (!interrupted)
+    {
+           printf("state: %s", Curr_State);
+           sleep(1); 
+        /*if (msg_wait() < 0)
+        {
+            printf("CAN Error\n");
+        }
+        Fault_Flag = Run_State(Curr_State);
+        if (Fault_Flag != 0)
+        {
+            printf("CReMy SHits");
+            Curr_State = FAULT;
+        } */
     }
+    //close(can0);
 
     // Wait for the websocket thread to finish
     pthread_join(thread_id, NULL);
