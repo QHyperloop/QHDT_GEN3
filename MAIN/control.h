@@ -17,14 +17,12 @@
 #include <libwebsockets.h>
 #include <json-c/json.h>
 
-double sensors_data[6] = {0};
-int Fault_Flag = 0;
-uint8_t ISO_STATE;
-
-int sensor_flag = 0;
-int response_flag = 0;
-
-int success_or_fail = 0;
+extern double sensors_data[6];
+extern int Fault_Flag;
+extern uint8_t ISO_STATE;
+extern int sensor_flag;
+extern int response_flag;
+extern int success_or_fail;
 
 typedef enum _error_handler {
 	CAN_INIT_OK,
@@ -67,4 +65,7 @@ typedef enum _PodState{
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
 
-Curr_State = INIT;
+void read_sensor_data();
+double read_battery_voltage();
+void read_pusher_distance();
+int Run_State(PodState state);

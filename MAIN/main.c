@@ -1,11 +1,20 @@
 #include "control.h"
 
+
 #define MESSAGE_INTERVAL 2 * LWS_USEC_PER_SEC
 
 static int interrupted;
 static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
+
+PodState Curr_State = INIT;
+double sensors_data[6] = {0};
+int Fault_Flag = 0;
+uint8_t ISO_STATE;
+int sensor_flag = 0;
+int response_flag = 0;
+int success_or_fail = 0;
 
 
 char *serialize_sensors()
