@@ -65,7 +65,4 @@ typedef enum _PodState{
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
 
-void read_sensor_data();
-double read_battery_voltage();
-void read_pusher_distance();
-uint8_t Run_State(PodState state);
+

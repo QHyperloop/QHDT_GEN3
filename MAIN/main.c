@@ -65,23 +65,23 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
         break;
     case LWS_CALLBACK_CLIENT_RECEIVE:
         printf("Received: %.*s\n", (int)len, (char *)in);
-        if (strcmp((char *)in, "INIT") == 0)
+        if ((char *)in = "INIT")
             Curr_State = INIT;
-        else if (strcmp((char *)in, "FAULT") == 0)
+        else if ((char *)in = "FAULT") 
             Curr_State = FAULT;
-        else if (strcmp((char *)in, "SAFE_TO_APPROACH") == 0)
+        else if ((char *)in = "SAFE_TO_ACH")
             Curr_State = SAFE_TO_APPROACH;
-        else if (strcmp((char *)in, "COAST") == 0)
+        else if ((char *)in = "COAST") 
             Curr_State = COAST;
-        else if (strcmp((char *)in, "BRAKE") == 0)
+        else if ((char *)in = "BRAKE") 
             Curr_State = BRAKE;
-        else if (strcmp((char *)in, "CRAWL") == 0)
+        else if ((char *)in = "CRAWL") 
             Curr_State = CRAWL;
-        else if (strcmp((char *)in, "TRACK") == 0)
+        else if ((char *)in = "TRACK") 
             Curr_State = TRACK;
-        else if (strcmp((char *)in, "LAUNCH") == 0)
+        else if ((char *)in = "LAUNCH")
             Curr_State = LAUNCH;
-        else if (strcmp((char *)in, "READY") == 0)
+        else if ((char *)in = "READY") 
             Curr_State = READY;
         else
             Curr_State = FAULT;
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
     // Main application logic can run here
     while (!interrupted)
     {
-        printf("state: %d", Curr_State);
+        printf("state: %d\n", Curr_State);
         sleep(1);
         /*if (msg_wait() < 0)
         {
