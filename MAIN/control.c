@@ -596,31 +596,6 @@ error_handler UPDATE_TEMP()
 }
 
 /* MAIN ######################################################################################################################################*/
-// Function to map state strings to state IDs
-unsigned int map_state_to_id(const char *state)
-{
-    if (strcmp(state, "INIT") == 0)
-        return INIT;
-    else if (strcmp(state, "FAULT") == 0)
-        return FAULT;
-    else if (strcmp(state, "SAFE_TO_APPROACH") == 0)
-        return SAFE_TO_APPROACH;
-    else if (strcmp(state, "COAST") == 0)
-        return COAST;
-    else if (strcmp(state, "BRAKE") == 0)
-        return BRAKE;
-    else if (strcmp(state, "CRAWL") == 0)
-        return CRAWL;
-    else if (strcmp(state, "TRACK") == 0)
-        return TRACK;
-    else if (strcmp(state, "LAUNCH") == 0)
-        return LAUNCH;
-    else if (strcmp(state, "READY") == 0)
-        return READY;
-    else
-        return 0;
-}
-
 
 uint8_t Run_State(PodState state)
 {
@@ -722,6 +697,4 @@ uint8_t Run_State(PodState state)
     }
 }
 
-int main(void)
-{
   
