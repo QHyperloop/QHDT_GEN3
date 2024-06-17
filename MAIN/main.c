@@ -7,12 +7,7 @@ static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 double sensors_data[6] = {0};
 
-int Fault_Flag = 0;
-uint8_t ISO_STATE;
-PodState Curr_State = INIT;
-int sensor_flag = 0;
-int response_flag = 0;
-int success_or_fail = 0;
+
 
 char *serialize_sensors()
 {
@@ -51,8 +46,7 @@ static void send_message(struct lws *wsi)
     lws_write(wsi, &buf[LWS_PRE], msg_len, LWS_WRITE_TEXT);
 }
 
-static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
-                              void *user, void *in, size_t len)
+static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len)
 {
     switch (reason)
     {
