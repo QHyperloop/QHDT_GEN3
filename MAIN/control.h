@@ -17,14 +17,14 @@
 #include <libwebsockets.h>
 #include <json-c/json.h>
 
-extern double sensors_data[6] = {0};
-extern int Fault_Flag = 0;
-extern uint8_t ISO_STATE;
+double sensors_data[6] = {0};
+int Fault_Flag = 0;
+uint8_t ISO_STATE;
 
-extern int sensor_flag = 0;
-extern int response_flag = 0;
+int sensor_flag = 0;
+int response_flag = 0;
 
-extern int success_or_fail = 0;
+int success_or_fail = 0;
 
 typedef enum _error_handler {
 	CAN_INIT_OK,
