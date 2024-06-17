@@ -64,6 +64,7 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
         lws_set_timer_usecs(wsi, MESSAGE_INTERVAL);
         break;
     case LWS_CALLBACK_CLIENT_RECEIVE:
+        pthread_mutex_lock(&state_lock);
         printf("Received: %.*s\n", (int)len, (char *)in);
         if (strcmp((char *)in, "INIT") == 0)
             Curr_State = INIT;
@@ -85,6 +86,7 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
             Curr_State = READY;
         else
             Curr_State = FAULT;
+        pthread_mutex_unlock(&state_lock);
         break;
     case LWS_CALLBACK_CLIENT_CLOSED:
         printf("Client disconnected\n");
