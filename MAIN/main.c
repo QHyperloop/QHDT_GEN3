@@ -1,12 +1,10 @@
 #include "control.h"
 
-
 #define MESSAGE_INTERVAL 2 * LWS_USEC_PER_SEC
 
 static int interrupted;
 static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-
 
 PodState Curr_State = INIT;
 double sensors_data[6] = {0};
@@ -15,7 +13,6 @@ uint8_t ISO_STATE;
 int sensor_flag = 0;
 int response_flag = 0;
 int success_or_fail = 0;
-
 
 char *serialize_sensors()
 {
@@ -120,7 +117,7 @@ void *websocket_thread(void *arg)
 
 int main(int argc, char **argv)
 {
-    /*if (gpioInitialise() < 0)
+    if (gpioInitialise() < 0)
     {
         printf("GPIO INIT FAIL\n");
         Curr_State = FAULT;
@@ -132,12 +129,14 @@ int main(int argc, char **argv)
 
     // init can
     can0 = create_socket("can0");
-    printf("CAN INIT SUCCESS\n");
-
-    // i2c init
-
-    Fault_Flag = Run_State(Curr_State);
-    printf("INIT_COMPLETE\n");*/
+    if (can0 < 0)
+    {
+        printf("CAN INIT FAIL\n");
+    }
+    else
+    {
+        printf("CAN INIT SUCCESS\n");
+    }
 
     struct lws_context_creation_info info;
     struct lws_client_connect_info ccinfo = {0};
@@ -181,7 +180,19 @@ int main(int argc, char **argv)
         lws_context_destroy(context);
         return -1;
     }
-
+    gpioWrite(28, 1); // pod ready
+    PodState Prev_State = INIT;
+    printf("state: %d\n", Curr_State);
+    while (gpioRead(31) != 1)
+    {
+        printf("Pod Init Fault");
+        Curr_State = FAULT;
+    }
+    else
+    {
+        printf("Pod Ready");
+        Curr_State = READY;
+    }
     // Create a thread for the libwebsockets event loop
     if (pthread_create(&thread_id, NULL, websocket_thread, context))
     {
@@ -193,25 +204,38 @@ int main(int argc, char **argv)
     // Main application logic can run here
     while (!interrupted)
     {
+        if (gpioRead(31) != 1)
+        {
+            Curr_State = FAULT;
+            break;
+        }
         printf("state: %d\n", Curr_State);
         sleep(1);
-        /*if (msg_wait() < 0)
+        int ret = msg_wait();
+        if (ret < 0)
         {
             printf("CAN Error\n");
         }
-        Fault_Flag = Run_State(Curr_State);
-        if (Fault_Flag != 0)
+        else if (ret == 1)
         {
-            printf("CReMy SHits");
-            Curr_State = FAULT;
-        } */
+            read_can_responses();
+        }
+        else
+        {
+            printf("No new Can Message\n");
+        }
+        if (Curr_State != Prev_State)
+        {
+            send_curr_state();
+        }
+        Prev_State = Curr_State;
     }
-    // close(can0);
 
     // Wait for the websocket thread to finish
     pthread_join(thread_id, NULL);
 
     lws_context_destroy(context);
+    close(can0);
 
     return 0;
 }

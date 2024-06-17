@@ -64,5 +64,8 @@ typedef enum _PodState{
 }PodState;
 extern PodState Curr_State;
 extern uint8_t ISO_STATE;
-
-
+extern int can0;
+extern int msg_wait();
+extern void read_can_responses();
+extern int create_socket(const char *ifname);
+extern void send_curr_state();

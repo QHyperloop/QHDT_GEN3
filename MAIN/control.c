@@ -263,40 +263,25 @@ int create_socket(const char *ifname)
     return s;
 }
 
-void set_esc_curr(uint8_t curr[])
+void send_curr_state()
 {
     struct canfd_frame frame;
-    frame.can_id = 0x100 | ESC_ID | CAN_EFF_FLAG;
-    frame.len = 8;
-    frame.data[0] = curr[0];
-    frame.data[1] = curr[1];
-    frame.data[2] = curr[2];
-    frame.data[3] = curr[3];
-    frame.data[4] = 0x00;
-    frame.data[5] = 0x00;
-    frame.data[6] = 0x00;
-    frame.data[7] = 0x00;
-
-    if (write(can0, &frame, sizeof(frame)) != sizeof(frame))
-    {
-        perror("Error in sending CAN frame");
-    }
-}
-
-void IMD_REQ_ISO()
-{
-    struct canfd_frame frame;
-    frame.can_id = IMD_ID | CAN_EFF_FLAG;
+    frame.can_id = 0x00001000;
     frame.len = 1;
-    frame.data[0] = 0xE0;
+    frame.data[0] = (uint8_t)Curr_State;
+
     if (write(can0, &frame, sizeof(frame)) != sizeof(frame))
     {
         perror("Error in sending CAN frame");
+    }else{
+         printf("Sent CAN FD frame with ID 0x%08x and data %02x\n",frame.can_id, frame.data[0]);
     }
 }
+
+
 
 // Function to read the responses and store data into state_responses array
-void read_state_responses()
+void read_can_responses()
 {
 
     struct canfd_frame frame;
@@ -380,6 +365,7 @@ int msg_wait()
         if (FD_ISSET(can0, &readfds))
         {
             // New message received
+            
             return 1;
         }
     }
