@@ -68,4 +68,4 @@ extern uint8_t ISO_STATE;
 void read_sensor_data();
 double read_battery_voltage();
 void read_pusher_distance();
-int Run_State(PodState state);
+uint8_t Run_State(PodState state);
