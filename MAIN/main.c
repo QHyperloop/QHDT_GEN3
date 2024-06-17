@@ -62,7 +62,26 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
         break;
     case LWS_CALLBACK_CLIENT_RECEIVE:
         printf("Received: %.*s\n", (int)len, (char *)in);
-        Curr_State = (char *)in;
+        if (strcmp((char *)in, "INIT") == 0)
+            Curr_State = INIT;
+        else if (strcmp((char *)in, "FAULT") == 0)
+            Curr_State = FAULT;
+        else if (strcmp((char *)in, "SAFE_TO_APPROACH") == 0)
+            Curr_State = SAFE_TO_APPROACH;
+        else if (strcmp((char *)in, "COAST") == 0)
+            Curr_State = COAST;
+        else if (strcmp((char *)in, "BRAKE") == 0)
+            Curr_State = BRAKE;
+        else if (strcmp((char *)in, "CRAWL") == 0)
+            Curr_State = CRAWL;
+        else if (strcmp((char *)in, "TRACK") == 0)
+            Curr_State = TRACK;
+        else if (strcmp((char *)in, "LAUNCH") == 0)
+            Curr_State = LAUNCH;
+        else if (strcmp((char *)in, "READY") == 0)
+            Curr_State = READY;
+        else
+            Curr_State = FAULT;
         break;
     case LWS_CALLBACK_CLIENT_CLOSED:
         printf("Client disconnected\n");
@@ -171,8 +190,8 @@ int main(int argc, char **argv)
     // Main application logic can run here
     while (!interrupted)
     {
-           printf("state: %s", Curr_State);
-           sleep(1); 
+        printf("state: %s", Curr_State);
+        sleep(1);
         /*if (msg_wait() < 0)
         {
             printf("CAN Error\n");
@@ -184,7 +203,7 @@ int main(int argc, char **argv)
             Curr_State = FAULT;
         } */
     }
-    //close(can0);
+    // close(can0);
 
     // Wait for the websocket thread to finish
     pthread_join(thread_id, NULL);
