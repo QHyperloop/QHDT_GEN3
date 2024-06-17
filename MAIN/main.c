@@ -65,23 +65,23 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
         break;
     case LWS_CALLBACK_CLIENT_RECEIVE:
         printf("Received: %.*s\n", (int)len, (char *)in);
-        if ((char *)in = "INIT")
+        if (strcmp((char *)in, "INIT") == 0)
             Curr_State = INIT;
-        else if ((char *)in = "FAULT") 
+        else if (strcmp((char *)in, "FAULT") == 0)
             Curr_State = FAULT;
-        else if ((char *)in = "SAFE_TO_ACH")
+        else if (strcmp((char *)in, "SAFE_TO_APPROACH") == 0)
             Curr_State = SAFE_TO_APPROACH;
-        else if ((char *)in = "COAST") 
+        else if (strcmp((char *)in, "COAST") == 0)
             Curr_State = COAST;
-        else if ((char *)in = "BRAKE") 
+        else if (strcmp((char *)in, "BRAKE") == 0)
             Curr_State = BRAKE;
-        else if ((char *)in = "CRAWL") 
+        else if (strcmp((char *)in, "CRAWL") == 0)
             Curr_State = CRAWL;
-        else if ((char *)in = "TRACK") 
+        else if (strcmp((char *)in, "TRACK") == 0)
             Curr_State = TRACK;
-        else if ((char *)in = "LAUNCH")
+        else if (strcmp((char *)in, "LAUNCH") == 0)
             Curr_State = LAUNCH;
-        else if ((char *)in = "READY") 
+        else if (strcmp((char *)in, "READY") == 0)
             Curr_State = READY;
         else
             Curr_State = FAULT;
