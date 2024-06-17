@@ -188,11 +188,9 @@ int main(int argc, char **argv)
         printf("Pod Init Fault");
         Curr_State = FAULT;
     }
-    else
-    {
-        printf("Pod Ready");
-        Curr_State = READY;
-    }
+    printf("Pod Ready");
+    Curr_State = READY;
+    
     // Create a thread for the libwebsockets event loop
     if (pthread_create(&thread_id, NULL, websocket_thread, context))
     {
