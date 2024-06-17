@@ -85,7 +85,7 @@ void read_can_responses()
         return;
     }
     printf("Recieved response\n"); // to help with testing
-
+/*
     if (frame.can_id == (IMD_ID | (CAN_EFF_FLAG & 0xE)))
     {
         if ((frame.data[0] & 0x40) == 0x40)
@@ -119,7 +119,7 @@ void read_can_responses()
             M_CURR = (frame.data[5] << 8 | frame.data[4]) * 10;
             return;
         }
-    }
+    }*/
 }
 
 int msg_wait()
