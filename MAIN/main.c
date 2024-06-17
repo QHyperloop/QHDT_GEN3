@@ -5,7 +5,6 @@
 static int interrupted;
 static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-double sensors_data[6] = {0};
 
 
 
@@ -46,7 +45,8 @@ static void send_message(struct lws *wsi)
     lws_write(wsi, &buf[LWS_PRE], msg_len, LWS_WRITE_TEXT);
 }
 
-static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len)
+static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
+                              void *user, void *in, size_t len)
 {
     switch (reason)
     {
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
     // Main application logic can run here
     while (!interrupted)
     {
-        printf("state: %s", Curr_State);
+        printf("state: %d", Curr_State);
         sleep(1);
         /*if (msg_wait() < 0)
         {
