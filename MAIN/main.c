@@ -85,6 +85,8 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
         break;
     case LWS_CALLBACK_CLIENT_CLOSED:
         printf("Client disconnected\n");
+        Curr_State = FAULT;
+        printf("Connection to GUI lost FAULT");
         interrupted = 1;
         break;
     case LWS_CALLBACK_CLIENT_WRITEABLE:
