@@ -180,14 +180,14 @@ int main(int argc, char **argv)
         lws_context_destroy(context);
         return -1;
     }
-    gpioWrite(28, 1); // pod ready
+    //gpioWrite(28, 1); // pod ready
     PodState Prev_State = INIT;
     printf("state: %d\n", Curr_State);
-    while (gpioRead(31) != 1)
+    /*while (gpioRead(31) != 1)
     {
         printf("Pod Init Fault");
         Curr_State = FAULT;
-    }
+    }*/
     printf("Pod Ready");
     Curr_State = READY;
     
@@ -202,11 +202,11 @@ int main(int argc, char **argv)
     // Main application logic can run here
     while (!interrupted)
     {
-        if (gpioRead(31) != 1)
+       /* if (gpioRead(31) != 1)
         {
             Curr_State = FAULT;
             break;
-        }
+        }*/
         printf("state: %d\n", Curr_State);
         sleep(1);
         int ret = msg_wait();
