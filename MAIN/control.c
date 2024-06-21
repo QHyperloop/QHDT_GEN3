@@ -53,9 +53,9 @@ int create_socket(const char *ifname)
 void send_curr_state()
 {
     struct canfd_frame frame;
-    frame.can_id = 0x00001000 | CAN_EFF_FLAG;
+    frame.can_id = 0x1000 | CAN_EFF_FLAG;
     frame.len = 1;
-    frame.data[0] = 0x01;
+    frame.data[0] = (uint8_t)Curr_State;
 
     if (write(can0, &frame, sizeof(frame)) != sizeof(frame))
     {
