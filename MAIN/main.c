@@ -89,6 +89,7 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
         gui_connected = 2;
         Curr_State = FAULT;
         printf("Connection to GUI lost FAULT\n");
+        send_curr_state();
         interrupted = 1;
         break;
     case LWS_CALLBACK_CLIENT_WRITEABLE:
@@ -215,10 +216,6 @@ int main(int argc, char **argv)
         }*/
         if(gui_connected == 0){
             printf("Waiting for GUI connection\n");
-        }
-        else if(gui_connected == 2){
-            Curr_State = FAULT;
-            send_curr_state();
         }
         printf("state: %d\n", Curr_State);
         sleep(1);
