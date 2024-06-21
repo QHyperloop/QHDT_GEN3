@@ -1,7 +1,7 @@
 #include "control.h"
 
 #define MESSAGE_INTERVAL 2 * LWS_USEC_PER_SEC
-
+int gui_connected = 0;
 static int interrupted;
 static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
@@ -58,6 +58,7 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
     {
     case LWS_CALLBACK_CLIENT_ESTABLISHED:
         printf("Client connected\n");
+        gui_connected = 1;
         lws_set_timer_usecs(wsi, MESSAGE_INTERVAL);
         break;
     case LWS_CALLBACK_CLIENT_RECEIVE:
@@ -85,6 +86,7 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
         break;
     case LWS_CALLBACK_CLIENT_CLOSED:
         printf("Client disconnected\n");
+        gui_connected = 0;
         Curr_State = FAULT;
         printf("Connection to GUI lost FAULT");
         interrupted = 1;
@@ -182,6 +184,9 @@ int main(int argc, char **argv)
         lws_context_destroy(context);
         return -1;
     }
+    while (gui_connected != 1){
+        printf("GUI not connected");
+    }
     //gpioWrite(28, 1); // pod ready
     PodState Prev_State = INIT;
     printf("state: %d\n", Curr_State);
@@ -209,6 +214,10 @@ int main(int argc, char **argv)
             Curr_State = FAULT;
             break;
         }*/
+        if(gui_connected == 0){
+            Curr_State = FAULT;
+            send_curr_state();
+        }
         printf("state: %d\n", Curr_State);
         sleep(1);
         int ret = msg_wait();
