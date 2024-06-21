@@ -86,9 +86,9 @@ static int callback_websocket(struct lws *wsi, enum lws_callback_reasons reason,
         break;
     case LWS_CALLBACK_CLIENT_CLOSED:
         printf("Client disconnected\n");
-        gui_connected = 0;
+        gui_connected = 2;
         Curr_State = FAULT;
-        printf("Connection to GUI lost FAULT");
+        printf("Connection to GUI lost FAULT\n");
         interrupted = 1;
         break;
     case LWS_CALLBACK_CLIENT_WRITEABLE:
@@ -184,9 +184,7 @@ int main(int argc, char **argv)
         lws_context_destroy(context);
         return -1;
     }
-    while (gui_connected != 1){
-        printf("GUI not connected");
-    }
+   
     //gpioWrite(28, 1); // pod ready
     PodState Prev_State = INIT;
     printf("state: %d\n", Curr_State);
@@ -195,7 +193,7 @@ int main(int argc, char **argv)
         printf("Pod Init Fault");
         Curr_State = FAULT;
     }*/
-    printf("Pod Ready");
+    printf("Pod Ready\n");
     Curr_State = READY;
     
     // Create a thread for the libwebsockets event loop
@@ -209,12 +207,16 @@ int main(int argc, char **argv)
     // Main application logic can run here
     while (!interrupted)
     {
+        
        /* if (gpioRead(31) != 1)
         {
             Curr_State = FAULT;
             break;
         }*/
         if(gui_connected == 0){
+            printf("Waiting for GUI connection\n");
+        }
+        else if(gui_connected == 2){
             Curr_State = FAULT;
             send_curr_state();
         }
