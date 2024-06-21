@@ -1,4 +1,5 @@
 #include <pigpio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,7 +12,8 @@
 #include <sys/ioctl.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
-
+#include <linux/can/error.h>
+#include <errno.h>
 #include <math.h>
 #include <pthread.h>
 #include <libwebsockets.h>
