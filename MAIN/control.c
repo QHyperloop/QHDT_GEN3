@@ -86,8 +86,8 @@ void read_can_responses()
     }
     printf("Recieved response with ID 0x%08x\n",frame.can_id); // to help with testing
     if(frame.can_id == (0x1001|CAN_EFF_FLAG)){\
-        Curr_State = frame_data[0];
-        for(i = 1; i<15, i++){
+        Curr_State = frame.data[0];
+        for(int i = 1; i<15; i++){
             sensors_data[i-1] = frame.data[i];
         }
     }
