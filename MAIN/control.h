@@ -19,7 +19,7 @@
 #include <libwebsockets.h>
 #include <json-c/json.h>
 
-extern double sensors_data[6];
+extern double sensors_data[21];
 extern int Fault_Flag;
 extern uint8_t ISO_STATE;
 extern int sensor_flag;

@@ -1,13 +1,13 @@
 #include "control.h"
 
-#define MESSAGE_INTERVAL 2 * LWS_USEC_PER_SEC
+#define MESSAGE_INTERVAL 1 * LWS_USEC_PER_SEC
 int gui_connected = 0;
 static int interrupted;
 static struct lws *client_wsi = NULL;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 PodState Curr_State = INIT;
-double sensors_data[6] = {0};
+double sensors_data[21] = {0};
 int Fault_Flag = 0;
 uint8_t ISO_STATE;
 int sensor_flag = 0;
@@ -17,21 +17,62 @@ int success_or_fail = 0;
 char *serialize_sensors()
 {
     json_object *jroot = json_object_new_object();
+    json_object *jstate = json_object_new_array();
+    json_object *jLVBMSDATA = json_object_new_array();
+    json_object *jHVBMSDATA = json_object_new_array();
     json_object *jsensor_temps = json_object_new_array();
     json_object *jsensor_pressures = json_object_new_array();
 
     // Serialize temperature sensors data
-    for (int i = 0; i < 4; i++)
+    switch(Curr_State){
+        case INIT:
+            json_object_array_add(jstate, json_object_new_string("INIT"));
+            break;
+        case FAULT:
+            json_object_array_add(jstate, json_object_new_string("FAULT"));
+            break;
+        case SAFE_TO_APPROACH:
+            json_object_array_add(jstate, json_object_new_string("SAFE_TO_APPROACH"));
+            break;
+        case READY:
+            json_object_array_add(jstate, json_object_new_string("READY"));
+            break;
+        case LAUNCH:
+            json_object_array_add(jstate, json_object_new_string("LAUNCH"));
+            break;
+        case COAST:
+            json_object_array_add(jstate, json_object_new_string("COAST"));
+            break;
+        case BRAKE:
+            json_object_array_add(jstate, json_object_new_string("BRAKE"));
+            break;
+        case CRAWL:
+            json_object_array_add(jstate, json_object_new_string("CRAWL"));
+            break;
+        case TRACK:
+            json_object_array_add(jstate, json_object_new_string("TRACK"));
+            break;
+
+    }
+    for (int i = 0; i<7 ; i++){
+        json_object_array_add(jLVBMSDATA, json_object_new_double(sensors_data[i]));
+    }
+    for (int i = 7; i < 14 ; i++){
+        json_object_array_add(jHVBMSDATA, json_object_new_double(sensors_data[i]));
+    }
+    for (int i = 14; i < 19; i++)
     {
         json_object_array_add(jsensor_temps, json_object_new_double(sensors_data[i]));
     }
 
     // Serialize pressure sensors data
-    for (int i = 4; i < 6; i++)
+    for (int i = 19; i < 21; i++)
     {
         json_object_array_add(jsensor_pressures, json_object_new_double(sensors_data[i]));
     }
 
+    json_object_object_add(jroot, "LVBMSDATA", jLVBMSDATA);
+    json_object_object_add(jroot, "HVBMSDATA", jHVBMSDATA);
     json_object_object_add(jroot, "temperature_sensors", jsensor_temps);
     json_object_object_add(jroot, "pressure_sensors", jsensor_pressures);
 

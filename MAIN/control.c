@@ -84,8 +84,14 @@ void read_can_responses()
         fprintf(stderr, "read: incomplete CAN frame\n");
         return;
     }
-    printf("Recieved response\n"); // to help with testing
-/*
+    printf("Recieved response with ID 0x%08x\n",frame.can_id); // to help with testing
+    if(frame.can_id == (0x1001|CAN_EFF_FLAG)){\
+        Curr_State = frame_data[0];
+        for(i = 1; i<15, i++){
+            sensors_data[i-1] = frame.data[i];
+        }
+    }
+/*  
     if (frame.can_id == (IMD_ID | (CAN_EFF_FLAG & 0xE)))
     {
         if ((frame.data[0] & 0x40) == 0x40)
