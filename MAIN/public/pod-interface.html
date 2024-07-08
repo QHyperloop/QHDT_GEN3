@@ -206,8 +206,9 @@
           <br />
           <span>330 Km</span>
         </span>
-        <img src="/images/external/sensorgraph2522-6s8p-700w.png" alt="SensorGraph2522"
-          class="pod1-progress-bar-state0-sensor-graph" />
+        <div class="pod1-progress-bar-state0-sensor-graph">
+          <canvas id="sensorGraph" width="636" height="380"></canvas>
+        </div>
         <button class="pod1-progress-bar-state0-safeto-approach-button" onclick="sendState('SAFE_TO_APPROACH')"
           style="cursor: pointer;">
           <img src="/images/external/rectangle32i252-n0kq-300w.png" alt="Rectangle32I252"
@@ -468,17 +469,55 @@
         }
       };
 
+      var ctx = document.getElementById('sensorGraph').getContext('2d');
+      var sensorChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [], // Labels for the x-axis
+          datasets: [{
+            label: 'Sensor Data',
+            data: [], // Data for the y-axis
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                unit: 'second'
+              }
+            },
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
       function updateSensorValues(data) {
         try {
           // Update the temperature sensor values
           document.getElementById('Batt_Temp').innerText = data.temperature_sensors[0] + " °C";
-          document.getElementById('Batt2_Temp').innerText = data.temperature_sensors[3] + " °C"; 
+          document.getElementById('Batt2_Temp').innerText = data.temperature_sensors[3] + " °C";
           document.getElementById('Motor_Temp').innerText = data.temperature_sensors[1] + " °C";
           document.getElementById('Air_Temp').innerText = data.temperature_sensors[2] + " °C";
-          
+
           // Update the pressure sensor values
           document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
           document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
+
+          var currentTime = new Date();
+          sensorChart.data.labels.push(currentTime);
+          sensorChart.data.datasets[0].data.push(data.temperature_sensors[0]); // Use appropriate sensor data
+          sensorChart.update();
+          if (sensorChart.data.labels.length > 50) { // Adjust as needed
+            sensorChart.data.labels.shift();
+            sensorChart.data.datasets[0].data.shift();
+          }
+
         } catch (e) {
           console.error('Error updating sensor values:', e);
         }
