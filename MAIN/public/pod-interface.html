@@ -118,7 +118,7 @@
       fill: var(--dl-color-theme-neutral-dark);
     }
   </style>
-  
+
   <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
@@ -428,7 +428,29 @@
   </div>
 
   <script>
-    import Chart from 'chart.js/auto';
+    import { Chart } from 'chart.js/auto';
+    import { DateTime } from 'luxon'
+    Chart.register({
+      id: 'luxon', // Or 'moment' or 'date-fns'
+      beforeInit: (chart) => {
+        chart.options.scales.x.adapters = {
+          date: {
+            parse: (value, format) => DateTime.fromFormat(value, format),
+            format: (date, format) => DateTime.fromMillis(date).toFormat(format),
+            add: (time, amount, unit) => DateTime.fromMillis(time).plus({ [unit]: amount }).toMillis(),
+            diff: (max, min, unit) => DateTime.fromMillis(max).diff(DateTime.fromMillis(min), unit).as(unit),
+            startOf: (time, unit, weekday) => {
+              time = DateTime.fromMillis(time);
+              if (unit === 'isoWeek') {
+                return time.minus({ days: time.weekday - 1 }).toMillis();
+              }
+              return time.startOf(unit).toMillis();
+            },
+            endOf: (time, unit) => DateTime.fromMillis(time).endOf(unit).toMillis()
+          }
+        };
+      }
+    });
     var ws;
     window.onload = function () {
       function updateTime() {
@@ -472,8 +494,19 @@
 
       var ctx = document.getElementById('sensorGraph').getContext('2d');
       const labels = [];
-      const data = {labels: labels, datasets: [{ label: 'Temp', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', data: [], }]};
-      const config = {type: 'line', data: data, options: {}};
+      const data = { labels: labels, datasets: [{ label: 'Temp', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', data: [], }] };
+      const config = {
+        type: 'line', data: data, options: {
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                unit: 'second'
+              }
+            }
+          }
+        }
+      };
       var sensorChart = new Chart(ctx, config);
 
       function updateSensorValues(data) {
@@ -488,10 +521,9 @@
           document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
           document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
 
-          var currentTime = new Date();
-          var formattedTime = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
-          sensorChart.data.labels.push(formattedTime);
-          sensorChart.data.datasets.forEach((dataset) => {dataset.data.push(data.temperature_sensors[0])}); // Use appropriate sensor data
+
+          sensorChart.data.labels.push(timeString);
+          sensorChart.data.datasets.forEach((dataset) => { dataset.data.push(data.temperature_sensors[0]) }); // Use appropriate sensor data
           sensorChart.update();
           if (sensorChart.data.labels.length > 20) { // Adjust as needed
             sensorChart.data.labels.shift();
