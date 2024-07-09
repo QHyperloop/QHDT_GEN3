@@ -118,7 +118,7 @@
       fill: var(--dl-color-theme-neutral-dark);
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
@@ -428,7 +428,7 @@
   </div>
 
   <script>
-
+    import Chart from 'chart.js/auto';
     var ws;
     window.onload = function () {
       function updateTime() {
@@ -471,32 +471,10 @@
       };
 
       var ctx = document.getElementById('sensorGraph').getContext('2d');
-      var sensorChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Temp'], // Labels for the x-axis
-          datasets: [{
-            label: 'Time',
-            data: [], // Data for the y-axis
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            x: {
-              type: 'time',
-              time: {
-                unit: 'second'
-              }
-            },
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
+      const labels = [];
+      const data = {labels: labels, datasets: [{ label: 'Temp', backgroundColor: 'rgb(255, 99, 132)', borderColor: 'rgb(255, 99, 132)', data: [], }]};
+      const config = {type: 'line', data: data, options: {}};
+      var sensorChart = new Chart(ctx, config);
 
       function updateSensorValues(data) {
         try {
@@ -513,11 +491,11 @@
           var currentTime = new Date();
           var formattedTime = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
           sensorChart.data.labels.push(formattedTime);
-          sensorChart.data.datasets[0].data.push(data.temperature_sensors[0]); // Use appropriate sensor data
+          sensorChart.data.datasets.forEach((dataset) => {dataset.data.push(data.temperature_sensors[0])}); // Use appropriate sensor data
           sensorChart.update();
           if (sensorChart.data.labels.length > 20) { // Adjust as needed
             sensorChart.data.labels.shift();
-            sensorChart.data.datasets[0].data.shift();
+            sensorChart.data.datasets.data.shift();
           }
 
         } catch (e) {
