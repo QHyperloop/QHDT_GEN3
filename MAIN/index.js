@@ -62,7 +62,7 @@ const app = express();
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'home-screen.html'));

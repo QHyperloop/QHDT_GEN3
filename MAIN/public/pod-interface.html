@@ -490,7 +490,7 @@
           document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
 
           
-          sensorChart.data.labels.push(timeString);
+          sensorChart.data.labels.push('timeString');
           sensorChart.data.datasets.forEach((dataset) => {dataset.data.push(data.temperature_sensors[0])}); // Use appropriate sensor data
           sensorChart.update();
           if (sensorChart.data.labels.length > 20) { // Adjust as needed
