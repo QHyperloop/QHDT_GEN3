@@ -473,9 +473,9 @@
       var sensorChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: [], // Labels for the x-axis
+          labels: ['Temp'], // Labels for the x-axis
           datasets: [{
-            label: 'Sensor Data',
+            label: 'Time',
             data: [], // Data for the y-axis
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
@@ -510,10 +510,11 @@
           document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
 
           var currentTime = new Date();
-          sensorChart.data.labels.push(currentTime.toISOString());
+          var formattedTime = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
+          sensorChart.data.labels.push(formattedTime);
           sensorChart.data.datasets[0].data.push(data.temperature_sensors[0]); // Use appropriate sensor data
           sensorChart.update();
-          if (sensorChart.data.labels.length > 50) { // Adjust as needed
+          if (sensorChart.data.labels.length > 20) { // Adjust as needed
             sensorChart.data.labels.shift();
             sensorChart.data.datasets[0].data.shift();
           }
