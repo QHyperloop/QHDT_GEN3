@@ -489,13 +489,15 @@
           document.getElementById('C_pressure').innerText = data.pressure_sensors[0] + " kP";
           document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
 
-          
-          sensorChart.data.labels.push('timeString');
+          var currentTime = new Date();
+          var formattedTime = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
+
+          sensorChart.data.labels.push(formattedTime.toString());
           sensorChart.data.datasets.forEach((dataset) => {dataset.data.push(data.temperature_sensors[0])}); // Use appropriate sensor data
           sensorChart.update();
           if (sensorChart.data.labels.length > 20) { // Adjust as needed
             sensorChart.data.labels.shift();
-            sensorChart.data.datasets.data.shift();
+            sensorChart.data.datasets.forEach((dataset) => {dataset.data.shift()});
           }
 
         } catch (e) {
