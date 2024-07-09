@@ -510,7 +510,7 @@
           document.getElementById('T_pressure').innerText = data.pressure_sensors[1] + " kP";
 
           var currentTime = new Date();
-          sensorChart.data.labels.push(currentTime);
+          sensorChart.data.labels.push(currentTime.toISOString());
           sensorChart.data.datasets[0].data.push(data.temperature_sensors[0]); // Use appropriate sensor data
           sensorChart.update();
           if (sensorChart.data.labels.length > 50) { // Adjust as needed
